@@ -18,8 +18,8 @@
 
 \maketitle
 
-
-Consider an idealized city of dimension $R$ with a rectilinear street network with spacing $S$, as shown in Figure~\ref{fig:gridcity}. A square are of size $\gamma$ in the city center has been pedestrianized, allowing only pedestrians, bicycles, and transits. The pedestrianized zone forces drivers to divert routes around the zone, increasing traffic density and congestion as a result. To mitigate the congestion's impact on mixed traffic transit (i.e., buses and streetcars/trams), an area of dimension $\tau$ has been designated transit priority, giving transit dedicated lanes. This reduces street capacity for automobiles, but negates the impact of congestion on transit speed.
+\section{Concept}
+Consider an idealized city of dimension $R$ with a rectilinear street network with spacing $d$, as shown in Figure~\ref{fig:gridcity}. A square zone of size $\gamma$ in the city center has been pedestrianized, allowing only pedestrians, bicycles, and transits. The pedestrianized zone forces drivers to divert routes around the zone, increasing traffic density and congestion as a result. To mitigate the congestion's impact on mixed traffic transit (i.e., buses and streetcars/trams), an area of dimension $\tau$ has been designated transit priority, giving transit dedicated lanes. This reduces street capacity for automobiles, but negates the impact of congestion on transit speed.
 
 \begin{figure}[!ht]
      \centering
@@ -36,7 +36,8 @@ Consider an idealized city of dimension $R$ with a rectilinear street network wi
     \item what are the resulting shifts in demand?
 \end{enumerate}
 
-\noindent Traffic flow through the network is characterized by the macroscopic fundamental diagram (see Figure~\ref{fig:mfd}) with travel time cost (see Figure~\ref{fig:traveltime}):
+\section{Traffic}
+Traffic flow through the network is characterized by the macroscopic fundamental diagram (see Figure~\ref{fig:mfd}) as a function of density. A travel time function (see Figure~\ref{fig:traveltime}) then depends upon the state of traffic flow through the network as being either ``uncongested'' (solid line) or ``congested'' (dashed line) in Figures~\ref{fig:mfd} and~\ref{fig:traveltime}.
 
 \begin{figure}[!ht]
      \centering
@@ -58,8 +59,7 @@ Consider an idealized city of dimension $R$ with a rectilinear street network wi
      \caption{Macroscopic fundamental diagram and travel time cost function}
 \end{figure}
 
-The travel time cost function depending on traffic flow and density can be defined as
-
+A travel time cost function can be defined as
 \begin{align}
     t(q) &= l \frac{k(q)}{q} & \text{for}~q < \mu \\
     t(q) &= t_c (\frac{q}{\mu})  & \text{for}~q \geq \mu
@@ -68,17 +68,32 @@ The travel time cost function depending on traffic flow and density can be defin
 \noindent where $t(q)$ is travel time for flow $q$, $k(q)$ is traffic density for flow $q$, $l$ is link length, and $\mu$ is link capacity. Assuming for this case a parabolic function for the uncongested portion of the flow-density relationship, an expression can be written as
 
 \begin{equation}
-    q(k) = q_c - (\beta k - k_c)^2
+    q(k) = q_c - (\alpha k - k_c)^2
 \end{equation}
 
-\noindent where $k_c$ is the density at capacity, $q_c$ is the flow at capacity, and $\beta$ is a fitting parameter. In order to determine travel time using density as a function of flow, $k(q)$, it can be solved for using the quadratic formula
+\noindent where $k_c$ is the density at capacity, $q_c$ is the flow at capacity, and $\alpha$ is a fitting parameter. In order to determine travel time using density as a function of flow, $k(q)$, it can be solved for using the quadratic formula
 
 \begin{equation}
-    k(q) = \frac{k_c - \sqrt{q_c - q^*}}{\beta}
+    k(q) = \frac{k_c - \sqrt{q_c - q^*}}{\alpha}
 \end{equation}
 
 \noindent where $q^*$ is the calculated peak flow required along the parallel streets.
 
+\section{Transit}
+
+Transit travel time is conditional upon whether it operates in a transit priority zone (e.g., dedicated lane or right-of-way) or in mixed-traffic (e.g., city bus). In assuming no other source of delay in a transit priority zone, the travel time of transit is then
+
+\begin{align}
+    t_T & = \frac{l}{v_{t}} + \frac{l}{S}t_s  & \text{with transit priority} \\
+    t_T(q) & = l\frac{k(q)}{q} + \frac{l}{S}t_s  & \text{without transit priority when}~q \geq \mu\\
+    t_T(q) & = t_c (\frac{q}{\mu}) + \frac{l}{S}t_s & \text{without transit priority when}~q \geq \mu
+\end{align}
+
+\noindent where s
+
+
+
+\section{Demand}
 Demand is generated in the city area in units of $\frac{trips}{dist^2}$, and can be simplified into two types: 
 
 \begin{itemize}[topsep=3pt, itemsep=3pt, partopsep=3pt, parsep=3pt]
