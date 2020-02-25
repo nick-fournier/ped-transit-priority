@@ -50,7 +50,41 @@ Demand is generated in the city area in units of $\frac{trips}{dist^2}$, and can
     q(r) = \frac{\lambda_b l}{\delta} + \frac{\lambda_c}{4r\delta} \left( \frac{R^2}{r} - r \right)
 \end{equation}
 
-\noindent where $l$ is the average trip link length, $\delta$ is the street density in $\frac{lane \cdot dist}{dist^2}$, calculated as $\delta = \frac{4d}{d^2} = \frac{4}{d}$. This function possess the form shown in Figure~\ref{fig:flowacross}. 
+\noindent where $l$ is the average trip link length, $\delta$ is the street density in $\frac{lane \cdot dist}{dist^2}$, calculated as $\delta = \frac{4d}{d^2} = \frac{4}{d}$.
+
+
+\begin{figure}[!ht]
+     \centering
+     \includegraphics[width=0.5\textwidth]{diagram_pedtransit_grid_city}
+     \caption{Diverted route types}
+     \label{fig:diverted}
+\end{figure}
+
+
+This function possess the form shown in Figure~\ref{fig:flowacross}. 
+
+Traffic flow on the perimeter road caused by trips being diverted around the zone.
+
+
+
+\begin{subequations}
+%\footnotesize
+\medmuskip=-1mu
+\thinmuskip=-1mu
+\thickmuskip=-1mu
+%\nulldelimiterspace=-1pt
+\scriptspace=0pt
+\begin{align}
+	q_1(\gamma) &= 0 \\
+	q_2(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma^2}{R^2} \times\frac{\gamma}{2}\right] \frac{4s}{8\gamma (R-2)}\\
+	q_3(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (2R - 3\gamma)}{2R^2} \times  3\gamma\right] \frac{4s}{8\gamma (R-2)}\\
+	q_4(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (\sqrt{2}R-\gamma)}{R^2} \times  3\gamma\right] \frac{4s}{8\gamma (R-2)}
+\end{align}
+\end{subequations}
+
+
+
+
 
 \begin{figure}[!ht]
      \centering
@@ -65,8 +99,8 @@ Demand is generated in the city area in units of $\frac{trips}{dist^2}$, and can
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{writing/concept/figures/diagram_perim_flow}
-         \caption{Trip demand flow around perimeter of pedestrian zone}
-         \label{fig:flowacross}
+         \caption{Trip demand flow on perimeter of pedestrian zone}
+         \label{fig:perimflow}
      \end{subfigure}
      \hfill
      \caption{Macroscopic fundamental diagram and travel time cost function}
@@ -114,23 +148,6 @@ A travel time cost function can be defined as
 \end{equation}
 
 \noindent where $q^*$ is the calculated peak flow required along the parallel streets.
-
-
-
-\begin{subequations}
-%\footnotesize
-\medmuskip=-1mu
-\thinmuskip=-1mu
-\thickmuskip=-1mu
-%\nulldelimiterspace=-1pt
-\scriptspace=0pt
-\begin{align}
-	q_1(\gamma) &= 0 \\
-	q_2(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma^2}{R^2} \times\frac{\gamma}{2}\right] \frac{4s}{8\gamma (R-2)}\\
-	q_3(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (2R - 3\gamma)}{2R^2} \times  3\gamma\right] \frac{4s}{8\gamma (R-2)}\\
-	q_4(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (\sqrt{2}R-\gamma)}{R^2} \times  3\gamma\right] \frac{4s}{8\gamma (R-2)}
-\end{align}
-\end{subequations}
 
 
 \section{Transit}
