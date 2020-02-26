@@ -169,19 +169,26 @@ Transit travel time is conditional upon whether it operates in a transit priorit
          \centering
          \includegraphics[width=\textwidth]{diagram_flow_combo}
          \caption{Macroscopic fundamental diagram}
-         \label{fig:mfd}
+         \label{fig:flowcombo}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_transit_traveltime}
         \caption{Macroscopic fundamental diagram}
-         \label{fig:traveltime}
+         \label{fig:transittraveltime}
      \end{subfigure}
      \hfill
      \caption{Macroscopic fundamental diagram and travel time cost function}
 \end{figure}
 
+
+\begin{subequations}
+    \begin{align}
+        P_D & = \frac{1}{1+e^{-\beta (t_A-t_T)}}\\
+        P_T & = 1 - P_D
+    \end{align}
+\end{subequations}
 
 
 
