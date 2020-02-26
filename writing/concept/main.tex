@@ -121,7 +121,7 @@ Traffic flow through the network is characterized by the macroscopic fundamental
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_traveltime}
-        \caption{Macroscopic fundamental diagram}
+        \caption{Travel time cost function}
          \label{fig:traveltime}
      \end{subfigure}
      \hfill
@@ -153,14 +153,34 @@ Transit travel time is conditional upon whether it operates in a transit priorit
 \begin{subequations}
 \begin{align}
     t_{TP} & = \frac{l}{v_T} + \frac{l}{s}t_s  & \text{with transit priority} \\
-    t_{MT}(q) & = l\frac{k(q)}{q} + \frac{l}{s}t_s  & \text{without transit priority when}~q \geq \mu\\
-    t_{MT}(q) & = t_c \left(\frac{q}{\mu}\right) + \frac{l}{s}t_s & \text{without transit priority when}~q \geq \mu
+    t_{TM}(q) & = l\frac{k(q)}{q} + \frac{l}{s}t_s  & \text{without transit priority when}~q \geq \mu\\
+    t_{TM}(q) & = t_c \left(\frac{q}{\mu}\right) + \frac{l}{s}t_s & \text{without transit priority when}~q \geq \mu
 \end{align}
 \end{subequations}
 
 \noindent where $v_T$ is the maximum cruising speed of transit unimpeded by transit, $s$ is stop spacing, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time.
 
 \section{Mode choice}
+
+\begin{figure}[!ht]
+     \centering
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{diagram_flow_combo}
+         \caption{Macroscopic fundamental diagram}
+         \label{fig:mfd}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{diagram_transit_traveltime}
+        \caption{Macroscopic fundamental diagram}
+         \label{fig:traveltime}
+     \end{subfigure}
+     \hfill
+     \caption{Macroscopic fundamental diagram and travel time cost function}
+\end{figure}
 
 
 
