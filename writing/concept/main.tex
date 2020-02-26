@@ -160,7 +160,7 @@ Transit travel time is conditional upon whether it operates in a transit priorit
 
 \noindent where $v_T$ is the maximum cruising speed of transit unimpeded by transit, $s$ is stop spacing, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time.
 
-\section{Mode choice}
+The travel time of transit in mixed-traffic will then always higher than driving an automobile, eventually converging as traffic conditions reach capacity. Transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving. 
 
 \begin{figure}[!ht]
      \centering
@@ -182,14 +182,18 @@ Transit travel time is conditional upon whether it operates in a transit priorit
      \caption{Macroscopic fundamental diagram and travel time cost function}
 \end{figure}
 
+\section{Mode choice}
+
+The mode choice can be modeled as the probability of choosing to drive an automobile $P_A$, or transit $P_T$, using a simple two-alternative logit model with (dis-)utility as the choice travel cost:
 
 \begin{subequations}
     \begin{align}
-        P_D & = \frac{1}{1+e^{-\beta (t_A-t_T)}}\\
+        P_A & = \frac{1}{1+e^{-\beta (t_A-t_T)}}\\
         P_T & = 1 - P_D
     \end{align}
 \end{subequations}
 
+\noindent where $t_A$ and $t_T$ are the travel times associated with automobile and transit, respectively; and $\beta$ is the a estimated scaling parameter.
 
 
 \end{document}
