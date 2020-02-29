@@ -76,7 +76,7 @@ Demand is generated in the city area in units of $\frac{trips}{dist^2}$, and can
 	q_3(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (2R - 3\gamma)}{2R^2} \times  3\gamma\right] \frac{4d}{8\gamma (R-2)}\\
 	q_4(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (\sqrt{2}R-\gamma)}{R^2} \times  3\gamma\right] \frac{4d}{8\gamma (R-2)}\\
 	\notag\text{which can be simplified to:} & \\
-	    q_p(\gamma) & = \sum\limits_{i=1}^4 q_i(\gamma) = \frac{\lambda_b d \gamma (R^2 - \gamma^2) (3R + 3\sqrt{2}R - 7\gamma)}{R^2(R-2)}
+	    q_p(\gamma) & = \sum\limits_{i=1}^4 q_i(\gamma) = \frac{\lambda_b d \gamma (6R + 6\sqrt{2}R - 11\gamma)(R^2 - \gamma^2)}{R^2(R-2)}
     \label{eq:perimflow}
 \end{align}
 \end{subequations}
@@ -171,26 +171,33 @@ The travel time of transit in mixed-traffic will then always higher than driving
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_transit_traveltime}
-        \caption{Transit travel time with mixed-traffic and transit priority conditions}
+        \caption{Transit travel time}
          \label{fig:transittraveltime}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_flow_combo}
-         \caption{Optimal pedestrian and transit priority zone sizing}
+         \caption{Optimal pedestrian and transit priority zone size}
          \label{fig:flowcombo}
      \end{subfigure}
      \hfill
      \caption{Transit travel time and optimal zone sizing}
 \end{figure}
 
-The critical transit traffic flow point $q^*_T$ could be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau$. However, if transit draw trips away from driving, $\pm \lambda_D$, it would thus reduce congestion and improve driving travel time, resulting in more driving trips. Assuming transit provides a reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit. An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ where the pedestrian zone is:
+The critical transit traffic flow point $q^*_T$ could be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau$. However, if transit draw trips away from driving, $\pm \lambda_D$, it would thus reduce congestion and improve driving travel time, resulting in more driving trips. Assuming transit provides a reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit.
+
+An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ where the pedestrian zone is:
 \begin{enumerate}[label=(\alph*)]
     \item large enough to prevent traffic flow across the network from exceeding capacity $q_a(\gamma) < q_c$, and 
     \item small enough to prevent perimeter traffic flow from exceeding capacity $q_p(\gamma) < q_c$. 
 \end{enumerate}
 
+While the intersection point of the two functions may be used as an optimal compromise ensuring both conditions are satisfied with the least possible traffic flow. Solving for the intersection point becomes a quintic function (polynomial to the $5^{th}$ power) that is not easily solvable analytically. However, given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, an exact deterministic solution for optimal $\gamma$ is found when the function is zero (i.e., $q_a(\gamma) = q_p(\gamma)$:
+
+\begin{equation}
+f(0) = \frac{11}{R^2} \gamma^5 - \frac{6(1+\sqrt{2})}{R}\gamma^4 - 11\gamma^3 + \frac{24\delta\lambda_b d R(1+\sqrt{2}) + \lambda_{c}(R-2)}{4\delta\lambda_{b}d}\gamma^{2} - \frac{R(R-2)}{\delta d}\gamma - \frac{\lambda_{c}(R-2)R^{2}}{4\delta\lambda_{b}d}
+\end{equation}
 
 
 \section{Mode choice}
@@ -207,6 +214,30 @@ The mode choice can be modeled as the probability of choosing to drive $P_D$ or 
 
 \noindent where $t_A$ and $t_T$ are the travel times associated with automobile and transit, respectively; and $\beta$ is the a estimated scaling parameter. The probability in Equation~\eqref{eq:choiceprob} can be used to find the proportion of trips made by driving.
 
+
+\section{...}
+
+Since the logit only requires a differential we just need $\Delta t = t_D - t_T$:
+
+\begin{equation}
+    \Delta t(q) = l \frac{k(q)}{q} - \left[
+    \frac{\tau}{R} \left( \frac{l}{v_T} + \frac{l}{s}t_s \right) + \frac{R-\tau}{R} \left( l\frac{k(q)}{q} + \frac{l}{s}t_s \right) \right]
+\end{equation}
+
+\noindent Since $q^*_T$ is a global constant regardless of demand, we can get $\tau$ by setting $q_a(\tau)=q^*_T$. But $q_a$ depends on demand, which depends on probability, which depends on travel time.
+
+\begin{align}
+    q_a(\tau, \Delta t(q)) & = P_D(\Delta t(q)) \times \left[ \frac{\lambda_b l}{\delta} + \frac{\lambda_c}{4\delta} \left( \frac{R^2}{\tau} - \tau \right) \right] \\
+    q_a(\tau, \Delta t(q)) & = q^*_T
+\end{align}
+
+\noindent Now there is some sort of dynamic equilibrium with flow and demand where travel time depends on flow and flow depends on travel time. 
+
+The pedestrian zone size somewhat less critical since it can exist in a range. However, lets set boundary as the perimeter flow.
+
+\begin{equation}
+        q_p(\gamma, \Delta t(q)) = P_D(\Delta t(q)) \times \frac{\lambda_b d \gamma (R^2 - \gamma^2) (3R + 3\sqrt{2}R - 7\gamma)}{R^2(R-2)} < q_c
+\end{equation}
 
 
 \end{document}
