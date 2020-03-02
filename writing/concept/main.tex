@@ -155,13 +155,13 @@ Transit travel time is conditional upon whether it operates in a transit priorit
 
 \begin{subequations}
 \begin{align}
-    t_{TP} & = \frac{l}{v_T} + \frac{l}{s}t_s  & \text{with transit priority} \\
+    t_{TP} & = \frac{l}{v_max} + \frac{l}{s}t_s  & \text{with transit priority} \\
     t_{TM}(q) & = l\frac{k(q)}{q} + \frac{l}{s}t_s  & \text{without transit priority when}~q \geq \mu\\
     t_{TM}(q) & = t_c \left(\frac{q}{\mu}\right) + \frac{l}{s}t_s & \text{without transit priority when}~q \geq \mu
 \end{align}
 \end{subequations}
 
-\noindent where $v_T$ is the maximum cruising speed of transit unimpeded by transit, $s$ is stop spacing, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time.
+\noindent where $v_max$ is the maximum cruising speed of transit unimpeded by traffic, $s$ is stop spacing, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time.
 
 The travel time of transit in mixed-traffic will then always higher than driving an automobile, eventually converging as traffic conditions reach capacity. Transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving (see Figure~\ref{fig:transittraveltime}). 
 
@@ -193,10 +193,10 @@ An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma)
     \item small enough to prevent perimeter traffic flow from exceeding capacity $q_p(\gamma) < q_c$. 
 \end{enumerate}
 
-While the intersection point of the two functions may be used as an optimal compromise ensuring both conditions are satisfied with the least possible traffic flow. Solving for the intersection point becomes a quintic function (polynomial to the $5^{th}$ power) that is not easily solvable analytically. However, given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, an exact deterministic solution for optimal $\gamma$ is found when the function is zero (i.e., $q_a(\gamma) = q_p(\gamma)$:
+While the intersection point of the two functions may be used as an optimal compromise ensuring both conditions are satisfied with the least possible traffic flow. Solving for the intersection point becomes a quintic function (polynomial to the $5^{th}$ power) that is not easily solvable analytically. However, given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, an exact deterministic solution for optimal pedestrian zone dimension $\gamma^*$, is found when the function is zero (i.e., $q_a(\gamma) = q_p(\gamma)$:
 
-\begin{equation}
-f(0) = \frac{11}{R^2} \gamma^5 - \frac{6(1+\sqrt{2})}{R}\gamma^4 - 11\gamma^3 + \frac{24\delta\lambda_b d R(1+\sqrt{2}) + \lambda_{c}(R-2)}{4\delta\lambda_{b}d}\gamma^{2} - \frac{R(R-2)}{\delta d}\gamma - \frac{\lambda_{c}(R-2)R^{2}}{4\delta\lambda_{b}d}
+\begin{equation}\small
+\gamma^* \Leftarrow \text{min} f(\tau) = 0 = \frac{11}{R^2} \gamma^5 - \frac{6(1+\sqrt{2})}{R}\gamma^4 - 11\gamma^3 + \frac{24\delta\lambda_b d R(1+\sqrt{2}) + \lambda_{c}(R-2)}{4\delta\lambda_{b}d}\gamma^{2} - \frac{R(R-2)}{\delta d}\gamma - \frac{\lambda_{c}(R-2)R^{2}}{4\delta\lambda_{b}d}
 \end{equation}
 
 
