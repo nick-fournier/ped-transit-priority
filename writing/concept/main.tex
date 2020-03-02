@@ -193,10 +193,10 @@ An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma)
     \item small enough to prevent perimeter traffic flow from exceeding capacity $q_p(\gamma) < q_c$. 
 \end{enumerate}
 
-While the intersection point of the two functions may be used as an optimal compromise ensuring both conditions are satisfied with the least possible traffic flow. Solving for the intersection point becomes a quintic function (polynomial to the $5^{th}$ power) that is not easily solvable analytically. However, given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, an exact deterministic solution for optimal pedestrian zone dimension $\gamma^*$, is found when the function is zero (i.e., $q_a(\gamma) = q_p(\gamma)$:
+While the intersection point of the two functions may be used as an optimal compromise ensuring both conditions are satisfied with the least possible traffic flow. Solving for the intersection point becomes a quintic function (polynomial to the $5^{th}$ power) that is not easily solvable analytically. However, given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, an exact deterministic solution for optimal pedestrian zone dimension $\gamma^*$, is found when the function is zero (i.e., $q_a(\gamma) = q_p(\gamma)$. Since two intersection points between $q_a$ and $q_p$ exist, the minimum of the two provides the desired optimal $\gamma^*$:
 
 \begin{equation}\small
-\gamma^* \Leftarrow \text{min} f(\tau) = 0 = \frac{11}{R^2} \gamma^5 - \frac{6(1+\sqrt{2})}{R}\gamma^4 - 11\gamma^3 + \frac{24\delta\lambda_b d R(1+\sqrt{2}) + \lambda_{c}(R-2)}{4\delta\lambda_{b}d}\gamma^{2} - \frac{R(R-2)}{\delta d}\gamma - \frac{\lambda_{c}(R-2)R^{2}}{4\delta\lambda_{b}d}
+\gamma^* \Leftarrow \text{min} f(\gamma) = 0 = \frac{11}{R^2} \gamma^5 - \frac{6(1+\sqrt{2})}{R}\gamma^4 - 11\gamma^3 + \frac{24\delta\lambda_b d R(1+\sqrt{2}) + \lambda_{c}(R-2)}{4\delta\lambda_{b}d}\gamma^{2} - \frac{R(R-2)}{\delta d}\gamma - \frac{\lambda_{c}(R-2)R^{2}}{4\delta\lambda_{b}d}
 \end{equation}
 
 
