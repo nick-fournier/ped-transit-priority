@@ -10,7 +10,7 @@
 \graphicspath{ {figures/} }
 
 \title{Analytical model of pedestrianized and transit priority zones in a rectilinear grid city}
-\author{Nicholas Fournier}
+\author{Nicholas Fournier and Eric Gonzales}
 \date{February 2020}
 
 \begin{document}
@@ -105,7 +105,7 @@ Demand is generated in the city area in units of $\frac{trips}{dist^2}$, and can
 
 
 
-\section{Traffic flow travel time}
+\section{Traffic flow}
 Traffic flow through the network is characterized by the macroscopic fundamental diagram (see Figure~\ref{fig:mfd}) as a function of density. A travel time function (see Figure~\ref{fig:traveltime}) then depends upon the state of traffic flow through the network as being either ``uncongested'' (solid line) or ``congested'' (dashed line) in Figures~\ref{fig:mfd} and~\ref{fig:traveltime}.
 
 \begin{figure}[!ht]
@@ -149,7 +149,7 @@ Traffic flow through the network is characterized by the macroscopic fundamental
 \end{equation}
 
 
-\section{Transit travel time}
+\section{Transit}
 
 Transit travel time is conditional upon whether it operates in a transit priority zone (e.g., dedicated lane or right-of-way) or in mixed-traffic (e.g., city bus). In assuming no other source of delay in a transit priority zone, the travel time of transit is then
 
@@ -193,11 +193,29 @@ An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma)
     \item small enough to prevent perimeter traffic flow from exceeding capacity $q_p(\gamma) < q_c$. 
 \end{enumerate}
 
-While the intersection point of the two functions may be used as an optimal compromise ensuring both conditions are satisfied with the least possible traffic flow. Solving for the intersection point becomes a quintic function (polynomial to the $5^{th}$ power) that is not easily solvable analytically. However, given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, an exact deterministic solution for optimal pedestrian zone dimension $\gamma^*$, is found when the function is zero (i.e., $q_a(\gamma) = q_p(\gamma)$. Since two intersection points between $q_a$ and $q_p$ exist, the minimum of the two provides the desired optimal $\gamma^*$:
+While the intersection point of the two functions may be used as an optimal compromise ensuring both conditions are satisfied with the least possible traffic flow. Solving for the intersection point becomes a quintic function (polynomial to the $5^{th}$ power) that is not easily solvable analytically, see Figure~\ref{fig:optimalped}. 
 
-\begin{equation}\small
-\gamma^* \Leftarrow \text{min} f(\gamma) = 0 = \frac{11}{R^2} \gamma^5 - \frac{6(1+\sqrt{2})}{R}\gamma^4 - 11\gamma^3 + \frac{24\delta\lambda_b d R(1+\sqrt{2}) + \lambda_{c}(R-2)}{4\delta\lambda_{b}d}\gamma^{2} - \frac{R(R-2)}{\delta d}\gamma - \frac{\lambda_{c}(R-2)R^{2}}{4\delta\lambda_{b}d}
+\begin{figure}[!ht]
+     \centering
+     \includegraphics[width=0.65\textwidth]{diagram_optimalped}
+     \caption{Quintic function for optimal pedestrian zone size, $f(\gamma)$}
+     \label{fig:optimalped}
+\end{figure}
+
+However, given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, an exact deterministic solution for optimal pedestrian zone dimension $\gamma^*$, is found when the function is zero (i.e., $q_a(\gamma) = q_p(\gamma)$. Since two intersection points between $q_a$ and $q_p$ exist, the minimum of the two provides the desired optimal $\gamma^*$:
+
+\begin{equation}
+f(\gamma) =  \frac{11}{R^2} \gamma^5 - \frac{6(1+\sqrt{2})}{R}\gamma^4 - 11\gamma^3 + \frac{24\delta\lambda_b d R(1+\sqrt{2}) + \lambda_{c}(R-2)}{4\delta\lambda_{b}d}\gamma^{2} - \frac{R(R-2)}{\delta d}\gamma - \frac{\lambda_{c}(R-2)R^{2}}{4\delta\lambda_{b}d}
 \end{equation}
+
+\begin{align}\small
+\gamma^* &\Leftarrow \text{min} \left[ f(\gamma_1) = 0, f(\gamma_2) = 0 \right]\\
+& \text{where}\\ 
+& 0 \geq \gamma \leq R 
+\end{align}
+
+
+
 
 
 \section{Mode choice}
@@ -217,7 +235,7 @@ The mode choice can be modeled as the probability of choosing to drive $P_D$ or 
 
 \section{...}
 
-Since the logit only requires a differential we just need $\Delta t = t_D - t_T$:
+A two-alternative logit can be simplified to require only the cost difference between the two choices, not the full value, thus logit only requires a travel time differential $\Delta t = t_D - t_T$:
 
 \begin{equation}
     \Delta t(q) = l \frac{k(q)}{q} - \left[
