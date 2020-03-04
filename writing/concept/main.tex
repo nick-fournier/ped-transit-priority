@@ -63,7 +63,7 @@ Demand is generated in the city area in units of $\frac{trips}{dist^2}$, and can
 \noindent The flow across the network at a point $r$ distance from the city center is then the summation of this baseline demand and the monocentric demand, calculated as:
 
 \begin{equation}
-    q_a(r) = \frac{\lambda_b l}{\delta} + \frac{\lambda_c}{4\delta} \left( \frac{R^2}{r} - r \right)
+    q_a(r) = \frac{\lambda_b l}{\delta} + \frac{\lambda_c}{4\delta r} \left(R^2 - r^2 \right)
     \label{eq:flowacross}
 \end{equation}
 
@@ -163,7 +163,7 @@ Transit travel time is conditional upon whether it operates in a transit priorit
 
 \noindent where $v_max$ is the maximum cruising speed of transit unimpeded by traffic, $s$ is stop spacing, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time.
 
-The travel time of transit in mixed-traffic will then always higher than driving an automobile, eventually converging as traffic conditions reach capacity. Transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving (see Figure~\ref{fig:transittraveltime}). 
+The travel time of transit in mixed-traffic will then always be higher than driving an automobile, eventually converging as traffic conditions reach jam flow. Transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving (see Figure~\ref{fig:transittraveltime}). This serves as a pressure relief for congestion, assuming unlimited transit capacity. 
 
 \begin{figure}[!ht]
      \centering
@@ -185,42 +185,43 @@ The travel time of transit in mixed-traffic will then always higher than driving
      \caption{Transit travel time and optimal zone sizing}
 \end{figure}
 
-The critical transit traffic flow point $q^*_T$ could be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau$. However, if transit draw trips away from driving, $\pm \lambda_D$, it would thus reduce congestion and improve driving travel time, resulting in more driving trips. Assuming transit provides a reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit.
+The critical transit traffic flow point $q^*_T$ could be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau$. The solution to this is quadratic, but assuming a non-negative value for the optimal transit zone size $\tau^*$, it can be solved for analytically:
 
-An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ where the pedestrian zone is:
+\begin{equation}
+    \tau^* = \frac{2\left(q_{t}\delta-\lambda_{b}R\right)-\sqrt{4\left(q_{t}\delta-\lambda_{b}R\right)^{2}+\lambda_{c}^{2}R^{2}}}{\lambda_{c}}
+\end{equation}
+
+\noindent Determining an optimal pedestrian zone size is slightly more complex. An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ where the pedestrian zone is (see Figure~\ref{fig:flowcombo}):
 \begin{enumerate}[label=(\alph*)]
     \item large enough to prevent traffic flow across the network from exceeding capacity $q_a(\gamma) < q_c$, and 
     \item small enough to prevent perimeter traffic flow from exceeding capacity $q_p(\gamma) < q_c$. 
 \end{enumerate}
 
-While the intersection point of the two functions may be used as an optimal compromise ensuring both conditions are satisfied with the least possible traffic flow. Solving for the intersection point becomes a quintic function (polynomial to the $5^{th}$ power) that is not easily solvable analytically, see Figure~\ref{fig:optimalped}. 
-
-\begin{figure}[!ht]
-     \centering
-     \includegraphics[width=0.65\textwidth]{diagram_optimalped}
-     \caption{Quintic function for optimal pedestrian zone size, $f(\gamma)$}
-     \label{fig:optimalped}
-\end{figure}
-
-However, given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, an exact deterministic solution for optimal pedestrian zone dimension $\gamma^*$, is found when the function is zero (i.e., $q_a(\gamma) = q_p(\gamma)$. Since two intersection points between $q_a$ and $q_p$ exist, the minimum of the two provides the desired optimal $\gamma^*$:
+The intersection point of the two functions may be used as an optimal compromise, ensuring both conditions are satisfied with the least possible traffic flow. However, solving for the intersection point by setting $q_a = q_p$ becomes a quintic function (polynomial to the $5^{th}$ power) with multiple points where the function is equal to zero and is not easily solvable analytically (see Figure~\ref{fig:optimalped}):
 
 \begin{equation}
 f(\gamma) =  \frac{11}{R^2} \gamma^5 - \frac{6(1+\sqrt{2})}{R}\gamma^4 - 11\gamma^3 + \frac{24\delta\lambda_b d R(1+\sqrt{2}) + \lambda_{c}(R-2)}{4\delta\lambda_{b}d}\gamma^{2} - \frac{R(R-2)}{\delta d}\gamma - \frac{\lambda_{c}(R-2)R^{2}}{4\delta\lambda_{b}d}
 \end{equation}
 
+\begin{figure}[!ht]
+     \centering
+     \includegraphics[width=0.6\textwidth]{diagram_optimalped}
+     \caption{Quintic function for optimal pedestrian zone size, $f(\gamma)$}
+     \label{fig:optimalped}
+\end{figure}
+
+Given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, a numeric solution for optimal pedestrian zone dimension $\gamma^*$, is found when whenever the function is zero. Since two intersection points between $q_a$ and $q_p$ exist, the minimum of the two provides the desired optimal $\gamma^*$:
+
+
+
 \begin{align}\small
 \gamma^* &\Leftarrow \text{min} \left[ f(\gamma_1) = 0, f(\gamma_2) = 0 \right]\\
-& \text{where}\\ 
-& 0 \geq \gamma \leq R 
+\text{s.t.} & ~ 0 \leq \gamma \leq R 
 \end{align}
 
 
-
-
-
 \section{Mode choice}
-
-The mode choice can be modeled as the probability of choosing to drive $P_D$ or transit $P_T$, using a simple two-alternative logit model with (dis-)utility as the choice travel cost:
+Since transit can draw trips away from driving, $\pm \lambda_D$, it would thus reduce congestion and improve driving travel time, resulting in more driving trips. Assuming transit provides a reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit. The mode choice can be modeled as the probability of choosing to drive $P_D$ or transit $P_T$, using a simple two-alternative logit model with (dis-)utility as the choice travel cost:
 
 \begin{subequations}
     \label{eq:choiceprob}
@@ -230,7 +231,7 @@ The mode choice can be modeled as the probability of choosing to drive $P_D$ or 
     \end{align}
 \end{subequations}
 
-\noindent where $t_A$ and $t_T$ are the travel times associated with automobile and transit, respectively; and $\beta$ is the a estimated scaling parameter. The probability in Equation~\eqref{eq:choiceprob} can be used to find the proportion of trips made by driving.
+\noindent where $t_D$ and $t_T$ are the travel times associated with automobile and transit, respectively; and $\beta$ is the a estimated scaling parameter. The probability in Equation~\eqref{eq:choiceprob} can be used to find the proportion of trips made by driving.
 
 
 \section{...}
