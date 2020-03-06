@@ -1,0 +1,117 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r, echo=F}
+#Single run
+library(data.table)
+library(ggplot2)
+
+set.seed(0)
+
+R=1
+#sequential run
+sequence <- seq(0.1,R,length.out = 1000) #runif(10, min=0.1, max=R) 
+
+#Generate random XY points for square
+#Calculate mean distance
+xy.sqr <- sapply(sequence, function(x) {
+  #Generate random XY points from radius Rmin to R
+  xysamp <- data.table(matrix(runif(1e6*4, min=-x, max=x), ncol=4))
+  colnames(xysamp) <- c("x1","y1","x2","y2")
+  #Remove points outside of square
+  xy <- xysamp[(abs(x1) + abs(y1)) <= x & (abs(x2) + abs(y2)) <= x, ]
+  #Calculate distance between each
+  xy[ , dist := abs(x1-x2) + abs(y1-y2)]
+  #Get average
+  mean(xy$dist)
+})
+xy.sqr <- data.table(r=sequence, mean=xy.sqr)
+xy.sqr <- xy.sqr[!is.nan(mean), ]
+
+#Linear fit
+sqr.linfit <- round(coef(lm(mean~0+r, xy.sqr)),6)
+
+#Calculate mean distance
+xy.circ <- sapply(sequence, function(x) {
+  #Generate random XY points from radius Rmin to R
+  xysamp <- data.table(matrix(runif(1e6*4, min=-x, max=x), ncol=4))
+  colnames(xysamp) <- c("x1","y1","x2","y2")
+  #Remove points outside of square
+  xy <- xysamp[sqrt(x1^2 + y1^2) <= x & sqrt(x2^2 + y2^2) <= x, ]
+  #Calculate distance between each
+  xy[ , dist := sqrt((x1-x2)^2 + (y1-y2)^2)]
+  #Get average
+  mean(xy$dist)
+})
+xy.circ <- data.table(r=sequence, mean=xy.circ)
+xy.circ <- xy.circ[!is.nan(mean), ]
+
+#Linear fit
+circ.linfit <- round(coef(lm(mean~0+r, xy.circ)),6)
+
+```
+
+This is numerical test of average distance of randomly distributed trips in rectlinear and ring-radial cities. Origins and destinations are randomly distributed, numerically calculating the average distance. The distance between these points is then calculated. Depending on the sample size, a posterior mean will emerge. 
+
+The average distance traveled for uniformly distributed trips in a rectilinear city is $\bar{r} = \frac{14}{15}r \approx `r round(sqr.linfit,3)` r$
+
+The average distance traveled for uniformly distributed trips in a ring-radial city is $\bar{r} = \frac{128}{45\pi}r \approx `r round(circ.linfit,3)` r$
+
+
+```{r, echo=F, fig.width=2}
+#Generate random XY points
+xy <- data.table(matrix(runif(1e5*4, min=-R, max=R), ncol=4))
+colnames(xy) <- c("x1","y1","x2","y2")
+#Plot
+ggplot(data = rbind(xy[,.(p='O',x=x1,y=y1)], xy[,.(p='D',x=x2,y=y2)])) + 
+  geom_point(aes(x=x/R,y=y/R,color=p), shape=".", size=0.01) +
+  coord_fixed() +
+  scale_color_brewer(NULL, labels = c("Origin","Destination"), palette = "Set1") +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+```
+
+```{r, echo=F, fig.width=4}
+#Generate random XY points
+xy <- data.table(matrix(runif(1e5*4, min=-R, max=R), ncol=4))
+colnames(xy) <- c("x1","y1","x2","y2")
+#Remove points outside of square
+xy <- xy[(abs(x1) + abs(y1)) <= R & (abs(x2) + abs(y2)) <= R, ]
+#Calculate distance between each
+xy[ , dist := abs(x1-x2) + abs(y1-y2)]
+#Get culmulative sum
+xy[ , n := 1:nrow(xy)]
+xy[ , AvgDist := cumsum(dist)/n]
+#Plot
+ggplot(data = xy, aes(x=n, y=AvgDist/R)) + 
+  geom_line() +
+  # annotate("text", x=nrow(xy)/2, y=1.1*mean(xy$dist)/R,
+  #          label = paste0("bar(r)==",mean(xy$dist)/R,"*R"), parse=T) +
+  theme_classic()
+```     
+
+
+
+```{r, echo=F, fig.width=4}
+#plot
+ggplot(data = xy.sqr, aes(x=r/R, y=mean/R)) + 
+  geom_point() +
+  geom_smooth(method="lm",se=F, fullrange=T) +
+  annotate("text", x=0.5, y=0.25*mean(xy.sqr$mean)/R,
+             label = paste0("bar(r)==",linfit,"*r"), parse=T) +
+  theme_classic()
+```
+
+
+```{r, echo=F, fig.width=4}
+#plot
+ggplot(data = xy.circ, aes(x=r/R, y=mean/R)) + 
+  geom_point() +
+  geom_smooth(method="lm",se=F, fullrange=T) +
+  annotate("text", x=0.5, y=0.25*mean(xy.circ$mean)/R,
+             label = paste0("bar(r)==",circ.linfit,"*r"), parse=T) +
+  theme_classic()
+```
