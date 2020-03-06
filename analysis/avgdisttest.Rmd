@@ -12,11 +12,11 @@ set.seed(0)
 
 R=1
 #sequential run
-sequence <- seq(0.1,R,length.out = 1000) #runif(10, min=0.1, max=R) 
+sequence <- seq(0.1,R,length.out = 100) #runif(10, min=0.1, max=R) 
 
 #Generate random XY points for square
 #Calculate mean distance
-xy.sqr <- sapply(sequence, function(x) {
+xy.sqr <- pbsapply(sequence, function(x) {
   #Generate random XY points from radius Rmin to R
   xysamp <- data.table(matrix(runif(1e6*4, min=-x, max=x), ncol=4))
   colnames(xysamp) <- c("x1","y1","x2","y2")
@@ -31,12 +31,12 @@ xy.sqr <- data.table(r=sequence, mean=xy.sqr)
 xy.sqr <- xy.sqr[!is.nan(mean), ]
 
 #Linear fit
-sqr.linfit <- round(coef(lm(mean~0+r, xy.sqr)),6)
+sqr.linfit <- coef(lm(mean~0+r, xy.sqr))
 
 #Calculate mean distance
-xy.circ <- sapply(sequence, function(x) {
+xy.circ <- sapply(seq(0.1,R,length.out = 100), function(x) {
   #Generate random XY points from radius Rmin to R
-  xysamp <- data.table(matrix(runif(1e6*4, min=-x, max=x), ncol=4))
+  xysamp <- data.table(matrix(runif(1e5*4, min=-x, max=x), ncol=4))
   colnames(xysamp) <- c("x1","y1","x2","y2")
   #Remove points outside of square
   xy <- xysamp[sqrt(x1^2 + y1^2) <= x & sqrt(x2^2 + y2^2) <= x, ]
