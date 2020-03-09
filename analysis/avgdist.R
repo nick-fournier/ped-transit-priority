@@ -81,9 +81,7 @@ rbind(pxy[ , .(x=x1,y=y1)], pxy[ , .(x=x2,y=y2)])[ , mean(abs(x)+abs(y))]
 sqrt(2)*R/2
 
 
-#### For trips around perpendicular square perimeter ####
-set.seed(0)
-#
+#### For trips around perpendicular square perimeter to the center #####
 R=10
 #Generate random XY points
 P <- runif(1e3, min=-R, max=R)
@@ -103,6 +101,31 @@ ggplot(data = rbind(pxy.perim[,.(p='O',x=x1,y=y1)], pxy.perim[,.(p='D',x=x2,y=y2
 
 rbind(pxy[ , .(x=x1,y=y1)], pxy[ , .(x=x2,y=y2)])[ , mean(abs(x)+abs(y))]
 
+
+
+#### For trips around perpendicular square perimeter to the center #####
+R = 10
+#Generate random XY points
+N = 1e5
+
+perim.xy <- rbind(data.table(x1=R,                       y1=runif(N, min=-R, max=R)),
+                  data.table(x1=runif(N, min=-R, max=R), y1=R),
+                  data.table(x1=-R,                      y1=runif(N, min=-R, max=R)),
+                  data.table(x1=runif(N, min=-R, max=R), y1=-R))
+
+
+inter.xy <- data.table(matrix(runif(N*4, min=-R, max=R), ncol=2))
+colnames(inter.xy) <- c("x2","y2")
+
+#Perpendicular point plot
+ggplot() + 
+  geom_point(data = perim.xy[sample(1:N*4,1000,T), ], aes(x=x1/R,y=y1/R), size=0.1) +
+  geom_point(data = inter.xy[sample(1:N*4,1000,T), ], aes(x=x2/R,y=y2/R), size=0.1) +
+  coord_fixed() +
+  theme_bw()
+
+
+cbind(perim.xy, inter.xy)[ , mean(abs(x1-x2) + abs(y1-y2))]
 
 
 #### For plotting linear fit #### 
