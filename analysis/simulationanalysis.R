@@ -1,5 +1,6 @@
 #### Packages ####
 library(ggplot2)
+library(data.table)
 
 #### 1. Global input parameters ####
 lambda_c = 90/2
@@ -9,6 +10,7 @@ v_w = 5
 v_b = 20
 v_m = 40
 t_s = 60/3600
+h = 15/60
 s = 0.5
 k_c = 45
 q_c = 500
@@ -18,124 +20,14 @@ d = 2/delta
 
 
 #### 2.  Functions ####
-#Flow across network at distance r from center
-fun.qr_a <- function(r) ((14*R*lambda_b) / (15*delta)) + (lambda_c/(4*r*delta))*(R^2 - r^2)
-
-#Flow around perimeter road
-fun.qg_p <- function(g) (2*lambda_b*g*(6*R*(1 + sqrt(2)) - 11*g)*(R^2 - g^2)) / ((R-2)*delta*R^2)
-
-#Traffic flow, parabolic
-fun.qk <- function(k) (q_c*(k*(2*k_c - k)))/(k_c^2)
-
-#Traffic density, parabolic
-fun.kq <- function(q) k_c*(1-sqrt(1-(q/q_c)))
-
-#Average flow experienced
-fun.qbar <- function(r) ((14*R*lambda_b)/(15*delta)) + (lambda_c/(8*delta*(R-r))) * (2*(R^2)*log(R/r) - R^2 + r^2)
-
-#Optimal ped zone size
-fun.gamma_int <- function(g) {
-  A = 11/R^2
-  B = -6*(1+sqrt(2))/R
-  C = -11
-  D = (48*(1+sqrt(2))*R*lambda_b + lambda_c*(R-2))/(8*lambda_b)
-  E = -14*R*(R-2)/30
-  H = (-lambda_c*(R-2)*R^2) / (8*lambda_b)
-  
-  A*g^5 + B*g^4 + C*g^3 + D*g^2 + E*g + H
-}
-
-#Optimal transit zone size as function of mode choice P_D
-fun.tau <- function(P) {
-  if(P > 0)
-    (56*P*lambda_b - 60*delta*q_T + sqrt( (56*P*lambda_b - 60*delta*q_T)^2 + 900*(R^2)*(P*lambda_c)^2))/(30*P*lambda_c)
-  else
-    0
-}
-
-#### DISTANCES 
-#Average ped walking distance
-fun.L_P <- function(g) (8*lambda_b*g^5 + 20*lambda_b*g^3(R^2 - R^2)) / 3*R^2 + 2*lambda*g^3 + g*(R^2 - g^2)
-
-#Average driving distance
-fun.L_D <- function(g) (R - g)*(14*lamba_b + 10*lambda_c) / 15*(lambda_b + lambda_c)
-
-#Average transit distance in mixed traffic
-fun.L_TM <- function(tau) (R - tau)*(14*lamba_b + 10*lambda_c) / 15*(lambda_b + lambda_c)
-
-#Average transit priority distance
-fun.L_TP <- function(tau) tau*(14*lambda_b + 10*lambda_c) / 15*(lambda_b + lambda_c)
-
-#Average walk distance
-fun.L_W <- function(g) 
-  ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) / 
-  (3*(R^2)*(g^2)*(2*lambda_b + lambda_c - 1) - 3*lambda_b*g^4 + 3*R^4)
-
-
-#### TRAVEL TIMES
-#Average driving travel time
-fun.tt_Dbar <- function(g) {
-  lbar <- (R-g)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
-  
-  if(fun.qbar(g) < q_c)
-    lbar*fun.kq(fun.qbar(g))/fun.qbar(g)
-  else
-    lbar*(k_c/q_c)*(fun.qbar(g)/q_c)^20
-}
-
-#Average mixed-traffic transit travel time
-fun.tt_TMbar<- function(tau) {
-  lbar <- (R-tau)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
-  
-  if(fun.qbar(tau) < q_c)
-    lbar*fun.kq(fun.qbar(tau))/fun.qbar(tau)
-  else
-    lbar*(k_c/q_c)*(fun.qbar(tau)/q_c)^20
-  
-}
-
-#Average walking travel time
-fun.tt_Wbar <- function(g) {
-  lbar <-   ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) / 
-    (3*(R^2)*(g^2)*(2*lambda_b + lambda_c - 1) - 3*lambda_b*g^4 + 3*R^4)
-  lbar/v_w
-}
-
-#Average biking travel time
-fun.tt_Bbar <- function(g) {
-  lbar <- ((8*lambda_b*g^5 + 20*lambda_b*(g^3)*(R^2 - g^2))/(3*R^2)) + 2*lambda_c*g^3 + g*(R^2 - g^2)
-  lbar/v_b
-}
-
-#Transit priority travel time
-fun.tt_TPbar <- function(tau) {
-  lbar <- ((tau*(14*lambda_b + 10*lambda_c))/(15*(lambda_b + lambda_c)))
-  (lbar/v_m) + (lbar/s)*t_s
-}
-
-#Average total drive time plus walking
-fun.tt_drive <- function(g) fun.tt_Dbar(g) + fun.tt_Wbar(g)
-
-#Average total transit time with priority
-fun.tt_transit <- function(tau) fun.tt_TPbar(tau) + fun.tt_TMbar(tau)
-
-
-#Total average travel time 
-fun.tt_total <- function(g,tau) fun.tt_Dbar(g) + fun.tt_Wbar(g) + fun.tt_TPbar(tau) + fun.tt_TMbar(tau)
-
-
-#Travel time difference [ transit - driving]
-fun.ttdiff <- function(g,tau) (fun.tt_Dbar(g) + fun.tt_Wbar(g)) - (fun.tt_TPbar(tau) + fun.tt_TMbar(tau))
-
-#Logit for driving
-fun.PD <- function(tdiff) 1/(1 + exp(beta*tdiff))
+source("analysis/simfunctions.R")
 
 
 #### 3. Simulation ####
 
 #Find the optimal intersection point, remains constant
 g.opt <- min(uniroot(fun.gamma_int, c(0,R/2))$root,
-                 uniroot(fun.gamma_int, c(R/2,R))$root)
+             uniroot(fun.gamma_int, c(R/2,R))$root)
 
 #Find critical transit priority flow, remains constant
 q_T <- {
@@ -146,6 +38,7 @@ q_T <- {
   else
     q_c*(TT*q_c/k_c)^(1/20)
 }
+
 
 ####
 # Initial probability --> Find optimal tau --> find new travel times --> update probability --> repeat
@@ -172,23 +65,76 @@ P_D <- fun.PD(TT.diff)
 fun.tt_drive(g.opt)
 
 
-Rseq <- seq(1,14,length.out = 100)
+
+##### Some Plots ####
+
+#AVerage travel time, varying one at a time.
+#varying only tau (optimal gamma) and
+#varying only gamma (tau = gamma in this case cuz theres no traffic in ped zone)
+
+ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+  stat_function(fun = function(x) fun.tt_total(g.opt,x), aes(color="tau", linetype="tau")) +
+  stat_function(fun = function(x) fun.tt_total(x,x), aes(color="gamma", linetype="gamma")) +
+  scale_x_continuous(expression("Distance from center"), limits = c(0,R)) +
+  scale_y_continuous("Average travel time (hours)", limits = c(0,30)) +
+  scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
+                      labels = expression("Varying"~tau~"while"~gamma==gamma*'*',
+                                          "Varying"~gamma~"while"~tau==gamma),
+                     guide = guide_legend(label.hjust=1), palette = "Set1") +
+  scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
+                     labels = expression("Varying"~tau~"while"~gamma==gamma*'*',
+                                         "Varying"~gamma~"while"~tau==gamma)) +
+  theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
-rbind(data.frame(r = Rseq, mode='Transit', TT = sapply(Rseq, function(x) fun.tt_transit(x))),
-      data.frame(r = Rseq, mode='Drive', TT = sapply(dat.ttvsprob$P, function(x) fun.tt_drive(x))))
+#Average transit and driving travel time functions
+ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+  stat_function(fun = function(x) fun.tt_transit(x), aes(color="tau", linetype="tau")) +
+  stat_function(fun = function(x) fun.tt_drive(x), aes(color="gamma", linetype="gamma")) +
+  scale_x_continuous(expression("Distance from center"), limits = c(0,R)) +
+  scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
+  scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
+                     labels = expression("Transit travel time varying"~tau~","~t[T](tau),
+                                         "Driving travel time varying"~gamma~","~t[D](gamma)),
+                     guide = guide_legend(label.hjust=1), palette = "Set1") +
+  scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
+                          labels = expression("Transit travel time varying"~tau~","~t[T](tau),
+                                              "Driving travel time varying"~gamma~","~t[D](gamma))) +
+  theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
-data.frame(r = Rseq, TT = sapply(Rseq, function(x) fun.tt_total(g.opt,x))) 
 
-ggplot(data.frame(r = Rseq, TT = sapply(Rseq, function(x) fun.tt_total(g.opt,x))),
-       aes(x=r, y=TT)) +
-  geom_point() +
-  #scale_x_continuous(limits = c(0,1)) +
-  #scale_x_continuous(limits = c(-15,15)) +
-  theme_bw()
+#Average travel time, varying both simultaneously.
+Rseq <- seq(0,R-(R/100),length.out = 200)
+plotmat <- data.table(expand.grid(gamma=Rseq,tau=Rseq))
 
-# 
+plotmat$tt_total <- mapply(fun.tt_total, plotmat$gamma, plotmat$tau)
+
+ggplot() +
+  geom_contour_filled(data = plotmat, aes(x = gamma, y = tau, z=log(tt_total)), breaks = 0:11) +
+  geom_area(aes(x = c(0,R), y = c(0,R)), fill='white', alpha = 0.6
+            ) +
+  geom_point(data=plotmat[which.min(tt_total), ], aes(x = gamma, y = tau)) +
+  annotate("text", x = 3*R/4, y = 1*R/4,
+           label = expression("Area under diagonal\ndenotes unrealistic\nregion where:"*tau < gamma), hjust=0.5) +
+  scale_x_continuous(expression(gamma), limits = c(0,R), expand = c(0,0)) +
+  scale_y_continuous(expression(tau), limits = c(0,R), expand = c(0,0)) +
+  scale_fill_brewer("Average travel time\n(mins, log scale)", palette = "RdYlBu", direction = -1,
+                    labels = paste0(round(exp(c(-Inf,0:10)),2),"-",round(exp(0:11),2))) +
+  theme_bw() + theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
+
+  
+#Drive travel time vs transit travel time
+
+  
+
+  
+    
+#
+  
+
+
+#Optimal ped size 
 # ggplot(data = data.frame(x = 0), mapping = aes(x = x)) +
 #   stat_function(fun = function(x) fun.gamma_int(g=x)) +
 #   stat_function(fun = function(x) fun.q_a(r=x), linetype='dashed') +
