@@ -19,7 +19,6 @@
 
 \maketitle
 
-
 This paper describes an analytical approximation model for a pedestrianized zone surrounded by a transit priority zone in an idealized rectilinear city. The model is intended to provide insights regarding how a pedestrianized city center can have complementary effects on transit priority, the optimal zone sizing, and their effects on traffic. 
 
 \begin{abstract}
@@ -162,7 +161,7 @@ Assuming for this case a parabolic function for the uncongested portion of the f
     \label{eq:densityparabolic}
 \end{equation}
 
-\noindent A piecewise monotonic cost function for travel time can then be defined as:
+\noindent A piecewise monotonic cost function for travel time, as shown in Figure~\ref{fig:traveltime}, can then be defined as:
 \begin{subequations}
 \begin{align}
     t_D(q) &= l \frac{k(q)}{q} & \text{for}~q < q_c \\
@@ -176,7 +175,7 @@ Assuming for this case a parabolic function for the uncongested portion of the f
     \bar{t} = \frac{\bar{l}}{\bar{v}} = \bar{l}~\frac{k\left(\bar{q_a}\right)}{\bar{q_a}}
 \end{equation}
 
-\noindent which can be analytically determined from the MFD as a function of average flow across the network $\bar{q_a}$, as experienced by travelers from their trips between the pedestrian zone $\gamma$, to the city limit $R$:
+\noindent which can be analytically determined from the MFD as a function of average flow across the network $\bar{q_a}$, as experienced by travelers from their trips between the pedestrian zone $\gamma$, and the city limit $R$:
 
 \begin{align}
     \bar{q}_a & = \frac{1}{R-\gamma}\int_\gamma^R q(\gamma) d\gamma \notag\\
@@ -189,13 +188,13 @@ Transit travel time is conditional upon whether it operates in a transit priorit
 
 \begin{subequations}
 \begin{align}
-    t_{TP} & = \frac{l}{v_{m}} + \frac{l}{s}t_s  & \text{with transit priority} \\
-    t_{TM}(q) & = l\frac{k(q)}{q} + \frac{l}{s}t_s  & \text{without transit priority when}~q < q_c\\
+    t_{TP} & = \frac{l}{v_{m}} + \frac{l}{s}t_s & \text{with transit priority} \\
+    t_{TM}(q) & = l\frac{k(q)}{q} + \frac{l}{s}t_s   & \text{without transit priority when}~q < q_c\\
     t_{TM}(q) & = l\frac{k_c}{q_c} \left(\frac{q}{q_c}\right)^{20} + \frac{l}{s}t_s & \text{without transit priority when}~q \geq q_c
 \end{align}
 \end{subequations}
 
-\noindent where $v_m$ is the maximum cruising speed of transit unimpeded by traffic, $s$ is stop spacing, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time. The travel time of transit in mixed-traffic will then always be higher than driving an automobile, eventually converging as traffic conditions reach jam flow. Transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving (see Figure~\ref{fig:transittraveltime}).
+\noindent where $v_m$ is the maximum cruising speed of transit unimpeded by traffic, $s$ is stop spacing, $h$ is the average headway for transit vehicles, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time. The travel time of transit in mixed-traffic will then always be higher than driving an automobile, eventually converging as traffic conditions reach jam flow. Transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving (see Figure~\ref{fig:transittraveltime}).
 
 \begin{figure}[!ht]
      \centering
@@ -217,26 +216,24 @@ Transit travel time is conditional upon whether it operates in a transit priorit
      \caption{Transit travel time and optimal zone sizing}
 \end{figure}
 
-The critical transit priority traffic flow point $q^*_T$, is found where transit priority travel time $t_{TP}$ intersects driving travel time $t_D$. Since travel time is a piece-wise function, it depends on whether the transit priority travel time $t_{TP}$, exceeds the driving travel time at roadway capacity $t_c$. Although it is unlikely that transit priority travel time will exceed traffic travel time, the condition is provided nonetheless. To determine when this occurs, a simple ratio can be taken, $\sfrac{t_{TP}}{t_c} = \frac{q_c}{k_c} \left( \frac{1}{v_m} + \frac{t_s}{s} \right)$. The critical transit priority traffic flow point then depends on whenther $\sfrac{t_{TP}}{t_c}$ is greater than or less than 1:
+The critical transit priority traffic flow point $q^*_T$, is found where transit priority travel time $t_{TP}$ intersects driving travel time $t_D$. Since travel time is a piece-wise function, it depends on whether the transit priority travel time $t_{TP}$, exceeds the driving travel time at roadway capacity $t_c$. Although it is unlikely that transit priority travel time will exceed traffic travel time, the condition is provided nonetheless. To determine when this occurs, a simple ratio can be taken, $\sfrac{t_{TP}}{t_c}$. The critical transit priority traffic flow point then depends on whenther $\sfrac{t_{TP}}{t_c}$ is greater than or less than 1:
 
 \begin{subequations}
 \begin{align}
-    q^*_T & = \frac{2k_{c}}{T} - \frac{k_{c}^{2}}{q_{c}T^{2}} & \text{for}~ \sfrac{t_{TP}}{t_c} < 1 \\
-    q^*_T & = q_{c}\left(\frac{q_{c}}{k_{c}}T\right)^{\frac{1}{20}} & \text{for}~ \sfrac{t_{TP}}{t_c} \geq 1 \\
-    \text{where: } & T = \frac{1}{v_{m}} + \frac{t_{s}}{s} \notag
+    q_T & = \frac{2k_{c}}{T} - \frac{k_{c}^{2}}{q_{c}T^{2}} & \text{for}~ \sfrac{t_{TP}}{t_c} < 1 \\
+    q_T & = q_{c}\left(\frac{q_{c}}{k_{c}}T\right)^{\frac{1}{20}} & \text{for}~ \sfrac{t_{TP}}{t_c} \geq 1 \\
+    \end{align}
+    \text{where: }
+    \begin{align}
+    T & = \frac{1}{v_{m}} + \frac{t_{s}}{s}  \notag \\
+    \sfrac{t_{TP}}{t_c} & = \frac{q_c}{k_c} \left( \frac{1}{v_m} + \frac{t_s}{s}  \right) \notag
     \end{align}
 \end{subequations}
 
-\noindent 
+\noindent **** NOTE **** Headway isn't included, it would cause $l$ to remain?
 
-
-$q^*_T$ could then be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau^*$. The solution to this is quadratic, but assuming a non-negative value for the optimal transit zone size, it can be solved for analytically:
-
-\begin{equation}
-    \tau^* = \frac{56\lambda_{b}-60\delta q_{t} +\sqrt{\left(56\lambda_{b}-60\delta q_{t}\right)^{2}+900\lambda_{c}^{2}R^{2}}}{30\lambda_{c}}
-\end{equation}
-
-Determining an optimal pedestrian zone size is slightly more complex. An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ where the pedestrian zone is (see Figure~\ref{fig:flowcombo}):
+\section{Optimal zones size}
+An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ where the pedestrian zone is (see Figure~\ref{fig:flowcombo}):
 
 \begin{enumerate}[label=(\alph*)]
     \item large enough to prevent traffic flow across the network from exceeding capacity $q_a(\gamma) < q_c$, and 
@@ -262,8 +259,21 @@ Given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$ an
 
 \begin{align}\small
 \gamma^* &\Leftarrow \text{min} \left[ f(\gamma_1) = 0, f(\gamma_2) = 0 \right]\\
-\text{s.t.} & ~ 0 \leq \gamma \leq R 
+\text{s.t.} & ~ 0 \leq \gamma\leq R  \notag 
 \end{align}
+
+The critical transit priority traffic flow $q^*_T$, can then be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau^*$. The solution to this is quadratic, but assuming a non-negative value for the optimal transit zone size, it can be solved for analytically:
+
+\begin{equation}
+    \tau^*(P_D) = \frac{56 P_D \lambda_{b}-60\delta q_{T} +\sqrt{\left(56 P_D \lambda_{b}-60\delta q_{T}\right)^{2}+900 P_D^2 \lambda_{c}^{2}R^{2}}}{30 P_D \lambda_{c}}
+\end{equation}
+
+\noindent However, unlike the optimal pedestrian zone, which us unaffected by changes in driving demand, the optimal transit priority zone size will depend on driving demand. To account for mode choice between driving and transit, the proportion of driving trips $P_D$, is introduced to scale driving demand by substituting $\lambda_b$ and $\lambda_c$ with $P_D\lambda_b$ and $P_D\lambda_c$, respectively. Conversely, the proportion of driving demand $P_D$ can be determined from $\tau$ as:
+
+\begin{equation}
+    P_D(\tau) = -\frac {60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
+\end{equation}
+
 
 \section{Distance traveled}
 To determine the travel time, the total average distance traveled must be calculated for the following modes:
@@ -332,7 +342,7 @@ Assuming unlimited transit capacity relative to driving and that transit priorit
 \begin{subequations}
     \label{eq:choiceprob}
     \begin{align}
-        P_D & = \frac{1}{1+e^{- (\beta_D t_D-t_T \beta_T)}}\\
+        P_D & = \frac{1}{1+e^{(\beta_D t_D-t_T \beta_T)}}\\
         P_T & = 1 - P_D
     \end{align}
 \end{subequations}
@@ -340,10 +350,80 @@ Assuming unlimited transit capacity relative to driving and that transit priorit
 \noindent where $t_D$ and $t_T$ are the travel times associated with automobile and transit, respectively; and $\beta$ is the a estimated scaling parameter. The probability in Equation~\eqref{eq:choiceprob} can be used to find the proportion of trips made by driving. A two-alternative logit can be simplified to require only the utility difference between the two choices, not the full value, thus the logit only requires a travel time differential $\Delta t = t_D - t_T$:
 
 \begin{equation}
-    \Delta t(q) = \beta_D\overset{drive}{\left[ L_D \frac{k(q)}{q} + \frac{L_D}{v_{walk}} \right]} - \beta_T \overset{transit}{\left[ \left( \frac{L_{TP}}{v_{max}} + \frac{L_{TP}}{s}t_s \right) + \left( L_{TM} \frac{k(q)}{q} + \frac{L_{TM}}{s}t_s \right) \right]}
+    \Delta t(\tau) = \beta_D\left[ t_D(\gamma) + t_W(\gamma) \right] - \left[ t_{TP}(\tau) + t_{TM}(\tau) \right]
+    %\Delta t(q) = \beta_D\overset{drive}{\left[ L_D \frac{k(q)}{q} + \frac{L_D}{v_{walk}} \right]} - \beta_T \overset{transit}{\left[ \left( \frac{L_{TP}}{v_{max}} + \frac{L_{TP}}{s}t_s \right) + \left( L_{TM} \frac{k(q)}{q} + \frac{L_{TM}}{s}t_s \right) \right]}
 \end{equation}
 
-The new demand is then shifted according to the proportional mode choice probability $P_D$ for baseline and monocentric demand $\hat{\lambda_b} = P_D \lambda_b$, and monocentric demand $\hat{\lambda_c} = P_D \lambda_c$. As travel time will vary depending upon $\tau$ and $\gamma$, there is some sort of dynamic equilibrium with flow and demand where travel time depends on flow and flow depends on travel time. 
+\noindent which is dependent upon tau and gamma. However, since since $\gamma^*$ remains constant (see Figure~\ref{fig:optimalped}), the function can be expressed entirely dependent upon $\tau$. The new demand is then shifted according to the proportional mode choice probability $P_D$ for baseline and monocentric demand $\hat{\lambda_b} = P_D \lambda_b$, and monocentric demand $\hat{\lambda_c} = P_D \lambda_c$. As travel time will vary depending upon $\tau$ and $\gamma$, there is some sort of dynamic equilibrium with flow and demand where travel time depends on flow and flow depends on travel time. 
+
+
+\section{Results}
+
+<<>>=
+    library(ggplot2)
+    library(data.table)
+
+    #### 1. Global input parameters ####
+    lambda_c = 90/2
+    lambda_b = 150/2
+    R = 15
+    v_w = 5
+    v_b = 20
+    v_m = 40
+    t_s = 60/3600
+    h = 15/60
+    s = 0.5
+    k_c = 45
+    q_c = 500
+    beta = 1
+    delta = 2.71
+    d = 2/delta
+    
+    
+    #### 2.  Functions ####
+    read_chunk("analysis/simfunctions.R")
+    
+    
+    #### 3. Simulation ####
+    
+    #Find the optimal intersection point, remains constant
+    g.opt <- min(uniroot(fun.gamma_int, c(0,R/2))$root,
+                 uniroot(fun.gamma_int, c(R/2,R))$root)
+    
+    #Find critical transit priority flow, remains constant
+    q_T <- {
+      TT <- (1/v_m)+(t_s/s)
+      tc_ratio <- (q_c/k_c)*((1/v_m) + (t_s/s))
+      if(tc_ratio < 1) 
+        (2*k_c/TT) - ((k_c^2)/(q_c*TT^2))
+      else
+        q_c*(TT*q_c/k_c)^(1/20)
+    }
+    
+    
+    ##### Some Plots ####
+    #Average travel time, varying both simultaneously.
+    Rseq <- seq(0,R-(R/100),length.out = 200)
+    plotmat <- data.table(expand.grid(gamma=Rseq,tau=Rseq))
+    
+    plotmat[['tt_total']] <- mapply(fun.tt_total, plotmat$gamma, plotmat$tau)
+    
+    ggplot() +
+      geom_contour_filled(data = plotmat, aes(x = gamma, y = tau, z=log(tt_total)), breaks = 0:11) +
+      geom_area(aes(x = c(0,R), y = c(0,R)), fill='white', alpha = 0.6
+                ) +
+      geom_point(data=plotmat[which.min(tt_total), ], aes(x = gamma, y = tau)) +
+      annotate("text", x = 3*R/4, y = 1*R/4,
+               label = expression("Area under diagonal\ndenotes unrealistic\nregion where:"*tau < gamma), hjust=0.5) +
+      scale_x_continuous(expression(gamma), limits = c(0,R), expand = c(0,0)) +
+      scale_y_continuous(expression(tau), limits = c(0,R), expand = c(0,0)) +
+      scale_fill_brewer("Average travel time\n(mins, log scale)", palette = "RdYlBu", direction = -1,
+                        labels = paste0(round(exp(c(-Inf,0:10)),2),"-",round(exp(0:11),2))) +
+      theme_bw() + theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
+    
+
+
+@
 
 
 
