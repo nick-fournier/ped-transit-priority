@@ -22,7 +22,7 @@ fun.gamma_int <- function(g) {
   D = (48*(1+sqrt(2))*R*lambda_b + lambda_c*(R-2))/(8*lambda_b)
   E = -14*R*(R-2)/30
   H = (-lambda_c*(R-2)*R^2) / (8*lambda_b)
-  
+
   A*g^5 + B*g^4 + C*g^3 + D*g^2 + E*g + H
 }
 
@@ -34,7 +34,7 @@ fun.tau <- function(P) {
     0
 }
 
-#### DISTANCES 
+#### DISTANCES
 #Average ped walking distance
 fun.L_P <- function(g) (8*lambda_b*g^5 + 20*lambda_b*g^3(R^2 - R^2)) / 3*R^2 + 2*lambda*g^3 + g*(R^2 - g^2)
 
@@ -48,8 +48,8 @@ fun.L_TM <- function(tau) (R - tau)*(14*lamba_b + 10*lambda_c) / 15*(lambda_b + 
 fun.L_TP <- function(tau) tau*(14*lambda_b + 10*lambda_c) / 15*(lambda_b + lambda_c)
 
 #Average walk distance
-fun.L_W <- function(g) 
-  ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) / 
+fun.L_W <- function(g)
+  ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) /
   (3*(R^2)*(g^2)*(2*lambda_b + lambda_c - 1) - 3*lambda_b*g^4 + 3*R^4)
 
 
@@ -57,7 +57,7 @@ fun.L_W <- function(g)
 #Average driving travel time
 fun.tt_Dbar <- function(g) {
   lbar <- (R-g)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
-  
+
   if(fun.qbar(g) < q_c)
     lbar*fun.kq(fun.qbar(g))/fun.qbar(g)
   else
@@ -67,17 +67,17 @@ fun.tt_Dbar <- function(g) {
 #Average mixed-traffic transit travel time
 fun.tt_TMbar<- function(tau) {
   lbar <- (R-tau)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
-  
+
   if(fun.qbar(tau) < q_c)
-    lbar*(fun.kq(fun.qbar(tau))/fun.qbar(tau) + (1/v_m) + (t_s/s)) 
+    lbar*(fun.kq(fun.qbar(tau))/fun.qbar(tau) + (1/v_m) + (t_s/s))
   else
-    lbar*((k_c/q_c)*(fun.qbar(tau)/q_c)^20  + (1/v_m) + (t_s/s)) 
-  
+    lbar*((k_c/q_c)*(fun.qbar(tau)/q_c)^20  + (1/v_m) + (t_s/s))
+
 }
 
 #Average walking travel time
 fun.tt_Wbar <- function(g) {
-  lbar <-   ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) / 
+  lbar <-   ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) /
     (3*(R^2)*(g^2)*(2*lambda_b + lambda_c - 1) - 3*lambda_b*g^4 + 3*R^4)
   lbar/v_w
 }
@@ -91,7 +91,7 @@ fun.tt_Bbar <- function(g) {
 #Transit priority travel time
 fun.tt_TPbar <- function(tau) {
   lbar <- ((tau*(14*lambda_b + 10*lambda_c))/(15*(lambda_b + lambda_c)))
-  (lbar/v_m) + (lbar/s)*t_s 
+  (lbar/v_m) + (lbar/s)*t_s
 }
 
 
@@ -109,14 +109,14 @@ fun.tt_drive <- function(g) fun.tt_Dbar(g) + fun.tt_Wbar(g)
 fun.tt_transit <- function(tau) fun.tt_TPbar(tau) + fun.tt_TMbar(tau)
 
 
-#Total average travel time 
-fun.tt_total <- function(g,tau)
+#Total average travel time
+fun.tt_total <- function(g,tau) {
+  #fun.PD(fun.tt_drive(g) - fun.tt_transit(tau))
   fun.Ptau(tau)*(fun.tt_Dbar(g) + fun.tt_Wbar(g)) + (1-fun.Ptau(tau))*(fun.tt_TPbar(tau) + fun.tt_TMbar(tau))
-
+}
 
 
 #Travel time difference [ transit - driving]
-fun.ttdiff <- function(g,tau) (fun.tt_Dbar(g) + fun.tt_Wbar(g)) - (fun.tt_TPbar(tau) + fun.tt_TMbar(tau))
-
+fun.ttdiff <- function(g,tau) { (fun.tt_Dbar(g) + fun.tt_Wbar(g)) - (fun.tt_TPbar(tau) + fun.tt_TMbar(tau)) }
 
 

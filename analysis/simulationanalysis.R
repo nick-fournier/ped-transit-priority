@@ -1,6 +1,7 @@
 #### Packages ####
 library(ggplot2)
 library(data.table)
+library(metR)
 
 #### 1. Global input parameters ####
 lambda_c = 90/2
@@ -26,8 +27,8 @@ source("analysis/simfunctions.R")
 #### 3. Simulation ####
 
 #Find the optimal intersection point, remains constant
-g.opt <- min(uniroot(fun.gamma_int, c(0,R/2))$root,
-             uniroot(fun.gamma_int, c(R/2,R))$root)
+g.opt <- min(uniroot(fun.gamma_int, c(0,R/2))[['root']],
+             uniroot(fun.gamma_int, c(R/2,R))[['root']])
 
 #Find critical transit priority flow, remains constant
 q_T <- {
@@ -40,29 +41,10 @@ q_T <- {
 }
 
 
-####
-# Initial probability --> Find optimal tau --> find new travel times --> update probability --> repeat
-####
 
-# Initial probability
-P <- 1
-
-# Find tau
-tau.opt <- fun.tau(P)
-
-#Find difference in travel times [ driving - transit ]
-TT.diff <- fun.ttdiff(g.opt, tau.opt)
-fun.tt_drive(g.opt)
-fun.tt_transit(tau.opt)
+###
 
 
-#Get new probability 
-P_D <- fun.PD(TT.diff)
-
-
-
-
-fun.tt_drive(g.opt)
 
 
 
@@ -100,30 +82,47 @@ ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
                           labels = expression("Transit travel time varying"~tau~","~t[T](tau),
                                               "Driving travel time varying"~gamma~","~t[D](gamma))) +
-  theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
 
 #Average travel time, varying both simultaneously.
-Rseq <- seq(0,R-(R/100),length.out = 200)
+Rseq <- seq(1/1000,R-(R/1000),length.out = 300)
 plotmat <- data.table(expand.grid(gamma=Rseq,tau=Rseq))
+#Calculate the average total travel time
+plotmat[ , tt_total := mapply(fun.tt_total, plotmat[['gamma']], plotmat[['tau']])]
+#Bins
+plotmat[ , bin := .bincode(tt_total, breaks = exp(0:ceiling(log(max(plotmat[['tt_total']])))))]
+#plotmat[ , bin := .bincode(tt_total, breaks = 10^(0:log10(max(plotmat[['tt_total']]))))]
+sort(unique(plotmat$bin))
 
-plotmat$tt_total <- mapply(fun.tt_total, plotmat$gamma, plotmat$tau)
+lower <- min(plotmat$bin)
+upper <- lower+8
+plotmat[ bin > upper, bin := upper]
 
-ggplot() +
-  geom_contour_filled(data = plotmat, aes(x = gamma, y = tau, z=log(tt_total)), breaks = 0:11) +
-  geom_area(aes(x = c(0,R), y = c(0,R)), fill='white', alpha = 0.6
-            ) +
-  geom_point(data=plotmat[which.min(tt_total), ], aes(x = gamma, y = tau)) +
-  annotate("text", x = 3*R/4, y = 1*R/4,
-           label = expression("Area under diagonal\ndenotes unrealistic\nregion where:"*tau < gamma), hjust=0.5) +
-  scale_x_continuous(expression(gamma), limits = c(0,R), expand = c(0,0)) +
-  scale_y_continuous(expression(tau), limits = c(0,R), expand = c(0,0)) +
-  scale_fill_brewer("Average travel time\n(mins, log scale)", palette = "RdYlBu", direction = -1,
-                    labels = paste0(round(exp(c(-Inf,0:10)),2),"-",round(exp(0:11),2))) +
-  theme_bw() + theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
+#plotting
+ggplot(data = plotmat, aes(x = gamma, y = tau, z = tt_total)) +
+  geom_tile(aes(fill = as.factor(bin))) +
+  geom_contour(breaks = exp(lower:upper), color = 'black', size = 0.1, alpha = 0.5) +
+  geom_area(data = data.frame(x = c(0,R), y=  c(0,R)), aes(x = x, y = y, z=0), fill='gray90', alpha = 0.6) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point(data=plotmat[which.min(tt_total), ]) +
+  geom_text(data=plotmat[which.min(tt_total), ], color = 'white', 
+            aes(x=gamma*1.75, y=tau*1.25, label = paste("Minimum =",round(tt_total,2),"hours"))) +
+  annotate("text", x = 3*R/4, y = R/7, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
+  annotate("text", x = 3*R/4, y = R/7, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
+  scale_x_continuous(expression(gamma), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
+  scale_y_continuous(expression(tau), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
+  scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
+                    label = c(paste0("<",scales::comma(round(exp(lower)), accuracy = 1)),
+                              paste0(scales::comma(round(exp(lower:(upper-2))),accuracy = 1), " - ",
+                                     scales::comma(round(exp((lower+1):(upper-1))), accuracy = 1)),
+                              paste0(">",scales::comma(round(exp(upper-1)), accuracy = 1)))) +
+  theme_light() + coord_fixed() +
+  theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
 
-  
+
+
 #Drive travel time vs transit travel time
 
   
