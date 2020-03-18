@@ -92,18 +92,22 @@ plotmat <- data.table(expand.grid(gamma=Rseq,tau=Rseq))
 #Calculate the average total travel time
 plotmat[ , tt_total := mapply(fun.tt_total, plotmat[['gamma']], plotmat[['tau']])]
 #Bins
-plotmat[ , bin := .bincode(tt_total, breaks = exp(0:ceiling(log(max(plotmat[['tt_total']])))))]
-#plotmat[ , bin := .bincode(tt_total, breaks = 10^(0:log10(max(plotmat[['tt_total']]))))]
-sort(unique(plotmat$bin))
+wdth = 0.25
+brks = exp(seq(0,ceiling(log(max(plotmat[['tt_total']]))), wdth))
+#brks = exp(0:ceiling(log(max(plotmat[['tt_total']]))))
+#brks = 10^(0:log10(max(plotmat[['tt_total']])))
+plotmat[ , bin := .bincode(tt_total, breaks = brks)]
+#sort(unique(plotmat$bin))
 
 lower <- min(plotmat$bin)
-upper <- lower+8
+upper <- lower + 8
 plotmat[ bin > upper, bin := upper]
 
 #plotting
 ggplot(data = plotmat, aes(x = gamma, y = tau, z = tt_total)) +
   geom_tile(aes(fill = as.factor(bin))) +
-  geom_contour(breaks = exp(lower:upper), color = 'black', size = 0.1, alpha = 0.5) +
+  geom_contour(breaks = brks[1:10], color = 'black', size = 0.1, alpha = 0.5) +
+  geom_contour(breaks = brks[11:length(brks)], color = 'black', size = 0.01, alpha = 0.2) +
   geom_area(data = data.frame(x = c(0,R), y=  c(0,R)), aes(x = x, y = y, z=0), fill='gray90', alpha = 0.6) +
   geom_abline(slope = 1, linetype = "dashed") +
   geom_point(data=plotmat[which.min(tt_total), ]) +
@@ -111,22 +115,20 @@ ggplot(data = plotmat, aes(x = gamma, y = tau, z = tt_total)) +
             aes(x=gamma*1.75, y=tau*1.25, label = paste("Minimum =",round(tt_total,2),"hours"))) +
   annotate("text", x = 3*R/4, y = R/7, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
   annotate("text", x = 3*R/4, y = R/7, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
-  scale_x_continuous(expression(gamma), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
-  scale_y_continuous(expression(tau), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
+  scale_x_continuous(expression("Pedestrian zone size"~gamma), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
+  scale_y_continuous(expression("Transit priority zone size"~tau), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
   scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
-                    label = c(paste0("<",scales::comma(round(exp(lower)), accuracy = 1)),
-                              paste0(scales::comma(round(exp(lower:(upper-2))),accuracy = 1), " - ",
-                                     scales::comma(round(exp((lower+1):(upper-1))), accuracy = 1)),
-                              paste0(">",scales::comma(round(exp(upper-1)), accuracy = 1)))) +
+                    label = c(paste0("<",scales::comma(brks)[lower]),
+                              paste0(scales::comma(brks)[lower:(upper-2)], " - ",
+                                     scales::comma(brks)[(lower+1):(upper-1)]),
+                              paste0(">",scales::comma(brks)[(upper-1)]))) +
   theme_light() + coord_fixed() +
   theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
 
 
 
-#Drive travel time vs transit travel time
-
   
-
+  
   
     
 #
