@@ -5,8 +5,8 @@ library(data.table)
 # library(ggpubr)
 
 #### 1. Global input parameters ####
-lambda_c = 0.9*90/2
-lambda_b = 0.9*150/2
+lambda_c = 90/2
+lambda_b = 150/2
 R = 15
 v_w = 5
 v_b = 20
@@ -116,17 +116,18 @@ plotmat <- data.table(expand.grid(gamma=Rseq,tau=Rseq))
 plotmat[ , tt_total := mapply(fun.tt_total, plotmat[['gamma']], plotmat[['tau']])]
 #Bins
 wdth = 0.25
-brks = exp(seq(0,ceiling(log(max(plotmat[['tt_total']]))), wdth))
+brks = c(0,exp(seq(0,ceiling(log(max(plotmat[['tt_total']]))), wdth)))
 #brks = exp(0:ceiling(log(max(plotmat[['tt_total']]))))
 #brks = 10^(0:log10(max(plotmat[['tt_total']])))
 plotmat[ , bin := .bincode(tt_total, breaks = brks)]
 #sort(unique(plotmat$bin))
 
 lower <- min(plotmat[['bin']])
-upper <- lower + 8
+upper <- lower + 8 #Number of bins
 plotmat[ bin > upper, bin := upper]
 
 #plotting
+suppressWarnings(
 plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma, y = tau, z = tt_total)) +
   geom_tile(aes(fill = as.factor(bin))) +
   geom_contour(breaks = brks[1:10], color = 'black', size = 0.1, alpha = 0.5) +
@@ -141,18 +142,15 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma, y = tau, z = tt_tota
   scale_x_continuous(expression("Pedestrian zone size"~gamma), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
   scale_y_continuous(expression("Transit priority zone size"~tau), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
   scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
-                    label = c(paste0("<",scales::comma(brks)[lower]),
-                              paste0(scales::comma(brks)[lower:(upper-2)], " - ",
+                    label = c(paste0(scales::comma(brks)[lower:(upper-2)], " - ",
                                      scales::comma(brks)[(lower+1):(upper-1)]),
                               paste0(">",scales::comma(brks)[(upper-1)]))) +
   theme_light() + coord_fixed() +
   theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
+)
 
 
 #
-  
-
-
 #Optimal ped size 
 # ggplot(data = data.frame(x = 0), mapping = aes(x = x)) +
 #   stat_function(fun = function(x) fun.gamma_int(g=x)) +
