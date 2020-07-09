@@ -22,7 +22,7 @@ d = 2/delta
 
 
 #### 2.  Functions ####
-source("analysis/simfunctions.R")
+#source("analysis/simfunctions.R")
 
 
 #### 3. Simulation ####
