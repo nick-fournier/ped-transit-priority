@@ -412,7 +412,8 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
 \end{table}
 
 << cache=FALSE>>==
- source("../../analysis/simulationanalysis.R")
+    source("../../analysis/simfunctions.R")
+    source("../../analysis/simulationanalysis.R")
  @
 
 <<echo=FALSE, cache=FALSE>>=
