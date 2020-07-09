@@ -462,11 +462,7 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
      \begin{subfigure}[b]{\textwidth}
          \centering
         <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
-        ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
-            stat_function(fun = function(x) fun.tt_drive(x)) +
-          scale_x_continuous(expression("Pedestrian zone size,"~gamma~"(miles)"), limits = c(0,R)) +
-          scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
-          theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+        plot[['drivett']]
         @
          \caption{Effect of pedestrian zone size on average travel time (no transit priority zone)}
          \label{fig:ttpedzone}
