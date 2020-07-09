@@ -411,6 +411,10 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
 \label{tab:inputpars}
 \end{table}
 
+<< cache=FALSE>>==
+ source("../../analysis/simulationanalysis.R")
+ @
+
 <<echo=FALSE, cache=FALSE>>=
     library(data.table)
     library(ggplot2)
@@ -449,27 +453,95 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
     }
     
     @
-    
-  \begin{figure}[H]
-    \centering
-    <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
+
+
+
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{\textwidth}
+         \centering
+        <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
         ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
-      stat_function(fun = function(x) fun.tt_transit(x), aes(color="tau", linetype="tau")) +
-      stat_function(fun = function(x) fun.tt_drive(x), aes(color="gamma", linetype="gamma")) +
-      scale_x_continuous(expression("Distance from center"), limits = c(0,R)) +
-      scale_y_continuous("Average travel time (hours)", limits = c(0,8)) +
-      scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
-                         labels = expression("Transit travel time varying"~tau~","~t[T](tau),
-                                             "Driving travel time varying"~gamma~","~t[D](gamma)),
-                         guide = guide_legend(label.hjust=1), palette = "Set1") +
-      scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
-                              labels = expression("Transit travel time varying"~tau~","~t[T](tau),
-                                                  "Driving travel time varying"~gamma~","~t[D](gamma))) +
-      theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
-    @
-    \caption{Average travel time by mode varying across $\gamma$ or $\tau$}
-    \label{fig:modett}
+            stat_function(fun = function(x) fun.tt_drive(x)) +
+          scale_x_continuous(expression("Pedestrian zone size,"~gamma~"(miles)"), limits = c(0,R)) +
+          scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
+          theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+        @
+         \caption{Effect of pedestrian zone size on average travel time (no transit priority zone)}
+         \label{fig:ttpedzone}
+     \end{subfigure}
+     
+     \begin{subfigure}[b]{\textwidth}
+         \centering
+        <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
+        ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+          stat_function(fun = function(x) fun.tt_transit(x), linetype = "dashed") +
+          scale_x_continuous(expression("Transit zone size"~tau~"(miles)"), limits = c(0,R), breaks =) +
+          scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
+          theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+        @
+        \caption{Effect of transit priority zone size on average travel time (no pedestrian zone)}
+         \label{fig:tttransitzone}
+     \end{subfigure}
+        \caption{Average travel time by mode varying pedestrian and transit zone size, $\gamma$ and $\tau$}
+        \label{fig:modett}
 \end{figure}
+
+
+
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{\textwidth}
+         \centering
+        <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
+        ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+            stat_function(fun = function(x) fun.tt_drive(x)) +
+          scale_x_continuous(expression("Pedestrian zone size,"~gamma~"(miles)"), limits = c(0,R)) +
+          scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
+          theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+        @
+         \caption{Effect of pedestrian zone size on average travel time (no transit priority zone)}
+         \label{fig:ttpedzone}
+     \end{subfigure}
+     
+     \begin{subfigure}[b]{\textwidth}
+         \centering
+        <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
+        ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+          stat_function(fun = function(x) fun.tt_transit(x), linetype = "dashed") +
+          scale_x_continuous(expression("Transit zone size"~tau~"(miles)"), limits = c(0,R)) +
+          scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
+          theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+        @
+        \caption{Effect of transit priority zone size on average travel time (no pedestrian zone)}
+         \label{fig:tttransitzone}
+     \end{subfigure}
+        \caption{Average travel time by mode varying pedestrian and transit zone size, $\gamma$ and $\tau$}
+        \label{fig:modett}
+\end{figure}
+
+
+
+%   \begin{figure}[H]
+%     \centering
+%     <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
+%     ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+%       stat_function(fun = function(x) fun.tt_transit(x), aes(color="tau", linetype="tau")) +
+%       stat_function(fun = function(x) fun.tt_drive(x), aes(color="gamma", linetype="gamma")) +
+%       scale_x_continuous(expression("Pedestrian / Transit zone size"), limits = c(0,R)) +
+%       scale_y_continuous("Average travel time (hours)", limits = c(0,8)) +
+%       scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
+%                          labels = expression("Transit travel time varying"~tau~","~t[T](tau),
+%                                              "Driving travel time varying"~gamma~","~t[D](gamma)),
+%                          guide = guide_legend(label.hjust=1), palette = "Set1") +
+%       scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
+%                               labels = expression("Transit travel time varying"~tau~","~t[T](tau),
+%                                                   "Driving travel time varying"~gamma~","~t[D](gamma))) +
+%       theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+%     @
+%     \caption{Average travel time by mode varying across $\gamma$ or $\tau$}
+%     \label{fig:modett}
+% \end{figure}
 
     
 
@@ -489,7 +561,7 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
     plotmat[ , bin := .bincode(tt_total, breaks = brks)]
     #sort(unique(plotmat$bin))
     
-    lower <- min(plotmat$bin)
+    lower <- min(plotmat[['bin']])
     upper <- lower + 8
     plotmat[ bin > upper, bin := upper]
     
