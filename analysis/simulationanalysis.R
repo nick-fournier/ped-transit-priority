@@ -1,11 +1,12 @@
 #### Packages ####
 library(ggplot2)
 library(data.table)
-library(metR)
+# library(metR)
+# library(ggpubr)
 
 #### 1. Global input parameters ####
-lambda_c = 90/2
-lambda_b = 150/2
+lambda_c = 0.9*90/2
+lambda_b = 0.9*150/2
 R = 15
 v_w = 5
 v_b = 20
@@ -40,21 +41,16 @@ q_T <- {
     q_c*(TT*q_c/k_c)^(1/20)
 }
 
-
-
 ###
-
-
 
 
 
 ##### Some Plots ####
 
-#AVerage travel time, varying one at a time.
+#### Average combined travel time ####
 #varying only tau (optimal gamma) and
 #varying only gamma (tau = gamma in this case cuz theres no traffic in ped zone)
-
-ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+plot[['combott']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_total(g.opt,x), aes(color="tau", linetype="tau")) +
   stat_function(fun = function(x) fun.tt_total(x,x), aes(color="gamma", linetype="gamma")) +
   scale_x_continuous(expression("Distance from center"), limits = c(0,R)) +
@@ -69,12 +65,22 @@ ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
-#Average transit and driving travel time functions
+#### Average combined travel time, when zones are the same size
+ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+  stat_function(fun = function(x) fun.tt_total(x,x), aes(color="gamma", linetype="gamma")) +
+  scale_x_continuous(expression("Zone size,"~gamma == tau), limits = c(0,R)) +
+  scale_y_continuous("Average travel time (hours)", limits = c(0,30)) +
+  theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+
+
+
+#### Average travel time for driving and transit separately ####
+#Travel time varying ped zone or transit zone.
 ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_transit(x), aes(color="tau", linetype="tau")) +
   stat_function(fun = function(x) fun.tt_drive(x), aes(color="gamma", linetype="gamma")) +
-  scale_x_continuous(expression("Distance from center"), limits = c(0,R)) +
-  scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
+  scale_x_continuous("Distance from center", limits = c(0,R)) +
+  scale_y_continuous("Average travel time (hours)", limits = c(0,8)) +
   scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
                      labels = expression("Transit travel time varying"~tau~","~t[T](tau),
                                          "Driving travel time varying"~gamma~","~t[D](gamma)),
@@ -85,7 +91,23 @@ ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
+#Average driving travel time varying pedestrian zone size gamma
+ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+  stat_function(fun = function(x) fun.tt_drive(x)) +
+  scale_x_continuous(expression("Pedestrian zone size,"~gamma~"(miles)"), limits = c(0,R)) +
+  scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
+  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
+#Average transit travel time varying transit zone size tau
+ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+  stat_function(fun = function(x) fun.tt_transit(x), linetype = "dashed") +
+  scale_x_continuous(expression("Transit zone size"~tau~"(miles)"), limits = c(0,R)) +
+  scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
+  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+
+
+
+#### Optimal Ped/Transit zone size ####
 #Average travel time, varying both simultaneously.
 Rseq <- seq(1/1000,R-(R/1000),length.out = 300)
 plotmat <- data.table(expand.grid(gamma=Rseq,tau=Rseq))
@@ -99,7 +121,7 @@ brks = exp(seq(0,ceiling(log(max(plotmat[['tt_total']]))), wdth))
 plotmat[ , bin := .bincode(tt_total, breaks = brks)]
 #sort(unique(plotmat$bin))
 
-lower <- min(plotmat$bin)
+lower <- min(plotmat[['bin']])
 upper <- lower + 8
 plotmat[ bin > upper, bin := upper]
 
@@ -126,11 +148,6 @@ ggplot(data = plotmat, aes(x = gamma, y = tau, z = tt_total)) +
   theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
 
 
-
-  
-  
-  
-    
 #
   
 
