@@ -177,11 +177,11 @@ The flow around the perimeter road is then calculated as the sum of the flow gen
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_flow_perim}
-         \caption{Perimeter road trip demand flow as pedestrian zone size $\gamma$ increases}
+         \caption{Trip demand flow on perimeter road of size $\gamma$}
          \label{fig:perimflow}
      \end{subfigure}
      \hfill
-     \caption{Macroscopic fundamental diagram and travel time cost function}
+     \caption{Trip demand flow}
 \end{figure}
 
 \subsection{Traffic flow}
@@ -251,6 +251,7 @@ Transit travel time is conditional upon whether it operates in a transit priorit
     t_{TM}(q) & = l\frac{k(q)}{q} + \frac{l}{s}t_s   & \text{without transit priority when}~q < q_c\\
     t_{TM}(q) & = l\frac{k_c}{q_c} \left(\frac{q}{q_c}\right)^{20} + \frac{l}{s}t_s & \text{without transit priority when}~q \geq q_c
 \end{align}
+\label{eq:ttfunc}
 \end{subequations}
 
 \noindent where $v_m$ is the maximum cruising speed of transit unimpeded by traffic, $s$ is stop spacing, $h$ is the average headway for transit vehicles, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time. The travel time of transit in mixed-traffic will then always be higher than driving an automobile, eventually converging as traffic conditions reach jam flow. Transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving (see Figure~\ref{fig:transittraveltime}).
@@ -276,11 +277,10 @@ The critical transit priority traffic flow point $q^*_T$, is found where transit
     \end{align}
 \end{subequations}
 
-\noindent **** NOTE **** wait time for headway isn't included, it would cause $l$ to remain when solving for $q_T$? Need to explore how much of a problem this is. 
-
+%it time for headway isn't included, it would cause $l$ to remain when solving for $q_T$? Need to explore how much of a problem this is. 
 
 \subsection{Optimal zones size}
-An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ where the pedestrian zone is (see Figure~\ref{fig:optimalped}):
+An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ where the pedestrian zone is (see Figure~\ref{fig:flowcombo}):
 
 \begin{enumerate}[label=(\alph*)]
     \item large enough to prevent traffic flow across the network from exceeding capacity $q_a(\gamma) < q_c$, and 
@@ -318,21 +318,22 @@ Given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$ an
 
 The critical transit priority traffic flow $q^*_T$, can then be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau^*$. The solution to this is quadratic, but assuming a non-negative value for the optimal transit zone size, it can be solved for analytically:
 
+\begin{align}
+    \tau^*(P_D) & = \frac{56 P_D \lambda_{b}-60\delta q_{T} +\sqrt{\left(56 P_D \lambda_{b}-60\delta q_{T}\right)^{2}+900 P_D^2 \lambda_{c}^{2}R^{2}}}{30 P_D \lambda_{c}}\\
+    \text{s.t.} & ~ \tau^* \geq 0 
+\end{align}
+
+\noindent where the proportion of driving trips $P_D$, is introduced to scale driving demand to account for mode choice between driving and transit. Unlike the optimal pedestrian zone, which us unaffected by changes in driving demand\footnote{Assuming $\lambda_c$ and $\lambda_b$ are affected by mode choice equally, both $q_a$ $q_p$ shift vertically, keeping $\gamma^*$ constant. See Figure~\ref{fig:flowcombo}}, the optimal transit priority zone size will depend on driving demand.
+
+Assuming unlimited transit capacity relative to driving, and transit priority is relatively unaffected by congestion, a transit system with transit priority in this model effectively serves as a pressure release for demand. As congestion increases with driving trips, transit becomes more appealing, thus drawing trips away from driving. Conversely, a reduction in congestion would attract trips towards driving as the driving travel time has improved. Assuming transit with priority provides a reasonable and reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit. Although the proportion $P_D$ may be modeled as a discrete choice probability, this requires travel time as an input, making optimal $\tau$ difficult to find as it creates a dynamic problem dependent upon itself. Fortunately, since since $\gamma^*$ remains constant relative to demand, the necessary proportion of driving demand $P_D$ to achieve $q_a = q_T$ (see Figure~\ref{fig:optimalped}) can be determined directly as a function of $\tau$:
+
 \begin{equation}
-    \tau^*(P_D) = \frac{56 P_D \lambda_{b}-60\delta q_{T} +\sqrt{\left(56 P_D \lambda_{b}-60\delta q_{T}\right)^{2}+900 P_D^2 \lambda_{c}^{2}R^{2}}}{30 P_D \lambda_{c}}
-\end{equation}
-
-\noindent Where the proportion of driving trips $P_D$, is introduced to scale driving demand to account for mode choice between driving and transit. Unlike the optimal pedestrian zone, which us unaffected by changes in driving demand\footnote{Assuming $\lambda_c$ and $\lambda_b$ are affected by mode choice equally, both $q_a$ $q_p$ shift vertically, keeping $\gamma^*$ constant. See Figure~\ref{fig:flowcombo}}, the optimal transit priority zone size will depend on driving demand.
-
-Assuming unlimited transit capacity relative to driving, and transit priority is unaffected by congestion, a transit system with transit priority in this model effectively serves as a pressure release for demand. As congestion increases with driving trips, transit becomes more appealing, thus drawing trips away from driving. Conversely, a reduction in congestion would attract trips towards driving as the driving travel time has improved. Assuming transit with priority provides a reasonable and reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit. Although the proportion $P_D$ may be modeled as a discrete choice probability, this requires travel time as an input, making optimal $\tau$ difficult to find as it creates a dynamic problem dependent upon itself. Fortunately, since since $\gamma^*$ remains constant relative to demand, the necessary proportion of driving demand $P_D$ to achieve $q_a = q_T$ (see Figure~\ref{fig:optimalped}) can be determined directly as a function of $\tau$:
-
-\begin{equation}
-    P_D(\tau) = -\frac {60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
+    P_D(\tau) = \frac {-60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
 \end{equation}
 
 
 \subsection{Distance traveled}
-To determine the travel time, the total average distance traveled must be calculated for the following modes:
+To determine the travel time, the total average distance traveled must be calculated and substituted for $l$ in Equation~\eqref{eq:ttfunc} for the following modes, respectively:
 
 \begin{description}
     \item [Bicycle and pedestrian] trips are also generated by the baseline demand (b) and the monocentric central demand (c). Let $D_{ij}$ be demand amount and $l_{ij}$ be the average walking distance covered in each case $ij$ where $i$ is trip types $\{1,3\}$ and $j$ is demand type $\{b,c\}$. The total distance covered by foot or bike $L_W$ is then:
@@ -384,27 +385,6 @@ L_D = \frac{(R-\gamma)(14\lambda_b + 10\lambda_c)}{15(\lambda_b + \lambda_c)}
 
 \end{description}
 
-%\subsection{Mode choice}
-%Assuming unlimited transit capacity relative to driving and that transit priority is unaffected by congestion, a transit system with transit priority in this model effectively serves as a pressure release for demand. As congestion increases with driving trips, transit becomes more appealing, thus drawing trips away from driving. Conversely, a reduction in congestion would attract trips towards driving as the driving travel time has improved. Assuming transit provides a reasonable and reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit. The mode choice can be modeled as the probability of choosing to drive $P_D$ or transit $P_T$, using a simple two-alternative logit model with (dis-)utility as the choice travel cost:
-
-% \begin{subequations}
-%     \label{eq:choiceprob}
-%     \begin{align}
-%         P_D & = \frac{1}{1+e^{(\beta_D t_D-t_T \beta_T)}}\\
-%         P_T & = 1 - P_D
-%     \end{align}
-% \end{subequations}
-
-% \noindent where $t_D$ and $t_T$ are the travel times associated with automobile and transit, respectively; and $\beta$ is the a estimated scaling parameter. The probability in Equation~\eqref{eq:choiceprob} can be used to find the proportion of trips made by driving. A two-alternative logit can be simplified to require only the utility difference between the two choices, not the full value, thus the logit only requires a travel time differential $\Delta t = t_D - t_T$:
-
-% \begin{equation}
-%     \Delta t(\tau) = \beta_D\left[ t_D(\gamma) + t_W(\gamma) \right] - \left[ t_{TP}(\tau) + t_{TM}(\tau) \right]
-%     %\Delta t(q) = \beta_D\overset{drive}{\left[ L_D \frac{k(q)}{q} + \frac{L_D}{v_{walk}} \right]} - \beta_T \overset{transit}{\left[ \left( \frac{L_{TP}}{v_{max}} + \frac{L_{TP}}{s}t_s \right) + \left( L_{TM} \frac{k(q)}{q} + \frac{L_{TM}}{s}t_s \right) \right]}
-% \end{equation}
-
-% \noindent which is dependent upon tau and gamma. However, since since $\gamma^*$ remains constant (see Figure~\ref{fig:optimalped}), the function can be expressed entirely dependent upon $\tau$. The new demand is then shifted according to the proportional mode choice probability $P_D$ for baseline and monocentric demand $\hat{\lambda_b} = P_D \lambda_b$, and monocentric demand $\hat{\lambda_c} = P_D \lambda_c$. As travel time will vary depending upon $\tau$ and $\gamma$, there is some sort of dynamic equilibrium with flow and demand where travel time depends on flow and flow depends on travel time. 
-
-
 \section{Numeric application}
 
 \noindent **** NOTE **** Input parameters for numeric example, could make them unitless?
@@ -430,9 +410,6 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
 \end{tabular}
 \label{tab:inputpars}
 \end{table}
-
-\section{Results}
-
 
 <<echo=FALSE, cache=FALSE>>=
     library(data.table)
