@@ -82,25 +82,25 @@ lambda_b = 150/2
 #### Average combined travel time ####
 #varying only tau (optimal gamma) and
 #varying only gamma (tau = gamma in this case cuz theres no traffic in ped zone)
-plots[['combottopt']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
-  stat_function(fun = function(x) fun.tt_total(g.opt,x), aes(color="tau", linetype="tau")) +
+plots[['combott2x']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
+  stat_function(fun = function(x) fun.tt_total(x,2*x), aes(color="tau", linetype="tau")) +
   stat_function(fun = function(x) fun.tt_total(x,x), aes(color="gamma", linetype="gamma")) +
-  scale_x_continuous(expression("Distance from center"), limits = c(0,R)) +
-  scale_y_continuous("Average travel time (hours)", limits = c(0,30)) +
+  scale_x_continuous("Zone radius (miles)", limits = c(0,R)) +
+  scale_y_continuous("Average travel time (hours)", limits = c(0,15)) +
   scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
-                      labels = expression("Varying"~tau~"while"~gamma==gamma*'*',
-                                          "Varying"~gamma~"while"~tau==gamma),
+                      labels = expression(tau==2*gamma,
+                                          tau==gamma),
                      guide = guide_legend(label.hjust=1), palette = "Set1") +
   scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
-                     labels = expression("Varying"~tau~"while"~gamma==gamma*'*',
-                                         "Varying"~gamma~"while"~tau==gamma)) +
-  theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+                          labels = expression(tau==2*gamma,
+                                              tau==gamma)) +
+  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
 #### Average combined travel time, when zones are the same size
 plots[['combott']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_total(x,x)) +
-  scale_x_continuous(expression("Zone size,"~gamma == tau~"(miles)"), limits = c(0,R)) +
+  scale_x_continuous(expression("Zone radius,"~gamma == tau~"(miles)"), limits = c(0,R)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,30)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
@@ -111,7 +111,7 @@ plots[['combott']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)
 plots[['modett']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_transit(x), aes(color="tau", linetype="tau")) +
   stat_function(fun = function(x) fun.tt_drive(x), aes(color="gamma", linetype="gamma")) +
-  scale_x_continuous("Distance from center", limits = c(0,R)) +
+  scale_x_continuous("Zone radius", limits = c(0,R)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,8)) +
   scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
                      labels = expression("Transit travel time varying"~tau~","~t[T](tau),
@@ -126,14 +126,14 @@ plots[['modett']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x))
 #Average driving travel time varying pedestrian zone size gamma
 plots[['drivett']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_drive(x)) +
-  scale_x_continuous(expression("Pedestrian zone size,"~gamma~"(miles)"), limits = c(0,R)) +
+  scale_x_continuous(expression("Pedestrian zone radius,"~gamma~"(miles)"), limits = c(0,R)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 #Average transit travel time varying transit zone size tau
 plots[['transittt']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_transit(x), linetype = "dashed") +
-  scale_x_continuous(expression("Transit zone size"~tau~"(miles)"), limits = c(0,R)) +
+  scale_x_continuous(expression("Transit zone radius"~tau~"(miles)"), limits = c(0,R)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
@@ -172,8 +172,8 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma, y = tau)) +
   #           aes(x=gamma*1.75, y=tau*1.25, label = paste("Minimum =",round(tt_total,2),"hours"))) +
   annotate("text", x = 3*R/4, y = R/7, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
   annotate("text", x = 3*R/4, y = R/7, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
-  scale_x_continuous(expression("Pedestrian zone size"~gamma), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
-  scale_y_continuous(expression("Transit priority zone size"~tau), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
+  scale_x_continuous(expression("Pedestrian zone radius"~gamma), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
+  scale_y_continuous(expression("Transit priority zone radius"~tau), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
   scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
                     label = c(paste0("<",scales::comma(brks)[lower]),
                               paste0(scales::comma(brks)[lower:(upper-2)], " - ",
