@@ -417,6 +417,20 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
  @
 
 
+
+
+
+\begin{figure}[H]
+    \centering
+    <<echo=FALSE, cache=TRUE, out.width="5in", warning=FALSE>>=
+    plots[['demandtt']]
+    @
+    \caption{Average total travel time varying across $\gamma$ and $\tau$}
+    \label{fig:compare}
+\end{figure}
+
+
+
 \begin{figure}
      \centering
      \begin{subfigure}[b]{\textwidth}
@@ -462,17 +476,6 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
     \label{fig:optimal}
 \end{figure}
 
-
-
-
-\begin{figure}[H]
-    \centering
-    <<echo=FALSE, cache=TRUE, out.width="5in", warning=FALSE>>=
-    plots[['compare']]
-    @
-    \caption{Average total travel time varying across $\gamma$ and $\tau$}
-    \label{fig:compare}
-\end{figure}
 
 
 
