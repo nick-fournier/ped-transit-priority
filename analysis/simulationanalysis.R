@@ -67,7 +67,7 @@ demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c"))
 
 plots[['demandtt']] <- ggplot(data = demdat) +
   geom_line(aes(x = prop, y = value, color = variable, linetype = variable)) +
-  scale_x_continuous("Demand proportion that drives", labels = scales::percent) +
+  scale_x_continuous("Demand proportion that drives", labels = scales::percent, breaks = seq(0, 1, by = 0.1)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0, 10)) +
   scale_linetype(NULL) +
   scale_color_brewer(NULL, palette = "Set1") +
