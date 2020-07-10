@@ -411,7 +411,7 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
 \label{tab:inputpars}
 \end{table}
 
-<<echo=FALSE, cache=FALSE>>==
+<<echo=FALSE, cache=TRUE>>==
     source("../../analysis/simfunctions.R")
     source("../../analysis/simulationanalysis.R")
  @
@@ -422,7 +422,7 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
 
 \begin{figure}[H]
     \centering
-    <<echo=FALSE, cache=TRUE, out.width="5in", warning=FALSE>>=
+    <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
     plots[['demandtt']]
     @
     \caption{Average total travel time varying across $\gamma$ and $\tau$}
