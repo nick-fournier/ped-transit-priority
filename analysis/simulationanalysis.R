@@ -83,17 +83,17 @@ lambda_b = 150/2
 #varying only tau (optimal gamma) and
 #varying only gamma (tau = gamma in this case cuz theres no traffic in ped zone)
 plots[['combott2x']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
-  stat_function(fun = function(x) fun.tt_total(x,2*x), aes(color="tau", linetype="tau")) +
-  stat_function(fun = function(x) fun.tt_total(x,x), aes(color="gamma", linetype="gamma")) +
+  stat_function(fun = function(x) fun.tt_total(0.5*x,x), aes(color="t=2g", linetype="t=2g")) +
+  stat_function(fun = function(x) fun.tt_total(x,x), aes(color="t=g", linetype="t=g")) +
   scale_x_continuous("Zone radius (miles)", limits = c(0,R), breaks = seq(0,R,by=2)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,15)) +
-  scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
-                      labels = expression(tau==2*gamma,
-                                          tau==gamma),
+  scale_color_brewer(name = NULL, limits = c("t=2g", "t=g"),
+                      labels = expression("Travel time when"~tau==2*gamma,
+                                          "Travel time when"~tau==gamma),
                      guide = guide_legend(label.hjust=1), palette = "Set1") +
-  scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
-                          labels = expression(tau==2*gamma,
-                                              tau==gamma)) +
+  scale_linetype_discrete(name = NULL, limits = c("t=2g", "t=g"),
+                          labels = expression("Travel time when"~tau==2*gamma,
+                                              "Travel time when"~tau==gamma)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
