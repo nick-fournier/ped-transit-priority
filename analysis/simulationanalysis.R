@@ -71,7 +71,7 @@ plots[['demandtt']] <- ggplot(data = demdat) +
   scale_y_continuous("Average travel time (hours)", limits = c(0, 10)) +
   scale_linetype(NULL) +
   scale_color_brewer(NULL, palette = "Set1") +
-  theme_bw()
+  theme_classic()
 
 
 #Ensure it is set back to original
@@ -101,7 +101,7 @@ plots[['combott']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)
   stat_function(fun = function(x) fun.tt_total(x,x)) +
   scale_x_continuous(expression("Zone size,"~gamma == tau~"(miles)"), limits = c(0,R)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,30)) +
-  theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
 
@@ -119,7 +119,7 @@ plots[['modett']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x))
   scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
                           labels = expression("Transit travel time varying"~tau~","~t[T](tau),
                                               "Driving travel time varying"~gamma~","~t[D](gamma))) +
-  theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
 #Average driving travel time varying pedestrian zone size gamma
