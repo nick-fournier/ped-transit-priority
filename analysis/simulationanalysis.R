@@ -71,7 +71,8 @@ plots[['demandtt']] <- ggplot(data = demdat) +
   scale_y_continuous("Average travel time (hours)", limits = c(0, 10)) +
   scale_linetype(NULL) +
   scale_color_brewer(NULL, palette = "Set1") +
-  theme_classic()
+  theme_classic() +
+  theme(legend.position = "bottom")
 
 
 #Ensure it is set back to original
