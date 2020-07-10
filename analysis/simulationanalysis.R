@@ -85,7 +85,7 @@ lambda_b = 150/2
 plots[['combott2x']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_total(x,2*x), aes(color="tau", linetype="tau")) +
   stat_function(fun = function(x) fun.tt_total(x,x), aes(color="gamma", linetype="gamma")) +
-  scale_x_continuous("Zone radius (miles)", limits = c(0,R)) +
+  scale_x_continuous("Zone radius (miles)", limits = c(0,R), breaks = seq(0,R,by=2)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,15)) +
   scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
                       labels = expression(tau==2*gamma,
@@ -100,7 +100,7 @@ plots[['combott2x']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = 
 #### Average combined travel time, when zones are the same size
 plots[['combott']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_total(x,x)) +
-  scale_x_continuous(expression("Zone radius,"~gamma == tau~"(miles)"), limits = c(0,R)) +
+  scale_x_continuous(expression("Zone radius,"~gamma == tau~"(miles)"), limits = c(0,R), breaks = seq(0,R,by=2)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,30)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
@@ -111,7 +111,7 @@ plots[['combott']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)
 plots[['modett']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_transit(x), aes(color="tau", linetype="tau")) +
   stat_function(fun = function(x) fun.tt_drive(x), aes(color="gamma", linetype="gamma")) +
-  scale_x_continuous("Zone radius", limits = c(0,R)) +
+  scale_x_continuous("Zone radius", limits = c(0,R), breaks = seq(0,R,by=2)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,8)) +
   scale_color_brewer(name = NULL, breaks = c("tau", "gamma"), 
                      labels = expression("Transit travel time varying"~tau~","~t[T](tau),
@@ -126,14 +126,14 @@ plots[['modett']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x))
 #Average driving travel time varying pedestrian zone size gamma
 plots[['drivett']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_drive(x)) +
-  scale_x_continuous(expression("Pedestrian zone radius,"~gamma~"(miles)"), limits = c(0,R)) +
+  scale_x_continuous(expression("Pedestrian zone radius,"~gamma~"(miles)"), limits = c(0,R), breaks = seq(0,R,by=2)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 #Average transit travel time varying transit zone size tau
 plots[['transittt']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x)) +
   stat_function(fun = function(x) fun.tt_transit(x), linetype = "dashed") +
-  scale_x_continuous(expression("Transit zone radius"~tau~"(miles)"), limits = c(0,R)) +
+  scale_x_continuous(expression("Transit zone radius"~tau~"(miles)"), limits = c(0,R), breaks = seq(0,R,by=2)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,10)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
