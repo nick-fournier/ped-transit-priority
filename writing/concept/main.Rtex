@@ -435,7 +435,7 @@ While it is unrealistic that travel time would approach infinity, in reality one
      \centering
      \begin{subfigure}[b]{\textwidth}
          \centering
-        <<echo=FALSE, cache=TRUE, out.width="in", fig.asp = 0.5, warning=FALSE>>=
+        <<echo=FALSE, cache=TRUE, out.width="4in", fig.asp = 0.5, warning=FALSE>>=
         plots[['drivett']]
         @
          \caption{Effect of pedestrian zone size on average driving travel time (no transit priority zone)}
@@ -454,9 +454,9 @@ While it is unrealistic that travel time would approach infinity, in reality one
         \label{fig:modett}
 \end{figure}
 
+Both Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} show a steep decrease in travel time as the zone sizes increase. This is because the most extreme congestion in the very center of the city is effectively abolished, thus yielding a huge improvement but with diminishing returns. However, in the driving case the travel time begins to increase as the pedestrianized zone become unreasonably large, effectively trading driving for walking. 
 
-
-However, Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} only consider travel time independently of the modes, and does not consider the combined effect on the average travel time of both modes. 
+Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} only consider travel time independently of the modes, and does not consider the combined effect on the average travel time of both modes. Meaning, Figure~\ref{fig:modett} does not account for the effect that a pedestrian zone might have on a transit zone and vice versa. Figure~\ref{fig:combott} shows the combined average travel for both modes as the pedestrianized and transit-priority zone vary in size. For demonstration, the transit-priority zone shown as being the same size as the pedestrian zone (i.e., no transit-priority zone) or twice the size of the pedestrianized zone.
 
 \begin{figure}[H]
 \centering
@@ -464,7 +464,7 @@ However, Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} only consider t
     plots[['combott']]
     @
     \caption{Average combined travel time for transit and driving when $\gamma = \tau$}
-    \label{fig:modett}
+    \label{fig:combott}
 \end{figure}
 
     
