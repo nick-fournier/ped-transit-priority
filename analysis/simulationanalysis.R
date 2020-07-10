@@ -153,14 +153,15 @@ plotmat[ , bin := .bincode(tt_total, breaks = brks)]
 #sort(unique(plotmat$bin))
 
 lower <- min(plotmat[['bin']])
-upper <- lower + 9 #Number of bins
+upper <- lower + 8 #Number of bins
 plotmat[ bin > upper, bin := upper]
 
 
 #plotting
 suppressWarnings(
 plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma, y = tau)) +
-  geom_contour_filled(aes(z = bin)) +
+  #geom_contour_filled(aes(z = bin)) +
+  geom_tile(aes(fill = as.factor(bin))) +
   geom_contour(aes(z = tt_total), breaks = brks[1:10], color = 'black', size = 0.1, alpha = 0.5) +
   geom_contour(aes(z = tt_total), breaks = brks[11:length(brks)], color = 'black', size = 0.01, alpha = 0.2) +
   geom_area(data = data.frame(x = c(0,R), y=  c(0,R)), aes(x = x, y = y, z=0), fill='gray90', alpha = 0.6) +
@@ -173,7 +174,8 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma, y = tau)) +
   scale_x_continuous(expression("Pedestrian zone size"~gamma), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
   scale_y_continuous(expression("Transit priority zone size"~tau), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
   scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
-                    label = c(paste0(scales::comma(brks)[lower:(upper-2)], " - ",
+                    label = c(paste0("<",scales::comma(brks)[lower]),
+                              paste0(scales::comma(brks)[lower:(upper-2)], " - ",
                                      scales::comma(brks)[(lower+1):(upper-1)]),
                               paste0(">",scales::comma(brks)[(upper-1)]))) +
   theme_light() + coord_fixed() +
