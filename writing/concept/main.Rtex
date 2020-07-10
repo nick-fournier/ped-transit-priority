@@ -411,12 +411,12 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
 \label{tab:inputpars}
 \end{table}
 
+
+
 <<echo=FALSE, cache=TRUE>>==
     source("../../analysis/simfunctions.R")
     source("../../analysis/simulationanalysis.R")
  @
-
-
 
 
 
