@@ -48,6 +48,36 @@ q_T <- {
 ##### Some Plots ####
 plots <- list()
 
+
+#### Average travel time varying demand ####
+#Melbourne
+#Baseline car trip proportion = 67%
+#Monocentric car trip proportion = 32%
+
+#Vary demand
+demdat <- rbindlist(lapply(seq(0.1, 1, by = 0.01), function(x) {
+  lambda_c <<- x*90/2
+  lambda_b <<- x*150/2
+  data.table(prop = x, lambda_b, lambda_c,
+             #combo = fun.tt_total(0.1,0.1), 
+             Drive = fun.tt_drive(0.1),
+             Transit = fun.tt_transit(0.1))
+}))
+demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c"))
+
+plots[['demandtt']] <- ggplot(data = demdat) +
+  geom_line(aes(x = prop, y = value, color = variable, linetype = variable)) +
+  scale_x_continuous("Demand proportion that drives", labels = scales::percent) +
+  scale_y_continuous("Average travel time (hours)", limits = c(0, 10)) +
+  scale_linetype(NULL) +
+  scale_color_brewer(NULL, palette = "Set1") +
+  theme_bw()
+
+
+#Ensure it is set back to original
+lambda_c = 90/2
+lambda_b = 150/2
+
 #### Average combined travel time ####
 #varying only tau (optimal gamma) and
 #varying only gamma (tau = gamma in this case cuz theres no traffic in ped zone)
@@ -89,7 +119,7 @@ plots[['modett']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = x))
   scale_linetype_discrete(name = NULL, breaks = c("tau", "gamma"),
                           labels = expression("Transit travel time varying"~tau~","~t[T](tau),
                                               "Driving travel time varying"~gamma~","~t[D](gamma))) +
-  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+  theme_bw() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
 #Average driving travel time varying pedestrian zone size gamma
@@ -123,20 +153,21 @@ plotmat[ , bin := .bincode(tt_total, breaks = brks)]
 #sort(unique(plotmat$bin))
 
 lower <- min(plotmat[['bin']])
-upper <- lower + 8 #Number of bins
+upper <- lower + 9 #Number of bins
 plotmat[ bin > upper, bin := upper]
+
 
 #plotting
 suppressWarnings(
-plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma, y = tau, z = tt_total)) +
-  geom_tile(aes(fill = as.factor(bin))) +
-  geom_contour(breaks = brks[1:10], color = 'black', size = 0.1, alpha = 0.5) +
-  geom_contour(breaks = brks[11:length(brks)], color = 'black', size = 0.01, alpha = 0.2) +
+plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma, y = tau)) +
+  geom_contour_filled(aes(z = bin)) +
+  geom_contour(aes(z = tt_total), breaks = brks[1:10], color = 'black', size = 0.1, alpha = 0.5) +
+  geom_contour(aes(z = tt_total), breaks = brks[11:length(brks)], color = 'black', size = 0.01, alpha = 0.2) +
   geom_area(data = data.frame(x = c(0,R), y=  c(0,R)), aes(x = x, y = y, z=0), fill='gray90', alpha = 0.6) +
   geom_abline(slope = 1, linetype = "dashed") +
   geom_point(data=plotmat[which.min(tt_total), ]) +
-  geom_text(data=plotmat[which.min(tt_total), ], color = 'white', 
-            aes(x=gamma*1.75, y=tau*1.25, label = paste("Minimum =",round(tt_total,2),"hours"))) +
+  # geom_text(data=plotmat[which.min(tt_total), ], color = 'white', 
+  #           aes(x=gamma*1.75, y=tau*1.25, label = paste("Minimum =",round(tt_total,2),"hours"))) +
   annotate("text", x = 3*R/4, y = R/7, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
   annotate("text", x = 3*R/4, y = R/7, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
   scale_x_continuous(expression("Pedestrian zone size"~gamma), limits = c(0,R), expand = c(0,0), breaks = seq(0,R,2)) +
@@ -146,19 +177,28 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma, y = tau, z = tt_tota
                                      scales::comma(brks)[(lower+1):(upper-1)]),
                               paste0(">",scales::comma(brks)[(upper-1)]))) +
   theme_light() + coord_fixed() +
-  theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
+  theme( legend.position = "right", legend.spacing.x = unit(0.5, 'cm'),
+         panel.grid = element_blank())
 )
 
 
-#
-#Optimal ped size 
-# ggplot(data = data.frame(x = 0), mapping = aes(x = x)) +
-#   stat_function(fun = function(x) fun.gamma_int(g=x)) +
-#   stat_function(fun = function(x) fun.q_a(r=x), linetype='dashed') +
-#   stat_function(fun = function(x) fun.q_p(g=x), linetype='dashed') +
-#   geom_vline(xintercept = opt.gamma) +
-#   geom_hline(yintercept = 0) +
-#   scale_y_continuous(labels = scales::comma, limits = c(-100,7000)) +
-#   scale_x_continuous(limits = c(0,15)) +
-#   theme_bw()
+
+#Find the optimal zone sizes
+opt <- optim(par = c(2,2), fn = function(x) {
+  GAMMA = x[1]
+  TAU = x[2]
+  fun.tt_total(GAMMA,TAU)
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
