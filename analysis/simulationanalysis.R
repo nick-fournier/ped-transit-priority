@@ -194,9 +194,7 @@ opt <- optim(par = c(2,2), fn = function(x) {
 })
 
 
-
-
-
+opt <- setNames(c(opt[['par']], opt[['value']]),c("ped","transit","tt"))
 
 
 
