@@ -376,11 +376,10 @@ L_D = \frac{(R-\gamma)(14\lambda_b + 10\lambda_c)}{15(\lambda_b + \lambda_c)}
 \end{description}
 
 \section{Numeric application}
-To demonstrate the hypothetical outcomes of a pedestrianized zone surrounded by a transit priority zone, numeric input parameters provided in Table~\ref{tab:inputpars}. These parameters are loosely derived from a relatively similar real-world case in Melbourne, Australia, shown in Figure~\ref{fig:melb}.
-
+To demonstrate the hypothetical outcomes of a pedestrianized zone surrounded by a transit priority zone, numeric input parameters provided in Table~\ref{tab:inputpars} for calculation. These parameters are loosely derived from a real-world case in Melbourne, Australia, shown in Figure~\ref{fig:melb}. Melbourne provides a useful example to draw from because it is a highly monocentric city with a sprawling and relatively uniform rectilinear street network with few geographic interruptions other than the bay. This enables parameters to be determined fairly easily using Geospatial Information Systems (GIS) and census sources. Moreover, Melbourne also currently has a partially pedestrianized Central Business District (CBD) and a large mixed-traffic streetcar system (called trams in Australia) which suffers from congestion, making it an intriguing example.
 
 \begin{table}[h!]
-\centering
+\centering\small
 \caption{Input Parameters}
 \begin{tabular}{ccc}
 \toprule
@@ -401,9 +400,9 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
 \label{tab:inputpars}
 \end{table}
 
-Melbourne is used because it possess an extremely grid-like street network despite its very monocentric traffic patterns and land-use development. 
 
-\begin{figure}[H]
+
+\begin{figure}[h!]
     \centering
      \includegraphics[width=0.5\textwidth]{vicmap}
     \caption{Street Network and Employment Density in Melbourne, Australia}
@@ -411,39 +410,37 @@ Melbourne is used because it possess an extremely grid-like street network despi
 \end{figure}
 
 
+To demonstrate a baseline scenario in a city with no pedestrianized or transit priority zones using the numeric parameters shown in Table~\ref{tab:inputpars}, demand is varied in Figure~\ref{fig:demandtt} by shifting the proportion of total demand that drives or uses transit. For demonstration purposes, this assumes infinite transit capacity. The travel time of both mixed-traffic transit and driving both dramatically increase as driving demand increases. This is because the network reaches capacity and traffic flow breaks down, causing average travel time to dramatically increase. It is also clear that transit demand is always slower than driving demand, even if the difference between the two modes becomes arbitrarily small as the average travel time becomes dramatically large. This numerically illustrates the situation hypothesized in Figure~\ref{fig:transittraveltime}. As mentioned, the problem in this scheme is there is little or no incentive for an individual to choose transit, other than to selflessly improve the system for all. 
+
 <<echo=FALSE, cache=TRUE>>==
     source("../../analysis/simfunctions.R")
     source("../../analysis/simulationanalysis.R")
  @
-
-
-To demonstrate a baseline scenario in a city with no pedestrianized or transit priority zones using the numeric parameters shown in Table~\ref{tab:inputpars}, demand is varied in Figure~\ref{fig:demandtt} by shifting the proportion of total demand that drives or uses transit. For demonstration purposes, this assumes infinite transit capacity. The travel time of both mixed-traffic transit and driving both dramatically increase as driving demand increases. This is because the network reaches capacity and traffic flow breaks down, causing average travel time to dramatically increase. It is also clear that transit demand is always slower than driving demand, even if the difference between the two modes becomes arbitrarily small as the average travel time becomes dramatically large. This numerically illustrates the theorized situation in Figure~\ref{fig:transittraveltime}. As mentioned, the problem in this scheme is there is little or no incentive for an individual to choose transit, other than to selflessly improve the system for all. 
-
 \begin{figure}[H]
     \centering
-    <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
+    <<echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.66, warning=FALSE>>=
     plots[['demandtt']]
     @
     \caption{Average total travel time varying across $\gamma$ and $\tau$}
     \label{fig:demandtt}
 \end{figure}
 
-While it is unrealistic that travel time would approach infinity, in reality one might assume that as traffic flow breaks down and travel time dramatically increases, demand for travel itself might simply become suppressed. To avoid such a scenario and ensure that travel demand is not suppressed and able to travel freely, the city might decide to impose a pedestrianized or transit priority zone. Figure~\ref{fig:modett} demonstrates the effect of pedestrianized and transit priority zones on the respective average travel time of driving and transit.
+While it is unrealistic that travel time would approach infinity, in reality one might assume that as traffic flow breaks down and travel time dramatically increases, demand for travel itself might simply become suppressed in general. To avoid such a scenario, ensuring that travel demand is not suppressed and able to travel freely, the city might decide to impose a pedestrianized or transit priority zone. Figure~\ref{fig:modett} demonstrates the effect of pedestrianized and transit priority zones on the respective average travel time of driving and transit.
 
 \begin{figure}[H]
      \centering
-     \begin{subfigure}[b]{\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-        <<echo=FALSE, cache=TRUE, out.width="4in", fig.asp = 0.5, warning=FALSE>>=
+        <<echo=FALSE, cache=TRUE, fig.width=4, fig.asp = 0.66, warning=FALSE>>=
         plots[['drivett']]
         @
          \caption{Effect of pedestrian zone size on average driving travel time (no transit priority zone)}
          \label{fig:ttpedzone}
      \end{subfigure}
-     
-     \begin{subfigure}[b]{\textwidth}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-        <<echo=FALSE, cache=TRUE, out.width="4in", fig.asp = 0.5, warning=FALSE>>=
+        <<echo=FALSE, cache=TRUE, fig.width=4, fig.asp = 0.66, warning=FALSE>>=
         plots[['transittt']]
         @
         \caption{Effect of transit priority zone size on average transit travel time (no pedestrian zone)}
@@ -455,22 +452,22 @@ While it is unrealistic that travel time would approach infinity, in reality one
 
 Both Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} show a steep decrease in travel time as the zone sizes increase. This is because the most extreme congestion in the very center of the city is effectively abolished, thus yielding a huge improvement but with diminishing returns. However, in the driving case the travel time begins to increase as the pedestrianized zone become unreasonably large, effectively trading driving for walking. 
 
-Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} only consider travel time independently of the modes, and does not consider the combined effect on the average travel time of both modes. Meaning, Figure~\ref{fig:modett} does not account for the effect that a pedestrian zone might have on a transit zone and vice versa. Figure~\ref{fig:combott} shows the combined average travel for both modes as the pedestrianized and transit priority zone vary in size. For demonstration, the transit priority zone shown as being the same size as the pedestrian zone (i.e., no transit priority zone) or twice the size of the pedestrianized zone.
+Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} only consider travel time independently of the modes, and does not consider the combined effect on the average travel time of both modes. Meaning, they do not account for the effect that a pedestrian zone might have on travel time with a transit zone and vice versa. Figure~\ref{fig:combott} shows the combined average travel for both modes as the pedestrianized and transit priority zone vary in size. For demonstration, the transit priority zone shown as being the same size as the pedestrian zone (i.e., no transit priority zone) or twice the size of the pedestrianized zone.
 
 \begin{figure}[H]
 \centering
-    <<echo=FALSE, cache=TRUE, out.width="5in", fig.asp = 0.5, warning=FALSE>>=
+    <<echo=FALSE, cache=TRUE, fig.width = 5, out.width="0.66\\textwidth", fig.asp = 0.66, warning=FALSE>>=
     plots[['combott2x']]
     @
     \caption{Average combined travel time for transit and driving varying $\tau$ and $\gamma$}
     \label{fig:combott}
 \end{figure}
 
-    
+It is clear from Figure~\ref{fig:combott} that the optimal travel time can vary with both the pedestrianized and transit priority zone sizes. To visualize this bi-variate gradient, the travel time in Figure~\ref{fig:optimal} is plotted against both the pedestrian zone on the horizontal axis, and the transit priority zone on the vertical axis. The resulting travel time is represented by the color scale, darker being lower travel times. In this case the optimal pedestrianized and transit priority zone sizes are \Sexpr{opt[['ped']]} and \Sexpr{opt[['transit']]} miles, respectively; with a minimum average travel time of \Sexpr{opt[['tt']]} hours.
 
 \begin{figure}[H]
     \centering
-    <<echo=FALSE, cache=TRUE, warning=FALSE>>=
+    <<echo=FALSE, cache=TRUE, warning=FALSE, fig.width=8, out.width="\\textwidth", fig.asp=0.5>>=
     plots[['optimal']]
     @
     \caption{Average total travel time varying across $\gamma$ and $\tau$}
