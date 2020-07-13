@@ -153,7 +153,7 @@ The flow around the perimeter road is then calculated as the sum of the flow gen
 \end{align}
 
 
-\noindent The flow across the network at distance $r$ from the center from the function in Equation~\eqref{eq:flowacross} possesses the form shown in Figure~\ref{fig:flowacross}, and flow around the perimeter of the pedestrian zone from the function in Equation~\eqref{eq:perimflow} possesses the form shown in Figure~\ref{fig:perimflow}. As the distance from the city increases, traffic decreases. When traffic near the center exceeds capacity, one might consider simply pedestrianizing the city center out to the point where capacity if first exceeded. However, as the pedestrian zone size increases so does traffic on the perimeter road. 
+\noindent The trip demand flow density across the network at distance $r$ from the city center, from the function in Equation~\eqref{eq:flowacross}, possesses the form shown in Figure~\ref{fig:flowacross}. As the distance from the city increases, traffic decreases. When traffic near the center exceeds capacity, one might consider simply pedestrianizing the city center out to the point where capacity if first exceeded. However, the trip demand flow around the perimeter of the pedestrian zone, from the function in Equation~\eqref{eq:perimflow}, possesses the form in Figure~\ref{fig:perimflow} showing that as the pedestrian zone size increases so does traffic on the perimeter road. The function does eventually decrease, but this is because the zone eventually reaches a point where the majority of the city no longer drives at all. It may eliminate congestion, but would greatly increase travel time by walking. This travel time consideration will be discussed in subsequent sections.
 
 \begin{figure}[H]
      \centering
@@ -161,14 +161,14 @@ The flow around the perimeter road is then calculated as the sum of the flow gen
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_flow_across}
-         \caption{Trip demand flow at point $r$ distance from center}
+         \caption{Trip demand flow at point $r$ distance from the city center}
          \label{fig:flowacross}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_flow_perim}
-         \caption{Trip demand flow on perimeter road of size $\gamma$}
+         \caption{Trip demand flow on perimeter road of pestrian zone size $\gamma$}
          \label{fig:perimflow}
      \end{subfigure}
      \hfill
@@ -176,7 +176,7 @@ The flow around the perimeter road is then calculated as the sum of the flow gen
 \end{figure}
 
 \subsection{Traffic flow}
-Traffic flow through the network is characterized by the macroscopic fundamental diagram (see Figure~\ref{fig:mfd}) as a function of density. A travel time function (see Figure~\ref{fig:traveltime}) then depends upon the state of traffic flow through the network as being either ``uncongested'' (solid line) or ``congested'' (dashed line) in Figures~\ref{fig:mfd} and~\ref{fig:traveltime}.
+Traffic flow through the network is characterized by the macroscopic fundamental diagram (see Figure~\ref{fig:mfd}) as a function of density. A travel time function (see Figure~\ref{fig:traveltime}) then depends upon the state of traffic flow through the network as being either ``uncongested'' (solid line) or ``congested'' (dashed line) in Figures~\ref{fig:mfd} and~\ref{fig:traveltime} \citep{Gonzales2015}.
 
 \begin{figure}[H]
      \centering
@@ -198,7 +198,7 @@ Traffic flow through the network is characterized by the macroscopic fundamental
      \caption{Macroscopic fundamental diagram and travel time cost function}
 \end{figure}
 
-Assuming for this case a parabolic function for the uncongested portion of the flow-density relationship, an expression for the ``uncongested'' solid line porition of Figure~\ref{fig:mfd} can be written as:
+Assuming for this case a parabolic function represents the uncongested portion of the flow-density relationship, an expression for the ``uncongested'' solid line portion of Figure~\ref{fig:mfd} can be written as:
 
 \begin{equation}
     q(k) = q_{c} - \frac{\left(k-k_{c}\right)^{2}}{\alpha_0} = q_{c}\frac{k\left(2k_{c}-k\right)}{k_{c}^{2}}
@@ -245,7 +245,7 @@ Transit travel time is conditional upon whether it operates in a transit priorit
 \label{eq:ttfunc}
 \end{subequations}
 
-\noindent where $v_m$ is the maximum cruising speed of transit unimpeded by traffic, $s$ is stop spacing, $h$ is the average headway for transit vehicles, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time. The travel time of transit in mixed-traffic will then always be higher than driving an automobile, eventually converging as traffic conditions reach jam flow. Transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving (see Figure~\ref{fig:transittraveltime}).
+\noindent where $v_m$ is the maximum cruising speed of transit unimpeded by traffic, $s$ is stop spacing, $h$ is the average headway for transit vehicles, and $t_s$ is stop time. The stop time is essentially the lost time inclusive of acceleration, deceleration and dwell time. The travel time of transit in mixed-traffic will then always be higher than driving an automobile, eventually converging as traffic conditions reach jam flow. Conversely, transit priority provides a constant travel time which will be initially slower than driving in uncongested traffic conditions, but will eventually reach a traffic flow point $q^*_T$, where the travel time of transit with priority exceeds driving (see Figure~\ref{fig:transittraveltime}).
 
 \begin{figure}[H]
     \centering
@@ -254,7 +254,7 @@ Transit travel time is conditional upon whether it operates in a transit priorit
     \label{fig:transittraveltime}
 \end{figure}
 
-The critical transit priority traffic flow point $q^*_T$, is found where transit priority travel time $t_{TP}$ intersects driving travel time $t_D$. Since travel time is a piece-wise function, it depends on whether the transit priority travel time $t_{TP}$, exceeds the driving travel time at roadway capacity $t_c$. Although it is unlikely that transit priority travel time will exceed traffic travel time, the condition is provided nonetheless. To determine when this occurs, a simple ratio can be taken, $\sfrac{t_{TP}}{t_c}$. The critical transit priority traffic flow point then depends on whenther $\sfrac{t_{TP}}{t_c}$ is greater than or less than 1:
+The critical transit priority traffic flow point $q^*_T$, is found where transit priority travel time $t_{TP}$ intersects driving travel time $t_D$. Since travel time is a piece-wise function, it depends on whether the transit priority travel time $t_{TP}$, exceeds the driving travel time at roadway capacity $t_c$. Although it is unlikely that transit priority travel time will exceed this point, the condition is provided nonetheless. To determine when this occurs, a simple ratio can be taken, $\sfrac{t_{TP}}{t_c}$. The critical transit priority traffic flow point then depends on whether $\sfrac{t_{TP}}{t_c}$ is greater than or less than 1:
 
 \begin{subequations}
 \begin{align}
@@ -285,7 +285,7 @@ An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma)
      \label{fig:flowcombo}
  \end{figure}
 
-The intersection point of the two functions may be used as an optimal compromise, ensuring both conditions are satisfied with the least possible traffic flow. However, setting $q_a = q_p$ to find the intersection point results in a quintic function (polynomial to the $5^{th}$ power):
+The intersection point of the two functions may be used as an optimal compromise, ensuring both conditions are satisfied with the least possible traffic flow. However, setting $q_a = q_p$ to find the intersection point results in a quintic function (polynomial to the 5\textsuperscript{th} power):
 
 \begin{equation}
 f(\gamma) = \frac{11}{R^{2}}\gamma^{5}-\frac{6(1+\sqrt{2})}{R}\gamma^{4}-11\gamma^{3}+\frac{48\lambda_{b}R(1+\sqrt{2})+\lambda_{c}(R-2)}{8\lambda_{b}}\gamma^{2}-\frac{14R(R-2)}{30}\gamma-\frac{\lambda_{c}R^{2}(R-2)}{8\lambda_{b}}
@@ -300,7 +300,7 @@ f(\gamma) = \frac{11}{R^{2}}\gamma^{5}-\frac{6(1+\sqrt{2})}{R}\gamma^{4}-11\gamm
      \label{fig:optimalped}
 \end{figure}
 
-Given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$ an optimal pedestrian zone dimension $\gamma^*$, can be found numerically. Since two intersection points between $q_a$ and $q_p$ exist, the minimum of the two provides the desired optimal $\gamma^*$:
+Given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, it reduces the number of feasible solutions in the domain, allowing for an optimal pedestrian zone dimension $\gamma^*$ to be found numerically. Since two intersection points between $q_a$ and $q_p$ exist, the minimum of the two provides the desired optimal $\gamma^*$:
 
 \begin{align}\small
 \gamma^* &\Leftarrow \text{min} \left[ f(\gamma_1) = 0, f(\gamma_2) = 0 \right]\\
@@ -314,14 +314,13 @@ The critical transit priority traffic flow $q^*_T$, can then be used in combinat
     \text{s.t.} & ~ \tau^* \geq 0 
 \end{align}
 
-\noindent where the proportion of driving trips $P_D$, is introduced to scale driving demand to account for mode choice between driving and transit. Unlike the optimal pedestrian zone, which us unaffected by changes in driving demand\footnote{Assuming $\lambda_c$ and $\lambda_b$ are affected by mode choice equally, both $q_a$ $q_p$ shift vertically, keeping $\gamma^*$ constant. See Figure~\ref{fig:flowcombo}}, the optimal transit priority zone size will depend on driving demand.
+\noindent where the proportion of driving trips, $P_D$, is introduced to scale driving demand to account for mode choice between driving and transit. Unlike the optimal pedestrian zone, which us unaffected by changes in driving demand, the optimal transit priority zone size will depend on driving demand. This is because, assuming $\lambda_c$ and $\lambda_b$ are affected by mode choice equally, both $q_a$ and $q_p$ shift vertically, keeping $\gamma^*$ constant (See Figure~\ref{fig:flowcombo}).
 
 Assuming unlimited transit capacity relative to driving, and transit priority is relatively unaffected by congestion, a transit system with transit priority in this model effectively serves as a pressure release for demand. As congestion increases with driving trips, transit becomes more appealing, thus drawing trips away from driving. Conversely, a reduction in congestion would attract trips towards driving as the driving travel time has improved. Assuming transit with priority provides a reasonable and reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit. Although the proportion $P_D$ may be modeled as a discrete choice probability, this requires travel time as an input, making optimal $\tau$ difficult to find as it creates a dynamic problem dependent upon itself. Fortunately, since since $\gamma^*$ remains constant relative to demand, the necessary proportion of driving demand $P_D$ to achieve $q_a = q_T$ (see Figure~\ref{fig:optimalped}) can be determined directly as a function of $\tau$:
 
 \begin{equation}
     P_D(\tau) = \frac {-60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
 \end{equation}
-
 
 \subsection{Distance traveled}
 To determine the travel time, the total average distance traveled must be calculated and substituted for $l$ in Equation~\eqref{eq:ttfunc} for the following modes, respectively:
@@ -377,8 +376,8 @@ L_D = \frac{(R-\gamma)(14\lambda_b + 10\lambda_c)}{15(\lambda_b + \lambda_c)}
 \end{description}
 
 \section{Numeric application}
+To demonstrate the hypothetical outcomes of a pedestrianized zone surrounded by a transit priority zone, numeric input parameters provided in Table~\ref{tab:inputpars}. These parameters are loosely derived from a relatively similar real-world case in Melbourne, Australia, shown in Figure~\ref{fig:melb}.
 
-\noindent **** NOTE **** Input parameters for numeric example, could make them unitless?
 
 \begin{table}[h!]
 \centering
@@ -402,12 +401,21 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
 \label{tab:inputpars}
 \end{table}
 
+Melbourne is used because it possess an extremely grid-like street network despite its very monocentric traffic patterns and land-use development. 
+
+\begin{figure}[H]
+    \centering
+     \includegraphics[width=0.5\textwidth]{vicmap}
+    \caption{Street Network and Employment Density in Melbourne, Australia}
+    \label{fig:melb}
+\end{figure}
 
 
 <<echo=FALSE, cache=TRUE>>==
     source("../../analysis/simfunctions.R")
     source("../../analysis/simulationanalysis.R")
  @
+
 
 To demonstrate a baseline scenario in a city with no pedestrianized or transit priority zones using the numeric parameters shown in Table~\ref{tab:inputpars}, demand is varied in Figure~\ref{fig:demandtt} by shifting the proportion of total demand that drives or uses transit. For demonstration purposes, this assumes infinite transit capacity. The travel time of both mixed-traffic transit and driving both dramatically increase as driving demand increases. This is because the network reaches capacity and traffic flow breaks down, causing average travel time to dramatically increase. It is also clear that transit demand is always slower than driving demand, even if the difference between the two modes becomes arbitrarily small as the average travel time becomes dramatically large. This numerically illustrates the theorized situation in Figure~\ref{fig:transittraveltime}. As mentioned, the problem in this scheme is there is little or no incentive for an individual to choose transit, other than to selflessly improve the system for all. 
 
