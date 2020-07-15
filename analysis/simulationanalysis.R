@@ -89,18 +89,18 @@ plots[['combott2x']] <- ggplot(data = data.frame(x = c(1,R)), mapping = aes(x = 
   stat_function(fun = function(x) fun.tt_total(x,x),       aes(color="g=t",     linetype="g=t")) +
   scale_x_continuous("Zone size (miles)", limits = c(0,R), breaks = seq(0,R,by=2)) +
   scale_y_continuous("Average travel time (hours)", limits = c(0,15)) +
-  scale_color_brewer(name = NULL, limits = c("g=0.25t","g=0.5t","g=0.75t","g=t"),
-                      labels = expression("Travel time when"~gamma==tau,
-                                          "Travel time when"~gamma==frac(3,4)*tau,
-                                          "Travel time when"~gamma==frac(1,2)*tau,
-                                          "Travel time when"~gamma==frac(1,4)*tau),
+  scale_color_brewer(name = "Travel time when:", limits = c("g=0.25t","g=0.5t","g=0.75t","g=t"),
+                      labels = expression(gamma==tau,
+                                          gamma==frac(3,4)*tau,
+                                          gamma==frac(1,2)*tau,
+                                          gamma==frac(1,4)*tau),
                      guide = guide_legend(label.hjust=1), palette = "Set1") +
-  scale_linetype_discrete(name = NULL, limits = c("g=0.25t","g=0.5t","g=0.75t","g=t"),
-                          labels = expression("Travel time when"~gamma==tau,
-                                              "Travel time when"~gamma==frac(3,4)*tau,
-                                              "Travel time when"~gamma==frac(1,2)*tau,
-                                              "Travel time when"~gamma==frac(1,4)*tau)) +
-  theme_classic() + theme(legend.position = "right", legend.spacing.x = unit(0.5, 'cm'))
+  scale_linetype_discrete(name = "Travel time when:", limits = c("g=0.25t","g=0.5t","g=0.75t","g=t"),
+                          labels = expression(gamma==tau,
+                                              gamma==frac(3,4)*tau,
+                                              gamma==frac(1,2)*tau,
+                                              gamma==frac(1,4)*tau)) +
+  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 
 
 #### Average combined travel time, when zones are the same size
