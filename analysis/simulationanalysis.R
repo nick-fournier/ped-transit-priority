@@ -185,7 +185,7 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
   annotate("text", x = 3/4, y = 1/7, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
   annotate("text", x = 3/4, y = 1/7, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
   scale_x_continuous(expression("Pedestrian zone size, "~frac(gamma,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
-  scale_y_continuous(expression("Transit priority zone size, "~frac(gamma,tau)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
+  scale_y_continuous(expression("Transit priority zone size, "~frac(tau,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
   scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
                     label = c(paste0("<",scales::comma(brks)[lower]),
                               paste0(scales::comma(brks)[lower:(upper-2)], " - ",
