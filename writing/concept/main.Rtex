@@ -454,7 +454,7 @@ Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} only consider travel tim
 
 \begin{figure}[H]
 \centering
-    <<echo=FALSE, cache=TRUE, fig.width = 6.5, out.width="0.75\\textwidth", fig.asp = 0.33, warning=FALSE>>=
+    <<echo=FALSE, cache=TRUE, fig.width = 5, out.width="0.66\\textwidth", fig.asp = 0.66, warning=FALSE>>=
     plots[['combott2x']]
     @
     \caption{Average combined travel time for transit and driving varying $\tau$ and $\gamma$}
