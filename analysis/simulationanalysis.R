@@ -26,23 +26,25 @@ d = 2/delta
 
 
 #### 3. Simulation ####
-
-#Find the optimal intersection point, remains constant
-g.opt <- min(uniroot(fun.gamma_int, c(0,R/2))[['root']],
-             uniroot(fun.gamma_int, c(R/2,R))[['root']])
-
 #Find critical transit priority flow, remains constant
 q_T <- {
   TT <- (1/v_m)+(t_s/s)
   tc_ratio <- (q_c/k_c)*((1/v_m) + (t_s/s))
-  if(tc_ratio < 1) 
+  if(tc_ratio < 1)
     (2*k_c/TT) - ((k_c^2)/(q_c*TT^2))
   else
     q_c*(TT*q_c/k_c)^(1/20)
 }
 
-###
 
+#Find the optimal zone sizes
+opt <- optim(par = c(2,2), fn = function(x) {
+  GAMMA = x[1]
+  TAU = x[2]
+  fun.tt_total(GAMMA,TAU)
+})
+
+opt <- setNames(c(opt[['par']], opt[['value']]),c("ped","transit","tt"))
 
 
 ##### Some Plots ####
@@ -55,30 +57,69 @@ plots <- list()
 #Monocentric car trip proportion = 32%
 
 #Vary demand
-demdat <- rbindlist(lapply(seq(0.1, 1, by = 0.01), function(x) {
+demdat <- rbindlist(lapply(seq(0.1, 1.5, by = 0.001), function(x) {
+  #Scaled demand
   lambda_c <<- x*90/2
   lambda_b <<- x*150/2
-  data.table(prop = x, lambda_b, lambda_c,
-             #combo = fun.tt_total(0.1,0.1), 
+  
+  #Optimal sizing
+  demopt <- optim(par = c(5,5), lower = 0.1, upper = (R-0.1), method = "L-BFGS-B", 
+                  fn = function(y) fun.tt_total(g = y[1],tau = y[2]))
+  
+  #Formatting
+  demopt <- setNames(c(demopt[['par']], demopt[['value']]),c("ped","transit","tt"))
+  
+  #Output
+  out <- data.table(prop = x, lambda_b, lambda_c,
              Drive = fun.tt_drive(0.1),
-             Transit = fun.tt_transit(0.1))
+             Transit = fun.tt_transit(0.1),
+             Optimal = fun.tt_total(demopt[['ped']],demopt[['transit']]),
+             g = demopt[['ped']],
+             tau = demopt[['transit']])
+  
+  #Calculate average travel time for no policy
+  dratio = (0.67*lambda_b + 0.32*lambda_c)/(lambda_b + lambda_c)
+  out[ , "Average" := dratio*Transit + (1-dratio)*Drive]
+  
+  return(out)
 }))
-demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c"))
 
-plots[['demandtt']] <- ggplot(data = demdat) +
+#Melt into long
+demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c","g","tau"))
+
+#Baseline demand loading
+plots[['baselinett']] <- ggplot(data = demdat[variable %in% c("Drive","Transit"), ]) +
   geom_line(aes(x = prop, y = value, color = variable, linetype = variable)) +
-  scale_x_continuous("Driving demand (% of total demand)", labels = scales::percent_format(accuracy = 1), breaks = seq(0, 1, by = 0.2)) +
+  scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"),
+                     labels = scales::percent_format(accuracy = 1),
+                     breaks = seq(0, max(demdat$prop), by = 0.2)) +
   scale_y_continuous("Average travel time (hours)") +
   scale_linetype(NULL) +
   scale_color_brewer(NULL, palette = "Set1") +
   theme_classic() +
-  coord_cartesian(xlim = c(0,1), ylim = c(0,2)) +
+  coord_cartesian(xlim = c(0,1), ylim = c(0,3)) +
+  theme(legend.position = "bottom")
+
+#Compare optimal demand load to baseline
+plots[['demandload']] <- ggplot(data = demdat[variable %in% c("Average","Optimal"),]) +
+  geom_line(aes(x = prop, y = value, color = variable, linetype = variable)) +
+  scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
+                     labels = scales::percent_format(accuracy = 1),
+                     breaks = seq(0, max(demdat$prop), by = 0.2)) +
+  scale_y_continuous("Average travel time (hours)") +
+  scale_linetype(NULL, limits = c("Average","Optimal"), labels = c("No policy", "Optimal policy")) +
+  scale_color_brewer(NULL, palette = "Set1", limits = c("Average","Optimal"), labels = c("No policy", "Optimal policy")) +
+  theme_classic() +
+  coord_cartesian(xlim = c(0,max(demdat$prop)), ylim = c(0,3)) +
   theme(legend.position = "bottom")
 
 
 #Ensure it is set back to original
 lambda_c = 90/2
 lambda_b = 150/2
+
+
+
 
 #### Average combined travel time ####
 #varying only tau (optimal gamma) and
@@ -196,17 +237,6 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
          panel.grid = element_blank())
 )
 
-
-
-#Find the optimal zone sizes
-opt <- optim(par = c(2,2), fn = function(x) {
-  GAMMA = x[1]
-  TAU = x[2]
-  fun.tt_total(GAMMA,TAU)
-})
-
-
-opt <- setNames(c(opt[['par']], opt[['value']]),c("ped","transit","tt"))
 
 
 

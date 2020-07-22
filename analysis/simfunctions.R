@@ -96,7 +96,10 @@ fun.tt_TPbar <- function(tau) {
 
 
 #Probability as function of tau
-fun.Ptau <- function(tau) -(60*delta*tau*q_T)/(15*lambda_c*(tau^2) - 56*tau*lambda_b - 15*lambda_c*R^2)
+fun.Ptau <- function(tau) {
+  ptau = -(60*delta*tau*q_T)/(15*lambda_c*(tau^2) - 56*tau*lambda_b - 15*lambda_c*R^2)
+  ifelse(ptau > 1, 1, ptau)
+}
 
 #Logit for driving
 fun.PD <- function(tdiff) 1/(1 + exp(beta*tdiff))
