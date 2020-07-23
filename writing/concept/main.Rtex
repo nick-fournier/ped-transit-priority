@@ -321,21 +321,27 @@ Assuming unlimited transit capacity relative to driving, and transit priority is
     P_D(\tau) = \frac {-60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
 \end{equation}
 
-An interesting caveat to this function is that the proportion of driving demand, $P_D$, could theoretically exceed 1, meaning that more than 100\% of demand must drive in order to achieve $q_a = q_T$. This may seem like a erroneous outcome of the model, but this actually means that traffic conditions, $q_a$, never reach the level necessary to justify transit priority $q_T$
+An interesting caveat to this function is that the proportion of driving demand, $P_D$, could theoretically exceed 1, meaning that more than 100\% of demand must drive in order to achieve $q_a = q_T$. This may seem like a erroneous outcome of the model, but is actually a very useful outcome to determine when transit priority is appropriate. This condition occurs when traffic conditions, $q_a$, never reach the level necessary to justify transit priority, $q_T$, because overall demand is too low. For example, if the traffic flow at the edge of the pedestrian zone is less than the transit priority threshold, $q_a(\gamma) < q_T \Rightarrow P_D \geq 1$, thus more drivers than are available are needed to justify transit priority whatsoever.
 
-
-overall demand is too low to justify a implementing transit priority
-
-it is actually a very useful outcome to determine when transit priority is appropriate. 
-
-
-For example, if the traffic flow at the edge of the pedestrian zone $q_a(\gamma) < q_T$, then $P_D \geq 1$, thus more drivers than are available are needed to justify transit priority whatsoever.
 
 \begin{figure}[H]
      \centering
-     \includegraphics[width=0.5\textwidth]{diagram_tau_pd}
-     \caption{Demand magnitude of driving ratio function $P_D(\tau)$}
-     \label{fig:taupd}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{diagram_tau_pd}
+         \caption{Driving proportion function $P_D(\tau)$}
+         \label{fig:taupd}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{diagram_demand_pd}
+        \caption{Demand magnitude effect on driving proportion when $\tau$ is constant}
+         \label{fig:demandpd}
+     \end{subfigure}
+     \hfill
+     \caption{Demand magnitude effect on proportion}
 \end{figure}
 
 
@@ -501,10 +507,10 @@ In this case, the optimal pedestrianized and transit priority zone sizes are \Se
 \begin{figure}[H]
     \centering
     <<echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
-    plots[['demandload']]
+    plots[['comparett']]
     @
     \caption{Comparing average total travel time for no policy and optimal pedestrian and transit priority policies}
-    \label{fig:demandload}
+    \label{fig:comparett}
 \end{figure}
 
 
