@@ -337,7 +337,7 @@ An interesting caveat to this function is that the proportion of driving demand,
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_demand_pd}
-        \caption{Demand magnitude effect on driving proportion when $\tau$ is constant}
+        \caption{Demand magnitude effect when $\tau$ is constant}
          \label{fig:demandpd}
      \end{subfigure}
      \hfill
