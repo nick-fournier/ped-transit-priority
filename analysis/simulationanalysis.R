@@ -57,7 +57,7 @@ plots <- list()
 #Monocentric car trip proportion = 32%
 
 #Vary demand
-demdat <- rbindlist(lapply(seq(0.1, 1.5, by = 0.001), function(x) {
+demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
   #Scaled demand
   lambda_c <<- x*90/2
   lambda_b <<- x*150/2
@@ -72,8 +72,9 @@ demdat <- rbindlist(lapply(seq(0.1, 1.5, by = 0.001), function(x) {
   #Output
   out <- data.table(prop = x, lambda_b, lambda_c,
              Drive = fun.tt_drive(0.1),
-             Transit = fun.tt_transit(0.1),
+             Transit = fun.tt_transit(0.1*R),
              Optimal = fun.tt_total(demopt[['ped']],demopt[['transit']]),
+             P_D = fun.Ptau(0.1),
              g = demopt[['ped']],
              tau = demopt[['transit']])
   
@@ -85,7 +86,23 @@ demdat <- rbindlist(lapply(seq(0.1, 1.5, by = 0.001), function(x) {
 }))
 
 #Melt into long
-demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c","g","tau"))
+demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c","g","tau","P_D"))
+
+
+#Compare demand proportion to P_D 
+plots[['demandload']] <- ggplot(data = unique(demdat[variable == "Average", .(prop,P_D)])) +
+  geom_line(aes(x = prop, y = P_D)) +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  annotate("text", x = 0.4, y = 1, label = expression("Transit Priority Threshold"~q[T]), parse = T) +
+  scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
+                     labels = scales::percent_format(accuracy = 1),
+                     breaks = seq(0, max(demdat$prop), by = 0.2)) +
+  scale_y_continuous(expression("Proportion Driving"~P[D](tau==0.1*R))) +
+  theme_classic() +
+  coord_cartesian(xlim = c(0,max(demdat$prop)), ylim = c(0,5)) +
+  theme(legend.position = "bottom")
+
+
 
 #Baseline demand loading
 plots[['baselinett']] <- ggplot(data = demdat[variable %in% c("Drive","Transit"), ]) +
@@ -101,7 +118,7 @@ plots[['baselinett']] <- ggplot(data = demdat[variable %in% c("Drive","Transit")
   theme(legend.position = "bottom")
 
 #Compare optimal demand load to baseline
-plots[['demandload']] <- ggplot(data = demdat[variable %in% c("Average","Optimal"),]) +
+plots[['comparett']] <- ggplot(data = demdat[variable %in% c("Average","Optimal"),]) +
   geom_line(aes(x = prop, y = value, color = variable, linetype = variable)) +
   scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
                      labels = scales::percent_format(accuracy = 1),
@@ -117,7 +134,6 @@ plots[['demandload']] <- ggplot(data = demdat[variable %in% c("Average","Optimal
 #Ensure it is set back to original
 lambda_c = 90/2
 lambda_b = 150/2
-
 
 
 

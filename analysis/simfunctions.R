@@ -97,8 +97,7 @@ fun.tt_TPbar <- function(tau) {
 
 #Probability as function of tau
 fun.Ptau <- function(tau) {
-  ptau = -(60*delta*tau*q_T)/(15*lambda_c*(tau^2) - 56*tau*lambda_b - 15*lambda_c*R^2)
-  ifelse(ptau > 1, 1, ptau)
+  -(60*delta*tau*q_T)/(15*lambda_c*(tau^2) - 56*tau*lambda_b - 15*lambda_c*R^2)
 }
 
 #Logit for driving
@@ -114,8 +113,8 @@ fun.tt_transit <- function(tau) fun.tt_TPbar(tau) + fun.tt_TMbar(tau)
 
 #Total average travel time
 fun.tt_total <- function(g,tau) {
-  #fun.PD(fun.tt_drive(g) - fun.tt_transit(tau))
-  fun.Ptau(tau)*(fun.tt_Dbar(g) + fun.tt_Wbar(g)) + (1-fun.Ptau(tau))*(fun.tt_TPbar(tau) + fun.tt_TMbar(tau))
+  Ptau = fun.Ptau(tau)
+  Ptau*(fun.tt_Dbar(g) + fun.tt_Wbar(g)) +  (1-Ptau)*(fun.tt_TPbar(tau) + fun.tt_TMbar(tau))
 }
 
 
