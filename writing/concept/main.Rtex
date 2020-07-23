@@ -306,7 +306,7 @@ Given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, t
 \text{s.t.} & ~ 0 \leq \gamma\leq R  \notag 
 \end{align}
 
-The critical transit priority traffic flow $q^*_T$, can then be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau^*$, when $q_T = q_a$. $q_p$ is not included in this because it only determines the traffic on the perimeter road of the pedestrian zone, not the traffic at the extent of the transit priority zone beyond the pedestrian zone. The solution to this is quadratic, but assuming a non-negative value for the optimal transit zone size, it can be solved for analytically:
+The critical transit priority traffic flow $q_T$, can then be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the optimal transit priority zone, $\tau^*$, when $q_T = q_a$. $q_p$ is not included in this because it only determines the traffic on the perimeter road of the pedestrian zone, not the traffic at the extent of the transit priority zone beyond the pedestrian zone. The solution to this is quadratic, but assuming a non-negative value for the optimal transit zone size, it can be solved for analytically:
 
 \begin{align}
     \tau^*(P_D) & = \frac{56 P_D \lambda_{b}-60\delta q_{T} +\sqrt{\left(56 P_D \lambda_{b}-60\delta q_{T}\right)^{2} + (30 P_D \lambda_{c} R)^2 }}{30 P_D \lambda_{c}}\\
@@ -321,20 +321,20 @@ Assuming unlimited transit capacity relative to driving, and transit priority is
     P_D(\tau) = \frac {-60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
 \end{equation}
 
-A caveat to this function is that the proportion of driving demand, $P_D$, necessary to achieve $q_a = q_T$ could exceed 1. Meaning that more more than 100\% of demand must drive in order to 
+An interesting caveat to this function is that the proportion of driving demand, $P_D$, could theoretically exceed 1, meaning that more than 100\% of demand must drive in order to achieve $q_a = q_T$. This may seem like a erroneous outcome of the model, but this actually means that traffic conditions, $q_a$, never reach the level necessary to justify transit priority $q_T$
 
 
+overall demand is too low to justify a implementing transit priority
+
+it is actually a very useful outcome to determine when transit priority is appropriate. 
 
 
-While this may seem like a bizarre flaw in the model, it is actually a very useful outcome. Such a condition can occur if overall travel demand does not cause enough congestion in the network to 
-
-
-
+For example, if the traffic flow at the edge of the pedestrian zone $q_a(\gamma) < q_T$, then $P_D \geq 1$, thus more drivers than are available are needed to justify transit priority whatsoever.
 
 \begin{figure}[H]
      \centering
      \includegraphics[width=0.5\textwidth]{diagram_tau_pd}
-     \caption{$P_D$}
+     \caption{Demand magnitude of driving ratio function $P_D(\tau)$}
      \label{fig:taupd}
 \end{figure}
 
