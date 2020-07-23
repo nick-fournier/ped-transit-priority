@@ -321,13 +321,21 @@ Assuming unlimited transit capacity relative to driving, and transit priority is
     P_D(\tau) = \frac {-60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
 \end{equation}
 
+A caveat to this function is that the proportion of driving demand, $P_D$, necessary to achieve $q_a = q_T$ could exceed 1. Meaning that more more than 100\% of demand must drive in order to 
+
+
+
+
+While this may seem like a bizarre flaw in the model, it is actually a very useful outcome. Such a condition can occur if overall travel demand does not cause enough congestion in the network to 
+
+
 
 
 \begin{figure}[H]
      \centering
      \includegraphics[width=0.5\textwidth]{diagram_tau_pd}
-     \caption{Quintic function for optimal pedestrian zone size, $f(\gamma)$}
-     \label{fig:optimalped}
+     \caption{$P_D$}
+     \label{fig:taupd}
 \end{figure}
 
 
