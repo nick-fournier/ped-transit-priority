@@ -71,9 +71,9 @@ demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
   
   #Output
   out <- data.table(prop = x, lambda_b, lambda_c,
-             Drive = fun.tt_drive(0.1),
+             Drive = fun.tt_drive(0.1*R),
              Transit = fun.tt_transit(0.1*R),
-             Optimal = fun.tt_total(demopt[['ped']],demopt[['transit']]),
+             Optimal = fun.tt_total(demopt[['ped']],demopt[['transit']], bounded = T),
              P_D = fun.Ptau(0.1),
              g = demopt[['ped']],
              tau = demopt[['transit']])
@@ -93,7 +93,7 @@ demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c","g","tau","P_D
 plots[['demandload']] <- ggplot(data = unique(demdat[variable == "Average", .(prop,P_D)])) +
   geom_line(aes(x = prop, y = P_D)) +
   geom_hline(yintercept = 1, linetype = "dashed") +
-  annotate("text", x = 0.4, y = 1, vjust=1, label = "'Transit Priority Threshold'~q[T]", parse = T) +
+  annotate("text", x = 0.4, y = 1, vjust=1.5, label = "'Transit Priority Threshold'~q[T]", parse = T) +
   scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
                      labels = scales::percent_format(accuracy = 1),
                      breaks = seq(0, max(demdat$prop), by = 0.2)) +
@@ -136,33 +136,6 @@ lambda_c = 90/2
 lambda_b = 150/2
 
 
-
-#### Average combined travel time ####
-#varying only tau (optimal gamma) and
-#varying only gamma (tau = gamma in this case cuz theres no traffic in ped zone)
-plots[['combott2x']] <- ggplot(data = data.frame(x = c(0,1)), mapping = aes(x = x)) +
-  stat_function(fun = function(x) fun.tt_total((1/4)*x*R,x*R), aes(color="g=0.25t", linetype="g=0.25t")) +
-  stat_function(fun = function(x) fun.tt_total((1/2)*x*R,x*R), aes(color="g=0.5t",  linetype="g=0.5t")) +
-  stat_function(fun = function(x) fun.tt_total((3/4)*x*R,x*R), aes(color="g=0.75t", linetype="g=0.75t")) +
-  stat_function(fun = function(x) fun.tt_total(x*R,x*R),       aes(color="g=t",     linetype="g=t")) +
-  scale_x_continuous(expression("Zone size,"~frac(gamma,R)~"and"~frac(tau,R)), breaks = seq(0,1,by=0.2)) +
-  scale_y_continuous("Average travel time (hours)") +
-  scale_color_brewer(name = "Travel time when:", limits = c("g=0.25t","g=0.5t","g=0.75t","g=t"),
-                      labels = expression(gamma==tau,
-                                          gamma==frac(3,4)*tau,
-                                          gamma==frac(1,2)*tau,
-                                          gamma==frac(1,4)*tau),
-                     guide = guide_legend(label.hjust=1), palette = "Set1") +
-  scale_linetype_discrete(name = "Travel time when:", limits = c("g=0.25t","g=0.5t","g=0.75t","g=t"),
-                          labels = expression(gamma==tau,
-                                              gamma==frac(3,4)*tau,
-                                              gamma==frac(1,2)*tau,
-                                              gamma==frac(1,4)*tau)) +
-  coord_cartesian(xlim = c(0,1), ylim = c(0,5)) +
-  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
-
-
-
 #### Average travel time for driving and transit separately ####
 #Average driving travel time varying pedestrian zone size gamma
 plots[['drivett']] <- ggplot(data = data.frame(x = c(0,1)), mapping = aes(x = x)) +
@@ -177,6 +150,30 @@ plots[['transittt']] <- ggplot(data = data.frame(x = c(0,1)), mapping = aes(x = 
   stat_function(fun = function(x) fun.tt_transit(R*x), linetype = "dashed") +
   scale_x_continuous(expression("Transit zone size, "~frac(tau,R)), breaks = seq(0,1,by=0.2)) +
   scale_y_continuous("Average travel time (hours)") +
+  coord_cartesian(xlim = c(0,1), ylim = c(0,5)) +
+  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+
+#### Average combined travel time ####
+#varying only tau (optimal gamma) and
+#varying only gamma (tau = gamma in this case cuz theres no traffic in ped zone)
+plots[['combott']] <- ggplot(data = data.frame(x = c(0,1)), mapping = aes(x = x)) +
+  stat_function(fun = function(x) fun.tt_total((1/4)*x*R,x*R, bounded = T), aes(color="g=0.25t", linetype="g=0.25t")) +
+  stat_function(fun = function(x) fun.tt_total((1/2)*x*R,x*R, bounded = T), aes(color="g=0.5t",  linetype="g=0.5t")) +
+  stat_function(fun = function(x) fun.tt_total((3/4)*x*R,x*R, bounded = T), aes(color="g=0.75t", linetype="g=0.75t")) +
+  stat_function(fun = function(x) fun.tt_total(x*R,x*R, bounded = T),       aes(color="g=t",     linetype="g=t")) +
+  scale_x_continuous(expression("Zone size,"~frac(gamma,R)~"and"~frac(tau,R)), breaks = seq(0,1,by=0.2)) +
+  scale_y_continuous("Average travel time (hours)") +
+  scale_color_brewer(name = "Travel time when:", limits = c("g=0.25t","g=0.5t","g=0.75t","g=t"),
+                     labels = expression(gamma==tau,
+                                         gamma==frac(3,4)*tau,
+                                         gamma==frac(1,2)*tau,
+                                         gamma==frac(1,4)*tau),
+                     guide = guide_legend(label.hjust=1), palette = "Set1") +
+  scale_linetype_discrete(name = "Travel time when:", limits = c("g=0.25t","g=0.5t","g=0.75t","g=t"),
+                          labels = expression(gamma==tau,
+                                              gamma==frac(3,4)*tau,
+                                              gamma==frac(1,2)*tau,
+                                              gamma==frac(1,4)*tau)) +
   coord_cartesian(xlim = c(0,1), ylim = c(0,5)) +
   theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
 

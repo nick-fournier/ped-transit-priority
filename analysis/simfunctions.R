@@ -75,6 +75,12 @@ fun.tt_TMbar<- function(tau) {
 
 }
 
+#Transit priority travel time
+fun.tt_TPbar <- function(tau) {
+  lbar <- ((tau*(14*lambda_b + 10*lambda_c))/(15*(lambda_b + lambda_c)))
+  (lbar/v_m) + (lbar/s)*t_s
+}
+
 #Average walking travel time
 fun.tt_Wbar <- function(g) {
   lbar <-   ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) /
@@ -86,12 +92,6 @@ fun.tt_Wbar <- function(g) {
 fun.tt_Bbar <- function(g) {
   lbar <- ((8*lambda_b*g^5 + 20*lambda_b*(g^3)*(R^2 - g^2))/(3*R^2)) + 2*lambda_c*g^3 + g*(R^2 - g^2)
   lbar/v_b
-}
-
-#Transit priority travel time
-fun.tt_TPbar <- function(tau) {
-  lbar <- ((tau*(14*lambda_b + 10*lambda_c))/(15*(lambda_b + lambda_c)))
-  (lbar/v_m) + (lbar/s)*t_s
 }
 
 
@@ -112,10 +112,10 @@ fun.tt_transit <- function(tau) fun.tt_TPbar(tau) + fun.tt_TMbar(tau)
 
 
 #Total average travel time
-fun.tt_total <- function(g,tau) {
+fun.tt_total <- function(g,tau,bounded = F) {
   Ptau = fun.Ptau(tau)
-  #Ptau = ifelse(Ptau > 1, 1, Ptau)
-  Ptau*(fun.tt_Dbar(g) + fun.tt_Wbar(g)) +  (1-Ptau)*(fun.tt_TPbar(tau) + fun.tt_TMbar(tau))
+  if(bounded == T) Ptau = ifelse(Ptau > 1, 1, Ptau)
+  Ptau*(fun.tt_Dbar(g) + fun.tt_Wbar(g)) + (1-Ptau)*(fun.tt_TPbar(tau) + fun.tt_TMbar(tau))
 }
 
 
