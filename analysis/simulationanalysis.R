@@ -87,7 +87,10 @@ demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
              Drive = fun.tt_drive(0.1*R),
              Transit = fun.tt_transit(0.1*R),
              Optimal = fun.tt_total(demopt[['gamma']],demopt[['tau']], bounded = T),
-             P_D = fun.Ptau(0.1*R),
+             '0.05' = fun.Ptau(0.05*R),
+             '0.10' = fun.Ptau(0.1*R),
+             '0.15' = fun.Ptau(0.15*R),
+             '0.20' = fun.Ptau(0.2*R),
              gamma = demopt[['gamma']],
              tau = demopt[['tau']])
   
@@ -99,18 +102,21 @@ demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
 }))
 
 #Melt into long
-demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c","gamma","tau","P_D"))
+demdat <- melt(demdat, measure.vars = c("Drive","Transit","Optimal","Average"))
+demdat <- melt(demdat, variable.name = "tau/R", value.name = "P_D",
+               id.vars = c("prop", "lambda_b", "lambda_c","gamma","tau","variable","value"))
 
 
 #Compare demand proportion to P_D 
-plots[['demandload']] <- ggplot(data = unique(demdat[variable == "Average", .(prop,P_D)])) +
-  geom_line(aes(x = prop, y = P_D)) +
+plots[['demandload']] <- ggplot(data = unique(demdat[variable == "Average", .(prop,`tau/R`,P_D)])) +
+  geom_line(aes(x = prop, y = P_D, color = `tau/R`)) +
   geom_hline(yintercept = 1, linetype = "dashed") +
-  annotate("text", x = 0.4, y = 1, vjust=1.5, label = "'Transit Priority Threshold'~q[T]", parse = T) +
+  #annotate("text", x = 0.4, y = 1, vjust=1.5, label = "'Transit Priority Threshold'~q[T]", parse = T) +
   scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
                      labels = scales::percent_format(accuracy = 1),
                      breaks = seq(0, max(demdat$prop), by = 0.2)) +
-  scale_y_continuous(expression("Proportion Driving"~P[D](tau==0.1*R))) +
+  scale_y_continuous(expression("Proportion Driving"~P[D])) +
+  scale_color_brewer(expression("Transit priority zone size"~frac(tau,R)), palette = "Set1") +
   theme_classic() +
   coord_cartesian(xlim = c(0,max(demdat$prop)), ylim = c(0,2)) +
   theme(legend.position = "bottom")
