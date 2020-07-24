@@ -326,8 +326,9 @@ Assuming unlimited transit capacity relative to driving, and transit priority is
     P_D(\tau) = \frac {-60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
 \end{equation}
 
-An interesting caveat to this function is that the proportion of driving demand, $P_D$, could theoretically exceed 1, meaning that more than 100\% of demand must drive in order to achieve $q_a = q_T$. This may seem like a erroneous outcome of the model, but is actually a very useful outcome to determine when transit priority is appropriate. This condition occurs when traffic conditions, $q_a$, never reach the level necessary to justify transit priority, $q_T$, because overall demand is too low. For example, if the traffic flow at the edge of the pedestrian zone is less than the transit priority threshold, $q_a(\gamma) < q_T \Rightarrow P_D \geq 1$, thus more drivers than are available are needed to justify transit priority whatsoever.
+An interesting caveat to this function is that the proportion of driving demand, $P_D$, could theoretically exceed 1, meaning that more than 100\% of demand must drive in order to achieve $q_a = q_T$ for a transit priority zone size of $\tau$. This occurs when traffic conditions at the edge of the transit priority zone, $q_a(\tau)$, never reach the level necessary to justify transit priority, $q_T$, because overall demand is too low. This may seem like a erroneous outcome of the model, but is actually a useful outcome to determine when transit priority zone of size $\tau$ is appropriate.
 
+When total demand in the city varies, it alters the steepness of the driving proportion function, $P_D$, as $\tau$ varies (see Figure~\ref{fig:taupd}). For a fixed transit priority zone of size $\tau$, and varying overall travel demand $\lamba$, the zone is justified when $P_D \leq 1$ (see Figure~\ref{fig:demandpd}). Meaning automobile traffic conditions are at least the same travel time or slower than transit priority. For example, if the traffic flow at the edge of the pedestrian zone is less than the transit priority threshold, $q_a(\gamma) < q_T \Rightarrow P_D > 1$, a driving demand greater than the total travel demand is needed and a transit priority zone is not beneficial.
 
 \begin{figure}[H]
      \centering
@@ -447,21 +448,8 @@ $d$         & $\sfrac{2}{\delta}=0.738$ & $km$                          \\\botto
     \label{fig:melb}
 \end{figure}
 
-\subsection{Transit priority threshold}
-
-\begin{figure}[H]
-    \centering
-    <<echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.5, warning=FALSE>>=
-    plots[['demandload']]
-    @
-    \caption{Demand loading to justify transit priority when $\tau$ is 10\% of $R$ (1.5 miles)}
-    \label{fig:demandload}
-\end{figure}
-
-
 \subsection{Baseline scenario -- no pedestrian or transit priority policies}
 First, a baseline scenario in a city with no pedestrianized or transit priority zones using the numeric parameters shown in Table~\ref{tab:inputpars}, demand is varied in Figure~\ref{fig:baselinett} by shifting the proportion of total demand that drives or uses transit. Again, for demonstration purposes, this assumes infinite transit capacity. The travel time of both mixed-traffic transit and driving dramatically increase as driving demand increases. This is because the network reaches capacity and traffic flow breaks down, it causes average travel time for both driving and mixed-traffic transit to dramatically increase.
-
 
 \begin{figure}[H]
     \centering
@@ -473,6 +461,22 @@ First, a baseline scenario in a city with no pedestrianized or transit priority 
 \end{figure}
 
 It is also clear that transit demand is always slower than driving demand, even if the difference between the two modes becomes arbitrarily small as the average travel time becomes dramatically large. This numerically illustrates the situation hypothesized in Figure~\ref{fig:transittraveltime}. As mentioned, the problem in this scheme is there is little or no incentive for an individual to choose transit, other than out of necessity or to selflessly improve the system for all. 
+
+\subsection{Transit priority threshold}
+
+
+To determine whether traffic conditions are worse enough to justify transit priority, regardless of a pedestrianized zone, 
+
+\begin{figure}[H]
+    \centering
+    <<echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.5, warning=FALSE>>=
+    plots[['demandload']]
+    @
+    \caption{Demand loading to justify transit priority when $\tau$ is 10\% of $R$ (1.5 miles)}
+    \label{fig:demandload}
+\end{figure}
+
+
 
 \subsection{Independent pedestrian and transit priority policies}
 While it is unrealistic that travel time would approach infinity, one might assume that as traffic flow breaks down and travel time dramatically increases, demand for travel itself might simply become suppressed in general. To avoid such a scenario, ensuring that travel demand is not suppressed and able to travel freely, the city might decide to impose a pedestrianized or transit priority zone. Figure~\ref{fig:modett} demonstrates the effect of pedestrianized and transit priority zones on the respective average travel time of driving and transit.
@@ -508,7 +512,7 @@ Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} only consider travel tim
 \begin{figure}[H]
 \centering
     <<echo=FALSE, cache=TRUE, fig.width = 5.5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
-    plots[['combott2x']]
+    plots[['combott']]
     @
     \caption{Average combined travel time for transit and driving varying $\tau$ and $\gamma$}
     \label{fig:combott}
