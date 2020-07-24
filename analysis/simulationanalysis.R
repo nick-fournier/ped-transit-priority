@@ -223,8 +223,8 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
   geom_area(data = data.frame(x=c(0,1),y=c(0,1)), aes(x=x,y=y), fill = "white", alpha = 0.5) +
   geom_text(data=plotmat[which.min(tt_total), ], vjust = 1.5, hjust = 0,
             aes(x=gamma/R, y=tau/R, label = paste("Minimum =",round(tt_total,2),"hours"))) +
-  annotate("text", x = 3/4, y = 1/8, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
-  annotate("text", x = 3/4, y = 1/7, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
+  annotate("text", x = 3/4, y = 1/10, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
+  annotate("text", x = 3/4, y = 1/10, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
   scale_x_continuous(expression("Pedestrian zone size, "~frac(gamma,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
   scale_y_continuous(expression("Transit priority zone size, "~frac(tau,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
   scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
