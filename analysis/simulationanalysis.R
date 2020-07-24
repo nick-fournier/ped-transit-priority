@@ -57,7 +57,7 @@ plots <- list()
 #Monocentric car trip proportion = 32%
 
 #Vary demand
-demdat <- rbindlist(pblapply(seq(0.01, 1.5, by = 0.001), function(x) {
+demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
   #Scaled demand
   lambda_c <<- x*90/2
   lambda_b <<- x*150/2
@@ -68,7 +68,8 @@ demdat <- rbindlist(pblapply(seq(0.01, 1.5, by = 0.001), function(x) {
   #Calculate the average total travel time
   mat[ , tt_total := mapply(fun.tt_total, mat[['gamma']], mat[['tau']], bounded = T)]
   demopt = as.matrix(mat[tau >= gamma, ][which.min(tt_total), .(gamma, tau, tt = tt_total)])[1,]
-  
+
+  # demopt = c("gamma" = 1, "tau" = 2)
   #Optimal sizing
   demopt <- optim(par = demopt[c("gamma","tau")], lower = 0.001, upper = (R-0.001), method = "L-BFGS-B",
                   fn = function(y) {
