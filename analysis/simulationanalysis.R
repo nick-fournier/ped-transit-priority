@@ -87,7 +87,7 @@ demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
              Drive = fun.tt_drive(0.1*R),
              Transit = fun.tt_transit(0.1*R),
              Optimal = fun.tt_total(demopt[['gamma']],demopt[['tau']], bounded = T),
-             P_D = fun.Ptau(0.1),
+             P_D = fun.Ptau(0.2*R),
              gamma = demopt[['gamma']],
              tau = demopt[['tau']])
   
@@ -110,7 +110,7 @@ plots[['demandload']] <- ggplot(data = unique(demdat[variable == "Average", .(pr
   scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
                      labels = scales::percent_format(accuracy = 1),
                      breaks = seq(0, max(demdat$prop), by = 0.2)) +
-  scale_y_continuous(expression("Proportion Driving"~P[D](tau==0.1*R))) +
+  scale_y_continuous(expression("Proportion Driving"~P[D](tau==0.2*R))) +
   theme_classic() +
   coord_cartesian(xlim = c(0,max(demdat$prop)), ylim = c(0,2)) +
   theme(legend.position = "bottom")
