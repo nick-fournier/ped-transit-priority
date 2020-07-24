@@ -81,11 +81,18 @@ fun.tt_TPbar <- function(tau) {
   (lbar/v_m) + (lbar/s)*t_s
 }
 
-#Average walking travel time
-fun.tt_Wbar <- function(g) {
+#Average travel time within ped zone
+fun.tt_Wbar <- function(g, maxwalk = 0.5) {
   lbar <-   ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) /
     (3*(R^2)*(g^2)*(2*lambda_b + lambda_c - 1) - 3*lambda_b*g^4 + 3*R^4)
-  lbar/v_w
+  
+  # if(g > maxwalk)
+  #   (lbar/v_m) + (lbar/s)*t_s
+  # else
+  #   lbar/v_w
+  # if(g > maxwalk)
+  (lbar/v_m) + (lbar/s)*t_s + (maxwalk/2)/v_w
+  
 }
 
 #Average biking travel time

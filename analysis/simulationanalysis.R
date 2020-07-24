@@ -57,26 +57,38 @@ plots <- list()
 #Monocentric car trip proportion = 32%
 
 #Vary demand
-demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
+demdat <- rbindlist(pblapply(seq(0.01, 1.5, by = 0.001), function(x) {
   #Scaled demand
   lambda_c <<- x*90/2
   lambda_b <<- x*150/2
   
-  #Optimal sizing
-  demopt <- optim(par = c(5,5), lower = 0.1, upper = (R-0.1), method = "L-BFGS-B", 
-                  fn = function(y) fun.tt_total(g = y[1],tau = y[2]))
+  #Find approx starting point
+  Rseq <- seq(1/100000,R-(R/100000),length.out = 10)
+  mat <- data.table(expand.grid(gamma=Rseq,tau=Rseq))
+  #Calculate the average total travel time
+  mat[ , tt_total := mapply(fun.tt_total, mat[['gamma']], mat[['tau']], bounded = T)]
+  demopt = as.matrix(mat[tau >= gamma, ][which.min(tt_total), .(gamma, tau, tt = tt_total)])[1,]
   
+  #Optimal sizing
+  demopt <- optim(par = demopt[c("gamma","tau")], lower = 0.001, upper = (R-0.001), method = "L-BFGS-B",
+                  fn = function(y) {
+                    # if(y[2] < y[1])
+                    #   9999
+                    # else
+                      fun.tt_total(g = y[1],tau = y[2], bounded = T)
+                    })
+
   #Formatting
-  demopt <- setNames(c(demopt[['par']], demopt[['value']]),c("ped","transit","tt"))
+  demopt <- setNames(c(demopt[['par']], demopt[['value']]),c("gamma","tau","tt"))
   
   #Output
   out <- data.table(prop = x, lambda_b, lambda_c,
              Drive = fun.tt_drive(0.1*R),
              Transit = fun.tt_transit(0.1*R),
-             Optimal = fun.tt_total(demopt[['ped']],demopt[['transit']], bounded = T),
+             Optimal = fun.tt_total(demopt[['gamma']],demopt[['tau']], bounded = T),
              P_D = fun.Ptau(0.1),
-             g = demopt[['ped']],
-             tau = demopt[['transit']])
+             gamma = demopt[['gamma']],
+             tau = demopt[['tau']])
   
   #Calculate average travel time for no policy
   dratio = (0.67*lambda_b + 0.32*lambda_c)/(lambda_b + lambda_c)
@@ -86,7 +98,7 @@ demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
 }))
 
 #Melt into long
-demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c","g","tau","P_D"))
+demdat <- melt(demdat, id.vars = c("prop", "lambda_b", "lambda_c","gamma","tau","P_D"))
 
 
 #Compare demand proportion to P_D 
@@ -118,7 +130,7 @@ plots[['baselinett']] <- ggplot(data = demdat[variable %in% c("Drive","Transit")
   theme(legend.position = "bottom")
 
 #Compare optimal demand load to baseline
-plots[['comparett']] <- ggplot(data = demdat[variable %in% c("Average","Optimal"),]) +
+plots[['comparett']] <- ggplot(data = demdat[variable %in% c("Average","Optimal","Drive","Transit"),]) +
   geom_line(aes(x = prop, y = value, color = variable, linetype = variable)) +
   scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
                      labels = scales::percent_format(accuracy = 1),
@@ -201,16 +213,16 @@ plotmat[ bin > upper, bin := upper]
 #plotting
 suppressWarnings(
 plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
-  #geom_contour_filled(aes(z = bin)) +
   geom_tile(aes(fill = as.factor(bin))) +
   geom_contour(aes(z = tt_total), breaks = brks[1:10], color = 'black', size = 0.1, alpha = 0.5) +
   geom_contour(aes(z = tt_total), breaks = brks[11:length(brks)], color = 'black', size = 0.01, alpha = 0.2) +
   geom_area(data = data.frame(x = c(0,R), y =  c(0,1)), aes(x = x, y = y, z=0), fill='gray90', alpha = 0.6) +
   geom_abline(slope = 1, linetype = "dashed") +
   geom_point(data=plotmat[which.min(tt_total), ]) +
-  # geom_text(data=plotmat[which.min(tt_total), ], color = 'white', 
-  #           aes(x=gamma*1.75, y=tau*1.25, label = paste("Minimum =",round(tt_total,2),"hours"))) +
-  annotate("text", x = 3/4, y = 1/7, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
+  geom_area(data = data.frame(x=c(0,1),y=c(0,1)), aes(x=x,y=y), fill = "white", alpha = 0.5) +
+  geom_text(data=plotmat[which.min(tt_total), ], vjust = 1.5, hjust = 0,
+            aes(x=gamma/R, y=tau/R, label = paste("Minimum =",round(tt_total,2),"hours"))) +
+  annotate("text", x = 3/4, y = 1/8, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
   annotate("text", x = 3/4, y = 1/7, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
   scale_x_continuous(expression("Pedestrian zone size, "~frac(gamma,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
   scale_y_continuous(expression("Transit priority zone size, "~frac(tau,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
