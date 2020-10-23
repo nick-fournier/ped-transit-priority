@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{elsarticle}
 \usepackage[utf8]{inputenc}
 
 \usepackage[letterpaper, margin=1.25in]{geometry}
@@ -14,53 +14,75 @@
 \usepackage{datetime}
 \usepackage{lineno}
 %\usepackage[square,sort&compress,comma,numbers]{natbib})
-\usepackage[style=numeric-comp, natbib=true, sorting=none]{biblatex}
-\AtEveryBibitem{%
-  \clearfield{issn} % Remove issn
-  \clearfield{doi} % Remove doi
-  \ifentrytype{online}{}{% Remove url except for @online
-    \clearfield{url}
-  }
-}
-\addbibresource{references.bib}
-
+% \usepackage[style=numeric-comp, natbib=true, sorting=none]{biblatex}
+% \AtEveryBibitem{%
+%   \clearfield{issn} % Remove issn
+%   %\clearfield{doi} % Remove doi
+%   \ifentrytype{online}{}{% Remove url except for @online
+%     \clearfield{url}
+%   }
+% }
+% %\addbibresource{references.bib}
 
 %Load in the R scripts
 <<echo=FALSE, cache=TRUE>>==
     source("../../analysis/simfunctions.R")
     source("../../analysis/simulationanalysis.R")
  @
-
-
-\linenumbers
-
 \graphicspath{ {figures/} }
 
-\title{An analytical evaluation of the complementary benefits of transit priority and pedestrianized zones in a city}
-\author{Nicholas Fournier}
-\date{\usdate}
+
+% \linenumbers
+% \title{Evaluating the complementary benefits of transit priority and pedestrianized zones in an idealized city}
+% \author{Nicholas Fournier, PhD}
+% \address{Institute of Transportation Studies, \\
+% University of California, Berkeley\\
+% 409 McLaughlin Hall, Berkeley, California 94720}
+%\date{\usdate}
+
+\bibliographystyle{elsarticle-num}
+\biboptions{sort&compress}
 
 \begin{document}
 
-\maketitle
+\begin{frontmatter}
+
+%\title{Hybrid pedestrian and transit priority zoning policies: Evaluating network traffic flow impacts in an urban street network}
+ 
+\title{Hybrid pedestrian and transit priority zoning policies in an urban street network: Evaluating network traffic flow impacts with analytical approximation}
+ 
+%% Group authors per affiliation:
+\author{Nicholas Fournier, PhD}
+\address{Institute of Transportation Studies, \\
+University of California, Berkeley\\
+409 McLaughlin Hall, Berkeley, California 94720}
+
+
+\begin{keyword}
+transit priority \sep pedestrianization \sep pedestrian only zone \sep policy 
+\end{keyword}
+
+% \maketitle
 
 \begin{abstract}
-Pedestrianized zones are becoming an increasingly popular policy tool for cities seeking to improve ``walkability'', ``livability’’, and reduce congestion in the urban center by prohibiting automobiles from entering a designated zone. However, pedestrianized zones can be inappropriately implemented in locations without justifiable congestion or sufficient transit alternatives. For mixed-traffic transit (e.g., bus and light-rail streetcars), the lack of reasonable transit alternatives is an issue further compounded by the traffic congestion generated from diverted driving trips concentrated around the pedestrianized zone, inadvertently slowing down both automobile traffic and mixed-traffic transit in tandem. Alternatively, to mitigate the traffic congestion impact on transit, policy makers can also designate a ``transit priority’’ zone around the pedestrian zone, where transit is unimpeded by congestion either through transit signal priority, dedicated lanes, or both. This ensures transit provides a consistent travel alternative as congestion varies, creating a stable demand equilibrium that would otherwise be suppressed by congestion. While such a solution has been proposed in advocacy, no research has explored such a combined policy in analytical terms. This research explores the potential complementary benefits and optimal sizing of pedestrianization and transit priority zones through analytical evaluation in an idealized rectilinear city. The model is intended to provide insights regarding traffic impacts, optimal zone sizing, system capacity, and the justifiable thresholds for implementating complementary pedestrianization and transit priority zones in a city.
+Pedestrianized zones are becoming an increasingly popular policy tool for cities seeking to improve ``walkability'', ``livability’’, and reduce congestion in the urban center by prohibiting automobiles from entering a designated zone. However, pedestrianized zones can be inappropriately implemented in locations without justifiable congestion or sufficient transit alternatives. For mixed-traffic transit (e.g., bus and light-rail streetcars), the lack of reasonable transit alternatives is an issue further compounded by the traffic congestion generated from diverted driving trips concentrated around the pedestrianized zone, inadvertently slowing down both automobile traffic and mixed-traffic transit in tandem. Alternatively, to mitigate the traffic congestion impact on transit, policy makers can also designate a ``transit priority’’ zone around the pedestrian zone, where transit is unimpeded by congestion either through transit signal priority, dedicated lanes, or both. This ensures transit provides a consistent travel alternative as congestion varies, creating a stable demand equilibrium that would otherwise be suppressed by congestion. While such a solution has been proposed in advocacy, no research has explored such a combined policy in analytical terms. This research explores the potential complementary benefits and optimal sizing of pedestrianization and transit priority zones through analytical evaluation in an idealized rectilinear city. The model is intended to provide insights regarding traffic impacts, optimal zone sizing, system capacity, and the justifiable thresholds for implementing complementary pedestrianization and transit priority zones in a city.
 
-\vfill
-
+% \vfill
 
 \end{abstract}
 
-\newpage
+\end{frontmatter}
 
+% \newpage
+
+\linenumbers
 
 \section{Introduction}
-Congestion, particularly automobile congestion, is often seen as the persistent foe of economic efficiency in dense urban cities \citep{Solow1971,Solow1972,Solow1973,Anas1998,Anas1999,Wheaton1998,Rossi-Hansberg2004}. For decades, planners and engineers have sought to mitigate this endemic issue of congestion through road capacity expansion and urban density controls (i.e., land use zoning policies). However, this often comes at the demise of historic urban centers, and more recently, an artificially high housing market due to a constrained supply of low-density single-family dwelling only zoning. In an effort to reverse this trend, planners and politicians occasionally implement pedestrian only zones as a particularly aggressive and dogmatic approach to urbanism. Pedestrian zones function by severely limiting or prohibiting automobile traffic in an area or corridor of a city, thereby enforcing walkability. 
+Congestion, particularly automobile congestion, is often seen as the persistent foe of economic efficiency in dense urban cities \citep{Solow1971,Solow1972,Solow1973,Anas1998,Anas1999,Wheaton1998,Rossi-Hansberg2004}. For decades, planners and engineers have sought to mitigate this endemic issue of congestion through road capacity expansion and urban density controls (i.e., land use zoning policies). However, this often comes at the demise of historic urban centers, and more recently, an affordable housing shortage due to a constrained supply of low-density single-family dwelling only zoning. In an effort to reverse this trend, planners and politicians occasionally implement pedestrian only zones as a particularly aggressive and dogmatic approach to urbanism. Pedestrian zones function by severely limiting or prohibiting automobile traffic in an area or corridor of a city, thereby enforcing walkability. 
 
 Pedestrian zone policies have and continue to be implemented, but these experimental policies too often fail to achieve the desired results due to inadequate supporting conditions. One such condition is providing reasonable transportation alternatives (i.e., transit). Otherwise pedestrian zones could fail to attract people, or worse, end up causing more congestion as diverted routes are concentrated around the zone. Furthermore, with the bulk of transit systems operating in mixed-traffic (e.g., buses or light-rail sharing lanes with traffic), the congestion compounds the problem by further slowing transit even if transit does exist.
 
-Another related policy is ``transit priority'', which holds a potential solution. Transit priority is often broadly defined as any policy, infrastructure, or operational strategy that gives transit priority over automobile traffic. There exists a spectrum of strategies, from signal timing to physical infrastructure, that can be used to provide some level of priority. Often, transit priority is simply a signal control strategy which provides some advantage to transit vehicles (e.g., red truncation, green extension, and progressive signal coordination), with little or no change to physical road geometry. This type of transit priority will be referred to as ``transit \emph{signal} priority''. While transit signal priority is a relatively new technology in practice, the concept itself has been experimented with since at least the 1970s \cite{Yagar1994,Yagar1993}. Although transit signal priority can provide some advantage to transit vehicles through various control strategies, effectiveness is still ultimately limited by road capacity and mixed-traffic congestion.
+Another related policy is ``transit priority'', which holds a potential solution. Transit priority is often broadly defined as any policy, infrastructure, or operational strategy that gives transit priority over automobile traffic. There exists a spectrum of strategies, from signal timing to physical infrastructure, that can be used to provide some level of priority. Often, transit priority is simply a signal control strategy which provides some advantage to transit vehicles (e.g., red truncation, green extension, and progressive signal coordination), with little or no change to physical road geometry. This type of transit priority will be referred to as ``transit \emph{signal} priority''. While transit signal priority is a relatively new technology in practice, the concept itself has been experimented with since at least the 1970s \citep{Yagar1994,Yagar1993}. Although transit signal priority can provide some advantage to transit vehicles through various control strategies, effectiveness is still ultimately limited by road capacity and mixed-traffic congestion.
 
 A more aggressive transit priority approach is to provide a physically dedicated right-of-way (e.g., bus only lane, elevated rail, or subways) which limits or restricts private vehicle traffic. In the case of bus only lanes or Bus Rapid Transit (BRT), this ensures transit vehicles are unimpeded by congestion, offering rail-like service reliability at a fraction of the cost. Unfortunately, transit priority generally comes at high cost (e.g., rail) or the loss of valuable road space and capacity (e.g., bus only lanes taking a traffic or parking lane) and is seldom politically popular \cite{Nash2003}. However, where the political will exists to implement pedestrian zones, transit priority is a modest extension but holds enormous complementary benefits and is ideally suited to mitigating the possible shortcomings of pedestrianization policies. Moreover, by ensuring that transit operates unimpeded, it provides a demand stabilizing effect. As automobile congestion and travel time rise, a reliable transit alternative becomes a more attractive mode choice, creating a stable demand equilibrium and preventing demand from being suppressed by high travel times due to congestion \cite{Wardrop1952,Gonzales2013,Tabuchi1993,Vickrey1969}. 
 
@@ -71,9 +93,9 @@ While there have been numerous studies and books published highlighting the pote
 \subsection{Transportation and Urbanism}
 Unarguably, the automobile has revolutionized transportation, expanding independent mobility and radically reshaping the urban form of cities around the world. City dwellers were no longer constrained within the walkable distances of their soot-filled industrial cities, and freed from the limited travel options offered by exploitative railroad monopolies \citep{Flink1972,Reiffen1990,Hovenkamp1984}. Around the world, and especially in the young cities of North America, cities ballooned in size and hollowed out in the center as fewer people lived the center, giving way to Central Business Districts where commuters worked and the suburban and exurban bedroom communities in which they lived \citep{Murphy2017}. Perhaps the most ubiquitous example is Los Angeles, which demonstrably transitioned over the last half-century from a centralized rail oriented city with the world's largest street car system, into a sprawling poly-centric automobile dependent metropolis. The streetcar named desire is now a four-door sedan \citep{Adler1991}.
 
-Today we see the ``tragedy of the commons'' in individualized mobility as automobile dependence comes with unrelenting traffic congestion, air pollution, and countless other social woes \citep{Hardin2009,Newman1999,Handy2002}. The road forward since the advent of the automobile has been less than progressive. The automobile has brought the decline of public transportation and ``Urban Renewal,'' which bulldozed entire neighborhoods typically of poor and minority demographics, entrenching economic disparities and racial segregation \citep{Anderson1964,Appler2017,Pritchett2003}. In the least malicious light, enthusiastic road building often leads to the futile attempt to combat capacity induced congestion with ever more capacity \citep{Goodwin1996,Cervero2001}. Time and again, cities and towns attempt to alleviate congestion by widening roads, adding lanes and creating new routes; often at the expense of sidewalks, crosswalks, street trees, and other urban features. Gradually economic activity and public street life are stripped away in an effort to reduce congestion, paradoxically in an attempt to improve economic vitality. Stark aesthetics and limited sidewalks reduce foot traffic for businesses and express routes bypass downtowns altogether, leading to the inevitable heat death of the proverbial Main Street. Numerous examples exist across the United States and other automobile dependent countries, where historic downtowns have been reduced to a gap-toothed smile of surviving buildings between parking lots \citep{Speck2013}. However, this shift has not been without resistance, leading to the ``Highway Revolts'' in the late 1950s and 1960s, calling for the halting or removal of highways \citep{Mohl2008,Armstrong1972}.
+Today we see the ``tragedy of the commons'' in individualized mobility as automobile dependence comes with unrelenting traffic congestion, air pollution, and countless other social woes \citep{Hardin2009,Newman1999,Handy2002}. The road forward since the advent of the automobile has been less than progressive. The automobile has brought the decline of public transportation and ``Urban Renewal,'' which bulldozed entire neighborhoods typically of poor and minority demographics, entrenching economic disparities and racial segregation \citep{Anderson1964,Appler2017,Pritchett2003}. In the least malicious light, enthusiastic road building often leads to the futile attempt to combat capacity induced congestion with ever more capacity \citep{Goodwin1996,Cervero2002}. Time and again, cities and towns attempt to alleviate congestion by widening roads, adding lanes and creating new routes; often at the expense of sidewalks, crosswalks, street trees, and other urban features. Gradually economic activity and public street life are stripped away in an effort to reduce congestion, paradoxically in an attempt to improve economic vitality. Stark aesthetics and limited sidewalks reduce foot traffic for businesses and express routes bypass downtowns altogether, leading to the inevitable heat death of the proverbial Main Street. Numerous examples exist across the United States and other automobile dependent countries, where historic downtowns have been reduced to a gap-toothed smile of surviving buildings between parking lots \citep{Speck2013}. However, this shift has not been without resistance, leading to the ``Highway Revolts'' in the late 1950s and 1960s, calling for the halting or removal of highways \citep{Mohl2008,Armstrong1972}.
 
-In an effort to preserve or revitalize urban centers and reduce congestion, pedestrian zones and transit priority are two increasingly popular planning policy tools. However, neither pedestrianization nor transit priority are new concepts, urban planners and community activists have been advocating for more ``walkable'' \citep{Brambilla1977,Pushkarev1975,Engwicht2007} and ``transit oriented'' \citep{Owen1972,Walbridge1977} urban environments for decades. Among the prominent names calling for more ``livable'' streets and public spaces over the last half-century are \citet{Appleyard1980,Whyte1980,Whyte2012,Gehl2011}. Perhaps inspired by Jane Jacobs' \citeyear{Jacobs1961} now-immortalized fight with highwayman Robert Moses, her advocacy for preserving the dense urban ``street ballet'' had catalyzed a shift from planning at 1:50,000-scale to street level community planning. 
+In an effort to preserve or revitalize urban centers and reduce congestion, pedestrian zones and transit priority are two increasingly popular planning policy tools. However, neither pedestrianization nor transit priority are new concepts, urban planners and community activists have been advocating for more ``walkable'' \citep{Brambilla1977,Pushkarev1975,Engwicht2007} and ``transit oriented'' \citep{Owen1972,Walbridge1977} urban environments for decades. Many prominent names, such as Donald Appleyard, William Whyte, and Jan Gehl, have calling for more ``livable'' streets and public spaces over the last half-century \citep{Appleyard1980,Whyte1980,Whyte2012,Gehl2011}. Perhaps inspired by Jane Jacobs' now-immortalized fight with highwayman Robert Moses, her advocacy for preserving the dense urban ``street ballet'' had catalyzed a shift from planning at 1:50,000-scale to street level community planning \citep{Jacobs1961}. 
 
 Throughout the latter half of the 20\textsuperscript{th} century, attempts were made to either recreate or replace historic walkable shopping districts. The 1950s to the 1990s saw the rise and fall of suburban pedestrian malls, creating corporate heterotopic versions of an otherwise organic downtown \citep{Hetherington1997,Saldanha2008}. However, the novelty of these synthetic malls faded as bigger and newer ones inevitably sprout up further out \citep{Yassin2019}, doing little to replace the lost local downtown economic activity \citep{Litman2003}. The 1990s also brought a renewed wave of environmental concern, highlighting the cost of automobile dependence and the relationship between urban form, density, and sustainability \citep{Beatley1997,Chiquetto1997,Newman1999,Cervero1997}. This has lead to more recent and tangible concepts and initiatives, such as ``Context Sensitive Design'', ``Traffic Calming'', ``Road Diets'', ''Complete Streets'', and ``Tactical Urbanism'' \citep{Yassin2019,Silva2016,Hass-Klau1992,Soni2016}. And then there is, of course, the indomitable Donald Shoup and his crusade for the abolition of free parking \citep{Shoup2017,Shoup1999}. Shoup famously pointed out that the land an automobile is parked on is often worth more than the automobile itself, and that a considerable portion of urban traffic, cited as high as 30\%, are merely drivers cruising for parking \citep{Shoup2006}. Shoup essentially makes the point that eliminating surplus free parking provides an economic (and inconvenience) incentive to not drive, while freeing that land for more productive uses.
 
@@ -278,7 +300,9 @@ The critical transit priority traffic flow point $q^*_T$, is found where transit
 %it time for headway isn't included, it would cause $l$ to remain when solving for $q_T$? Need to explore how much of a problem this is. 
 
 \subsection{Optimal zones size}
-An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ (see Figure~\ref{fig:flowcombo}) where the pedestrian zone is:
+There are two zones that require sizing: the pedestrian only zone and the transit priority zone.
+
+When selecting an appropriate pedestrian zone size, there are two constraints to be considered. The first constraint considered is that the zone must be at least large enough that trip demand across the edge of the zone does not exceed network capacity. However, the pedestrian zone cannot become too large as the traffic around the perimeter road should also not exceed capacity. While it is possible to simply zone the entire city as pedestrian only, obviating all traffic conditions, this is both impractical and likely to increase travel time due to excessive walking distances. Assuming policy makers wish to keep automobiles in the city, a feasible pedestrian zone size can exist anywhere in the range $q_a(\gamma) < q_c > q_p(\gamma)$ (see Figure~\ref{fig:flowcombo}) where the pedestrian zone is:
 
 \begin{enumerate}[label=(\alph*)]
     \item large enough to prevent traffic flow across the network from exceeding capacity $q_a(\gamma) < q_c$, and 
@@ -292,7 +316,7 @@ An appropriate pedestrian zone size can exist anywhere in the range $q_a(\gamma)
      \label{fig:flowcombo}
  \end{figure}
 
-The intersection point of the two functions may be used as an optimal compromise, ensuring both conditions are satisfied with the least possible traffic flow. However, setting $q_a = q_p$ to find the intersection point results in a quintic function (polynomial to the 5\textsuperscript{th} power):
+For mathematical convenience, the intersection of the two functions can be used to analytically determine a pedestrian zone size that ensures both traffic conditions are below capacity. While any zone size in this range is feasible, if the objective is to reduce traffic then the intersection can be considered optimal as any change in size would result in an increase in traffic flow either around (i.e., $q_p$) or to/from the perimeter (i.e., $q_a$). However, setting $q_a = q_p$ to find the intersection point results in a quintic function (polynomial to the 5\textsuperscript{th} power):
 
 \begin{equation}
 f(\gamma) = \frac{11}{R^{2}}\gamma^{5}-\frac{6(1+\sqrt{2})}{R}\gamma^{4}-11\gamma^{3}+\frac{48\lambda_{b}R(1+\sqrt{2})+\lambda_{c}(R-2)}{8\lambda_{b}}\gamma^{2}-\frac{14R(R-2)}{30}\gamma-\frac{\lambda_{c}R^{2}(R-2)}{8\lambda_{b}}
@@ -577,8 +601,8 @@ The optimal case with pedestrianized and transit priority zones not only provide
 \section*{Acknowledgments}
 The author would like to acknowledge Dr. Gonzales of the University of Massachusetts Amherst for the initial formulation of network traffic flow in a circular city \citep{Gonzales2015,Fournier2018a, Fournier2019}, from which this model was originally conceived.
 
-\printbibliography
+% \printbibliography
 % \bibliographystyle{agsm}
-% \bibliography{references}
+\bibliography{references.bib}
 
 \end{document}
