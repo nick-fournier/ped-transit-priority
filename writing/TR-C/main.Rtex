@@ -140,53 +140,56 @@ Demand is generated in the city area in units of $\frac{trips}{dist^2 \cdot time
     \item monocentric travel demand going to and from the center of the city, $\lambda_c$. 
 \end{itemize}
 
-The baseline traffic flows associated with average trip length $l$ generate $q_b = \frac{\lambda_b l}{\delta}$ flow across the network. The average distance for baseline and monocentric trips in a rectilinear city are $l_b=\frac{14}{15}R$ and $l_c=\frac{2}{3}R$, respectively; with an overall average travel distance of $\bar{l} = \frac{r(14\lambda_b + 10\lambda_c)}{15(\lambda_b + \lambda_c)}$. The additional traffic flow associated with trips to and from the center varies with the distance from the center. Consider a narrow square of infinitesimal width $dr$ at radius $r$ from the center. The total demand for trips crossing this square is $2\lambda_m (R^2 - r^2)$. Each of these vehicles travel a distance $dr$ within the square, and the amount of road infrastructure is $8r\delta$ as oriented perpendicular (as shown), or $4\sqrt{2}r\delta$ as a 45-degree diamond. $\delta$ is the density of available road network in $\frac{lane \cdot dist}{dist^2}$. The calculation for network density is derived as the total roadway length $2n(n+1)d$, divided by total area $nd^2$; both of which can be expressed as a function of the number of city blocks $n$, and the street spacing dimension $d$. Since the function is linearly constant, of $\delta$ with respect to $d$, yielding $\delta = \frac{2}{d}$. 
-
-The flow across the network, $q_a$, at a point $r$ distance from the city center is then calculated as the combined sum of the baseline demand and the monocentric demand, calculated as:
+The baseline traffic flows associated with average trip length $l$ generate $q_b = \frac{\lambda_b l}{\delta}$ flow across the network\footnote{
+	The average baseline Manhattan distance, $l_b$ can be calculated from the expected Manhattan distance distributed across a unit square, $E(D) = \iint\iint \frac{1}{4}\left(|x_1 - x_2| + |y_1 - y_2| \right ) dy_2 dx_2 dy_1 dx_1$ with the limits of $-R \leq x_1 \leq R$, $|x_1|-1 \leq y_1 \leq 1-|x_1|$, $-1 \leq x_2 \leq 1$, and $|x_1|-1 \leq y_2 \leq 1-|x_1|$. Since $|x_1 + x_2|$ and $|y_1 + y_2|$ are identical, it can be simplified to $2\int_{-1}^{1} \int_{-1}^{1} |x_1 - x_2|(1-|x_1|)(1-|x_2|)dx_2 dx_1$, which evaluates to $\frac{14}{15}$ as proportional to any size $R$, thus $l_b = \frac{14}{15}R$. The average monocentric Manhattan distance, $l_c$ to the center of the square is equivalent to the Euclidean distance to the center in a circle of size $R$, thus the average expected distance is $l_c = \frac{2}{3}R$ \cite{Stone1991}. The overall average travel distance is then $\bar{l} = \frac{R(14\lambda_b + 10\lambda_c)}{15(\lambda_b + \lambda_c)}$.
+}. The additional traffic flow associated with trips to and from the center varies with the distance from the center. Consider a narrow square of infinitesimal width $dr$ at radius $r$ from the center, the total demand for trips crossing this square is $2\lambda_m (R^2 - r^2)$. Each of these vehicles travel a distance $dr$ within the square, and the amount of road infrastructure is $8r\delta$ as oriented perpendicular, or $4\sqrt{2}r\delta$ as a 45-degree diamond as shown. $\delta$ is the density\footnote{
+The calculation for network density is derived as the total roadway length $2n(n+1)d$, divided by total area $nd^2$; both of which can be expressed as a function of the number of city blocks $n$, and the street spacing dimension $d$. The relationship of $\delta$ and $d$ is linearly constant with respect, yielding $\delta = \frac{2}{d}$.
+} of available road network in $\frac{lane \cdot dist}{dist^2}$. However, unlike ring-radial networks which concentrates traffic along the perimeter road, a rectilinear grid provides multiple equivalent shortest routes around the pedestrianized center. This means that the quantity of perimeter infrastructure is multiplied by the average number of equivalent routes $\frac{R-2}{4d}$. The flow across the network, $q_a$, at a point $r$ distance from the city center is then calculated as the combined sum of the baseline demand and the monocentric demand, calculated as:
 
 \begin{equation}
     q_a(r) = \frac{14R\lambda_b}{15\delta} + \frac{\lambda_c}{4\delta r} \left(R^2 - r^2 \right)
     \label{eq:flowacross}
 \end{equation}
 
-\noindent The pedestrianized zone will cause some trips to be diverted around the perimeter zone. Trips can be categorized into four distinct types (see Figure~\ref{fig:diverted}):
+\noindent The pedestrianized zone will cause some trips to be diverted around the pedestrian zone along a square perimeter zone created by ``pinch points'' at the corners. Trips can be categorized into four distinct types (see Figure~\ref{fig:diverted}):
 
 \begin{enumerate}
 	\item Unimodal routes entirely within the pedestrianized zone that are unaffected by the zone, 
+	\item Bimodal routes taking vehicles to perimeter of pedestrianized zone to park nearest the destination and the remaining radial distance is traveled on foot,
 	\item Unimodal routes entirely outside the pedestrianized zone that are unaffected by the zone,
-	\item Bimodal routes taking vehicles around the perimeter of the pedestrianized zone to park nearest the destination and the remaining radial distance is traveled on foot,
-	\item Unimodal routes that would have passed through the center travels around the perimeter of the pedestrianized zone vertically and horizontally, and
-	\item Unimodal routes that would have passed through the center travels around the perimeter of the pedestrianized zone diagonally.
+	\item Unimodal routes that would have passed through the center travels, whose shortest paths are now diverted to the ``pinch points'' created by the pedestrianized zone vertically and horizontally.
 \end{enumerate}
 
 \begin{figure}[H]
      \centering
-     \includegraphics[width=0.3\textwidth]{diagram_diverted_routes}
+     \includegraphics[width=0.4\textwidth]{diagram_diverted_routes}
      \caption{Example diverted route types}
      \label{fig:diverted}
 \end{figure}
 
-\noindent The shaded areas in Figure~\ref{fig:diverted} denote the contributing demand area for each trip type. The trip types are calculated bidirectionally, meaning the shaded areas are mirrored and overlap on all sides of the pedestrianized zones. However, for clarity they are shown asymmetrically in Figure~\ref{fig:diverted}. 
+\noindent In a rectilinear grid, multiple equidistant paths exist that can be used to avoid congestion. Trip types 1, 2, and 3 can avoid traveling along the pinch point perimeter by taking an earlier or later turn without increasing distance. However, trip type 4 cannot avoid the perimeter unless a longer path is taken. While a longer route can and will be chosen in reality, the worst case is assumed that travelers will choose the shortest path and face congestion at these pinch point perimeter roads. To determine the trip flow along this perimeter, the shaded areas in Figure~\ref{fig:diverted} denote the contributing demand area for each trip type. The expected trip flow (vehicle-distance/time) on the perimeter road is the product of three values: the number of trips originating in the critical city half between $\gamma$ and R, $\lambda_b (R^2 - \gamma^2)$; the probability that a trip destination falls within the trip category, $\frac{\gamma(R-\gamma)}{R^2}$; and the expected distance per trip on the pinch point perimeter road $2\gamma$. Dividing the total vehicle-distance/time by the length of the perimeter traversed $2\gamma$, provides the critical flows of vehicles/time on the perimeter road:
 
-It should also be stated that the trip routes in Figure~\ref{fig:diverted} are not perfect assumptions. In a rectilinear grid it is possible for multiple equidistant routes to exist  to avoid the perimeter road (e.g., type 3 and type 5 trips), or that travelers may choose a longer route to avoid congestion. However, for a conservative assumption and for simplicity, this model assumes the worst case that travelers will travel along the perimeter road.
-
-The flow around the perimeter road is then calculated as the sum of the flow generated by the four trip types:
-\begin{subequations}\small
-\begin{align}
-	q_1(\gamma) &= 0 \\
-	q_2(\gamma) &= 0 \\
-	q_3(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma^2}{R^2} \times\frac{\gamma}{2}\right] \frac{4d}{8\gamma (R-2)}\\
-	q_4(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (2R - 3\gamma)}{2R^2} \times  3\gamma\right] \frac{4d}{8\gamma (R-2)}\\
-	q_5(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (\sqrt{2}R-\gamma)}{R^2} \times  3\gamma\right] \frac{4d}{8\gamma (R-2)}
-\end{align}
-\end{subequations}
-
-\noindent where $q_1$ and $q_2$ possess no contributing flow along the perimeter road. The sum of these flows can then be simplified to:
-
-\begin{align}
-	    q_p(\gamma) & = \sum\limits_{i=1}^4 q_i(\gamma) = \frac{2\lambda_b \gamma \left(6R(1+\sqrt{2}) - 11\gamma\right) \left(R^2 - \gamma^2\right)}{\delta R^2(R-2)}
+\begin{equation}
+	q_p(\gamma) = \frac{\lambda_b \gamma (R-\gamma) (R^2 - \gamma^2)}{R^2}
     \label{eq:perimflow}
-\end{align}
+\end{equation}
+
+%\begin{subequations}\small
+%\begin{align}
+%	q_1(\gamma) &= 0 \\
+%	q_2(\gamma) &= 0 \\
+%	q_3(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma^2}{R^2} \times\frac{\gamma}{2}\right] \frac{4d}{8\gamma (R-2)}\\
+%	q_4(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (2R - 3\gamma)}{2R^2} \times  3\gamma\right] \frac{4d}{8\gamma (R-2)}\\
+%	q_5(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (\sqrt{2}R-\gamma)}{R^2} \times  3\gamma\right] \frac{4d}{8\gamma (R-2)}
+%\end{align}
+%\end{subequations}
+
+%\noindent where $q_1$ and $q_2$ possess no contributing flow along the perimeter road. The sum of these flows can then be simplified to:
+%
+%\begin{align}
+%	    q_p(\gamma) & = \sum\limits_{i=1}^4 q_i(\gamma) = \frac{2\lambda_b \gamma \left(6R(1+\sqrt{2}) - 11\gamma\right) \left(R^2 - \gamma^2\right)}{\delta R^2(R-2)}
+%    \label{eq:perimflow}
+%\end{align}
 
 The trip demand flow density across the network at distance $r$ from the city center, from the function in Equation~\eqref{eq:flowacross}, possesses the form shown in Figure~\ref{fig:flowacross}. As the distance from the city increases, traffic decreases. When traffic near the center exceeds capacity, one might consider simply pedestrianizing the city center out to the point where capacity is no longer exceeded. However, the trip demand flow around the perimeter of the pedestrian zone, from the function in Equation~\eqref{eq:perimflow}, possesses the form in Figure~\ref{fig:perimflow}, showing that as the pedestrian zone size increases so does traffic on the perimeter road. The function does eventually decrease, but this is because the zone eventually reaches a point where the majority of the city is pedestrianized and no longer drives at all. It may eliminate congestion, but would greatly increase travel time by walking. An appropriate policy might try to find a balance between where the city center is pedestrianized enough to reduce congestion in the center, but not too much to create perimeter road congestion.
 

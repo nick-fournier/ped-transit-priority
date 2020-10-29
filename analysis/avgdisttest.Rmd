@@ -12,7 +12,7 @@ set.seed(0)
 
 R=1
 #sequential run
-sequence <- seq(0.1,R,length.out = 1000) #runif(10, min=0.1, max=R) 
+sequence <- seq(0.1,R,length.out = 1) #runif(10, min=0.1, max=R) 
 
 #Generate random XY points for square
 #Calculate mean distance
@@ -30,8 +30,9 @@ xy.sqr <- pbsapply(sequence, function(x) {
 xy.sqr <- data.table(r=sequence, mean=xy.sqr)
 xy.sqr <- xy.sqr[!is.nan(mean), ]
 
-#Linear fit
+#Linear fi
 sqr.linfit <- coef(lm(mean~0+r, xy.sqr))
+
 
 #Calculate mean distance
 xy.circ <- sapply(seq(0.1,R,length.out = 100), function(x) {
