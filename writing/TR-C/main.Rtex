@@ -13,16 +13,6 @@
 \usepackage{float}
 \usepackage{datetime}
 \usepackage{lineno}
-%\usepackage[square,sort&compress,comma,numbers]{natbib})
-% \usepackage[style=numeric-comp, natbib=true, sorting=none]{biblatex}
-% \AtEveryBibitem{%
-%   \clearfield{issn} % Remove issn
-%   %\clearfield{doi} % Remove doi
-%   \ifentrytype{online}{}{% Remove url except for @online
-%     \clearfield{url}
-%   }
-% }
-% %\addbibresource{references.bib}
 
 %Load in the R scripts
 <<echo=FALSE, cache=TRUE>>==
@@ -31,15 +21,6 @@
  @
 \graphicspath{ {figures/} }
 
-
-% \linenumbers
-% \title{Evaluating the complementary benefits of transit priority and pedestrianized zones in an idealized city}
-% \author{Nicholas Fournier, PhD}
-% \address{Institute of Transportation Studies, \\
-% University of California, Berkeley\\
-% 409 McLaughlin Hall, Berkeley, California 94720}
-%\date{\usdate}
-
 \bibliographystyle{elsarticle-num}
 \biboptions{sort&compress}
 
@@ -47,8 +28,7 @@
 
 \begin{frontmatter}
 
-%\title{Hybrid pedestrian and transit priority zoning policies: Evaluating network traffic flow impacts in an urban street network}
- 
+
 \title{Hybrid pedestrian and transit priority zoning policies in an urban street network: Evaluating network traffic flow impacts with analytical approximation}
  
 %% Group authors per affiliation:
@@ -142,7 +122,7 @@ Demand is generated in the city area in units of $\frac{trips}{dist^2 \cdot time
 
 The baseline traffic flows associated with average trip length $l$ generate $q_b = \frac{\lambda_b l}{\delta}$ flow across the network\footnote{
 	The average baseline Manhattan distance, $l_b$ can be calculated from the expected Manhattan distance distributed across a unit square, $E(D) = \iint\iint \frac{1}{4}\left(|x_1 - x_2| + |y_1 - y_2| \right ) dy_2 dx_2 dy_1 dx_1$ with the limits of $-R \leq x_1 \leq R$, $|x_1|-1 \leq y_1 \leq 1-|x_1|$, $-1 \leq x_2 \leq 1$, and $|x_1|-1 \leq y_2 \leq 1-|x_1|$. Since $|x_1 + x_2|$ and $|y_1 + y_2|$ are identical, it can be simplified to $2\int_{-1}^{1} \int_{-1}^{1} |x_1 - x_2|(1-|x_1|)(1-|x_2|)dx_2 dx_1$, which evaluates to $\frac{14}{15}$ as proportional to any size $R$, thus $l_b = \frac{14}{15}R$. The average monocentric Manhattan distance, $l_c$ to the center of the square is equivalent to the Euclidean distance to the center in a circle of size $R$, thus the average expected distance is $l_c = \frac{2}{3}R$ \cite{Stone1991}. The overall average travel distance is then $\bar{l} = \frac{R(14\lambda_b + 10\lambda_c)}{15(\lambda_b + \lambda_c)}$.
-}. The additional traffic flow associated with trips to and from the center varies with the distance from the center. Consider a narrow square of infinitesimal width $dr$ at radius $r$ from the center, the total demand for trips crossing this square is $2\lambda_m (R^2 - r^2)$. Each of these vehicles travel a distance $dr$ within the square, and the amount of road infrastructure is $8r\delta$ as oriented perpendicular, or $4\sqrt{2}r\delta$ as a 45-degree diamond as shown. $\delta$ is the density\footnote{
+}. The additional traffic flow associated with trips to and from the center varies with the distance from the center. Consider a narrow square of infinitesimal width $dr$ at radius $r$ from the center, the total demand for trips crossing this square is $2\lambda_c (R^2 - r^2)$. Each of these vehicles travel a distance $dr$ within the square, and the amount of road infrastructure is $8r\delta$ as oriented perpendicular, or $4\sqrt{2}r\delta$ as a 45-degree diamond as shown. $\delta$ is the density\footnote{
 The calculation for network density is derived as the total roadway length $2n(n+1)d$, divided by total area $nd^2$; both of which can be expressed as a function of the number of city blocks $n$, and the street spacing dimension $d$. The relationship of $\delta$ and $d$ is linearly constant with respect, yielding $\delta = \frac{2}{d}$.
 } of available road network in $\frac{lane \cdot dist}{dist^2}$. However, unlike ring-radial networks which concentrates traffic along the perimeter road, a rectilinear grid provides multiple equivalent shortest routes around the pedestrianized center. This means that the quantity of perimeter infrastructure is multiplied by the average number of equivalent routes $\frac{R-2}{4d}$. The flow across the network, $q_a$, at a point $r$ distance from the city center is then calculated as the combined sum of the baseline demand and the monocentric demand, calculated as:
 
@@ -167,29 +147,12 @@ The calculation for network density is derived as the total roadway length $2n(n
      \label{fig:diverted}
 \end{figure}
 
-\noindent In a rectilinear grid, multiple equidistant paths exist that can be used to avoid congestion. Trip types 1, 2, and 3 can avoid traveling along the pinch point perimeter by taking an earlier or later turn without increasing distance. However, trip type 4 cannot avoid the perimeter unless a longer path is taken. While a longer route can and will be chosen in reality, the worst case is assumed that travelers will choose the shortest path and face congestion at these pinch point perimeter roads. To determine the trip flow along this perimeter, the shaded areas in Figure~\ref{fig:diverted} denote the contributing demand area for each trip type. The expected trip flow (vehicle-distance/time) on the perimeter road is the product of three values: the number of trips originating in the critical city half between $\gamma$ and R, $\lambda_b (R^2 - \gamma^2)$; the probability that a trip destination falls within the trip category, $\frac{\gamma(R-\gamma)}{R^2}$; and the expected distance per trip on the pinch point perimeter road $2\gamma$. Dividing the total vehicle-distance/time by the length of the perimeter traversed $2\gamma$, provides the critical flows of vehicles/time on the perimeter road:
+\noindent In a rectilinear grid, multiple equidistant paths exist that can be used to avoid congestion. Trip types 2 and 3 can avoid traveling along the pinch point perimeter by taking an earlier or later turn without increasing distance. However, trip type 4 cannot avoid the perimeter unless a longer path is taken. While a longer route can and will be chosen in reality, the worst case is assumed that travelers will choose the shortest path and face congestion at these pinch point perimeter roads. To determine the trip flow along this perimeter, the shaded areas in Figure~\ref{fig:diverted} denote the contributing demand area for each trip type. The expected trip flow (vehicle-distance/time) on the perimeter road is the product of three values: the number of trips originating in the critical city half between $\gamma$ and R, $\lambda_b (R^2 - \gamma^2)$; the probability that a trip destination falls within the trip category, $\frac{\gamma(R-\gamma)}{R^2}$; and the expected distance per trip on the pinch point perimeter road $2\gamma$. Dividing the total vehicle-distance/time by the length of the perimeter traversed $2\gamma$, provides the critical flows of vehicles/time on the perimeter road:
 
 \begin{equation}
 	q_p(\gamma) = \frac{\lambda_b \gamma (R-\gamma) (R^2 - \gamma^2)}{R^2}
     \label{eq:perimflow}
 \end{equation}
-
-%\begin{subequations}\small
-%\begin{align}
-%	q_1(\gamma) &= 0 \\
-%	q_2(\gamma) &= 0 \\
-%	q_3(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma^2}{R^2} \times\frac{\gamma}{2}\right] \frac{4d}{8\gamma (R-2)}\\
-%	q_4(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (2R - 3\gamma)}{2R^2} \times  3\gamma\right] \frac{4d}{8\gamma (R-2)}\\
-%	q_5(\gamma) &= \left[2 \lambda_b \left(R^2 - \gamma^2\right) \times \frac{\gamma (\sqrt{2}R-\gamma)}{R^2} \times  3\gamma\right] \frac{4d}{8\gamma (R-2)}
-%\end{align}
-%\end{subequations}
-
-%\noindent where $q_1$ and $q_2$ possess no contributing flow along the perimeter road. The sum of these flows can then be simplified to:
-%
-%\begin{align}
-%	    q_p(\gamma) & = \sum\limits_{i=1}^4 q_i(\gamma) = \frac{2\lambda_b \gamma \left(6R(1+\sqrt{2}) - 11\gamma\right) \left(R^2 - \gamma^2\right)}{\delta R^2(R-2)}
-%    \label{eq:perimflow}
-%\end{align}
 
 The trip demand flow density across the network at distance $r$ from the city center, from the function in Equation~\eqref{eq:flowacross}, possesses the form shown in Figure~\ref{fig:flowacross}. As the distance from the city increases, traffic decreases. When traffic near the center exceeds capacity, one might consider simply pedestrianizing the city center out to the point where capacity is no longer exceeded. However, the trip demand flow around the perimeter of the pedestrian zone, from the function in Equation~\eqref{eq:perimflow}, possesses the form in Figure~\ref{fig:perimflow}, showing that as the pedestrian zone size increases so does traffic on the perimeter road. The function does eventually decrease, but this is because the zone eventually reaches a point where the majority of the city is pedestrianized and no longer drives at all. It may eliminate congestion, but would greatly increase travel time by walking. An appropriate policy might try to find a balance between where the city center is pedestrianized enough to reduce congestion in the center, but not too much to create perimeter road congestion.
 
@@ -371,8 +334,6 @@ The critical transit priority traffic flow point $q^*_T$, is found where transit
     \end{align}
 \end{subequations}
 
-%it time for headway isn't included, it would cause $l$ to remain when solving for $q_T$? Need to explore how much of a problem this is. 
-
 \section{Zone sizing}
 There are two zones that require sizing, the pedestrian only zone and the transit priority zone. The two zones have varying goals but which can work simultaneously to improve travel flow across the city holistically. The pedestrian zone is concerned with preventing traffic flow from exceeding roadway network capacity in the center. However, the zone cannot be too large as to cause perimeter road traffic to exceed capacity or to cause travel times to increase due to walking. Thus, transit priority is then concerned with mitigating excess congestion around the pedestrianized zone by providing a stable travel alternative. The sizing of the pedestrianized zone and transit priority zone are described in more detail in the following two subsections.
 
@@ -397,7 +358,8 @@ However, this three point intersection of $q_a$, $q_p$, and $q_c$ (as shown in F
 For mathematical convenience, the intersection points can be used as the ``optimal'' pedestrian zone size. This ensures that the size is exactly small or large enough to meet capacity by selecting the minimum pedestrian zone size in case \ref{case:monodom} and the maximum zone size in case \ref{case:basedom}. This makes finding the solution relatively simple by setting the respective functions equal to roadway capacity $q_c$. However, in case \ref{case:mutdom} where both functions meet capacity, either point could be used. As an ``optimal compromise'', the intersection of the two flow functions could be used, ensuring both constraints are satisfied while the least possible traffic flow condition in either function is used. However, setting $q_a = q_p$ to find the intersection point results in a quintic function (polynomial to the 5\textsuperscript{th} power):
 
 \begin{equation}\footnotesize
-f(\gamma) = \frac{11}{R^{2}}\gamma^{5}-\frac{6(1+\sqrt{2})}{R}\gamma^{4}-11\gamma^{3}+\frac{48\lambda_{b}R(1+\sqrt{2})+\lambda_{c}(R-2)}{8\lambda_{b}}\gamma^{2}-\frac{14R(R-2)}{30}\gamma-\frac{\lambda_{c}R^{2}(R-2)}{8\lambda_{b}}
+% f(\gamma) = \frac{11}{R^{2}}\gamma^{5}-\frac{6(1+\sqrt{2})}{R}\gamma^{4}-11\gamma^{3}+\frac{48\lambda_{b}R(1+\sqrt{2})+\lambda_{c}(R-2)}{8\lambda_{b}}\gamma^{2}-\frac{14R(R-2)}{30}\gamma-\frac{\lambda_{c}R^{2}(R-2)}{8\lambda_{b}}
+f(\gamma) = \frac{\lambda_b \gamma^5}{R^2} + \lambda_b R \gamma^4 + \lambda_b \gamma^3 + \frac{\lambda_c}{4 \delta}\gamma^2 - \frac{14 R \lambda_b}{15\delta} \gamma - \lambda_c R^2
 \end{equation}
 
 \noindent yielding multiple points where the function is equal to zero (see Figure~\ref{fig:optimalped}) and cannot be easily solved analytically.
@@ -473,7 +435,7 @@ Parameter   & Value & Units \\ \hline
 $R$         & 15                    & $km$                              \\
 $\delta$    & 2.71                  & $\sfrac{lane\cdot dist}{dist^2}$  \\
 $\lambda_b$ & 75                    & $\sfrac{trips}{km^2\cdot hr}$     \\
-$\lambda_m$ & 45                    & $\sfrac{trips}{km^2\cdot hr}$     \\
+$\lambda_c$ & 45                    & $\sfrac{trips}{km^2\cdot hr}$     \\
 $v_m$       & 40                    & $\sfrac{km}{hr}$                  \\
 $v_w$       & 5                     & $\sfrac{km}{hr}$                  \\
 $t_s$       & $\sfrac{60}{3600}$    & $hr$                              \\
