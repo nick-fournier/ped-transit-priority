@@ -215,7 +215,7 @@ plotmat[ , bin := .bincode(tt_total, breaks = brks)]
 #sort(unique(plotmat$bin))
 
 lower <- min(plotmat[['bin']])
-upper <- lower + 5 #Number of bins
+upper <- lower + 8 #Number of bins
 plotmat[ bin > upper, bin := upper]
 
 
