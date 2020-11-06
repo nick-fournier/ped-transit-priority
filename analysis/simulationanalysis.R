@@ -20,7 +20,7 @@ d = 2/delta
 
 
 #### 2.  Functions ####
-#source("analysis/simfunctions.R")
+source("analysis/simfunctions.R")
 
 
 #### 3. Simulation ####
@@ -224,8 +224,8 @@ minval <- c("gamma"=plotmat[which.min(tt_total), gamma]/R,
             "tt"=plotmat[which.min(tt_total), tt_total])
 
 minlab <- c(paste0("'Travel time'==", round(plotmat[which.min(tt_total), tt_total],2),"~hours"),
-            paste0("gamma==", round(plotmat[which.min(tt_total), gamma],2)),
-            paste0("tau==",round(plotmat[which.min(tt_total), tau],2)))
+            paste0("gamma==", round(minval['gamma'],2)),
+            paste0("tau==",round(minval['tau'],2)))
 
 #plotting
 suppressWarnings(
@@ -260,11 +260,3 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
 )
 
 #plots[['optimal']]
-
-
-
-
-
-
-
-
