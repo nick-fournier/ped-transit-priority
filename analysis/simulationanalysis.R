@@ -8,11 +8,9 @@ library(data.table)
 lambda_c = 90/2
 lambda_b = 150/2
 R = 15
-v_w = 5
-v_b = 20
-v_m = 40
+v_w = 3
+v_m = 45
 t_s = 60/3600
-h = 15/60
 s = 0.5
 k_c = 45
 q_c = 500
@@ -22,7 +20,7 @@ d = 2/delta
 
 
 #### 2.  Functions ####
-#source("analysis/simfunctions.R")
+source("analysis/simfunctions.R")
 
 
 #### 3. Simulation ####
@@ -203,10 +201,14 @@ plots[['combott']] <- ggplot(data = data.frame(x = c(0,1)), mapping = aes(x = x)
 Rseq <- seq(1/1000,R-(R/1000),length.out = 300)
 plotmat <- data.table(expand.grid(gamma=Rseq,tau=Rseq))
 #Calculate the average total travel time
-plotmat[ , tt_total := mapply(fun.tt_total, plotmat[['gamma']], plotmat[['tau']])]
+plotmat[ , tt_total := mapply(fun.tt_total, plotmat[['gamma']], plotmat[['tau']], F)]
 #Bins
 wdth = 0.25
-brks = c(0,exp(seq(0,ceiling(log(max(plotmat[['tt_total']]))), wdth)))
+minval <- floor(min(plotmat[['tt_total']]))
+maxval <- ceiling(log(max(plotmat[['tt_total']])))
+
+brks = c( minval, exp(seq(0, maxval, wdth)) )
+
 #brks = exp(0:ceiling(log(max(plotmat[['tt_total']]))))
 #brks = 10^(0:log10(max(plotmat[['tt_total']])))
 plotmat[ , bin := .bincode(tt_total, breaks = brks)]
@@ -217,6 +219,14 @@ upper <- lower + 8 #Number of bins
 plotmat[ bin > upper, bin := upper]
 
 
+minval <- c("gamma"=plotmat[which.min(tt_total), gamma]/R,
+            "tau"=plotmat[which.min(tt_total), tau]/R,
+            "tt"=plotmat[which.min(tt_total), tt_total])
+
+minlab <- c(paste0("'Travel time'==", round(plotmat[which.min(tt_total), tt_total],2),"~hours"),
+            paste0("gamma==", round(plotmat[which.min(tt_total), gamma],2)),
+            paste0("tau==",round(plotmat[which.min(tt_total), tau],2)))
+
 #plotting
 suppressWarnings(
 plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
@@ -225,12 +235,18 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
   geom_contour(aes(z = tt_total), breaks = brks[11:length(brks)], color = 'black', size = 0.01, alpha = 0.2) +
   geom_area(data = data.frame(x = c(0,R), y =  c(0,1)), aes(x = x, y = y, z=0), fill='gray90', alpha = 0.6) +
   geom_abline(slope = 1, linetype = "dashed") +
-  geom_point(data=plotmat[which.min(tt_total), ]) +
+  
   geom_area(data = data.frame(x=c(0,1),y=c(0,1)), aes(x=x,y=y), fill = "white", alpha = 0.5) +
-  geom_text(data=plotmat[which.min(tt_total), ], vjust = 1.5, hjust = 0,
-            aes(x=gamma/R, y=tau/R, label = paste("Minimum =",round(tt_total,2),"hours"))) +
+  geom_point(data=plotmat[tau >= gamma, ][which.min(tt_total), ], aes(x=gamma/R, y=tau/R)) +
+  #geom_text(data=plotmat[which.min(tt_total), ], vjust = -1.5, hjust = 0,aes(x=gamma/R, y=tau/R, label = minlab), parse=T) +
+  
+  annotate('text', x = minval['gamma'], y = minval['tau'], label=minlab[1], parse=TRUE, vjust=-4, hjust=0) +
+  annotate('text', x = minval['gamma'], y = minval['tau'], label=minlab[2], parse=TRUE, vjust=-1.5, hjust=0) +
+  annotate('text', x = minval['gamma'], y = minval['tau'], label=minlab[3], parse=TRUE, vjust=-0.5, hjust=0) +
+  
   annotate("text", x = 3/4, y = 1/10, label = "Area under diagonal\ndenotes unrealistic\nregion where:", hjust=0.5, vjust=-0.25) +
   annotate("text", x = 3/4, y = 1/10, label = "tau < gamma", hjust=0.5, parse = T, vjust=0.25) +
+  
   scale_x_continuous(expression("Pedestrian zone size, "~frac(gamma,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
   scale_y_continuous(expression("Transit priority zone size, "~frac(tau,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
   scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
@@ -243,6 +259,7 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
          panel.grid = element_blank())
 )
 
+#plots[['optimal']]
 
 
 

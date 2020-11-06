@@ -3,9 +3,8 @@
 fun.qr_a <- function(r) ((14*R*lambda_b) / (15*delta)) + (lambda_c/(4*r*delta))*(R^2 - r^2)
 
 #Flow around perimeter road
-fun.qg_p <- function(g) lambda_b*g*(R - g)*(R^2 - g^2) / R^2
-  #(2*lambda_b*g*(6*R*(1 + sqrt(2)) - 11*g)*(R^2 - g^2)) / ((R-2)*delta*R^2) #old 
-                        
+fun.qg_p <- function(g) (2*lambda_b*g*(6*R*(1 + sqrt(2)) - 11*g)*(R^2 - g^2)) / ((R-2)*delta*R^2)
+
 #Traffic flow, parabolic
 fun.qk <- function(k) (q_c*(k*(2*k_c - k)))/(k_c^2)
 
@@ -17,19 +16,14 @@ fun.qbar <- function(r) ((14*R*lambda_b)/(15*delta)) + (lambda_c/(8*delta*(R-r))
 
 #Optimal ped zone size
 fun.gamma_int <- function(g) {
-  # A = 11/R^2
-  # B = -6*(1+sqrt(2))/R
-  # C = -11
-  # D = (48*(1+sqrt(2))*R*lambda_b + lambda_c*(R-2))/(8*lambda_b)
-  # E = -14*R*(R-2)/30
-  # H = (-lambda_c*(R-2)*R^2) / (8*lambda_b)
-  # 
-  # A*g^5 + B*g^4 + C*g^3 + D*g^2 + E*g + H
-  
-  lambda_b*((1/R^2)*(g^5) - (1/R)*(g^4) - (g^3)) + 
-    (lambda_b*R + (lambda_c/(4*delta)))*(g^2) - 
-    ((14*R*lambda_b)/(15*delta))*g - 
-    (lambda_c*(R^2)/(4*delta))
+  A = 11/R^2
+  B = -6*(1+sqrt(2))/R
+  C = -11
+  D = (48*(1+sqrt(2))*R*lambda_b + lambda_c*(R-2))/(8*lambda_b)
+  E = -14*R*(R-2)/30
+  H = (-lambda_c*(R-2)*R^2) / (8*lambda_b)
+
+  A*g^5 + B*g^4 + C*g^3 + D*g^2 + E*g + H
 }
 
 #Optimal transit zone size as function of mode choice P_D
@@ -51,50 +45,58 @@ fun.L_TM <- function(tau) (R - tau)*(14*lambda_b + 10*lambda_c) / (15*(lambda_b 
 fun.L_TP <- function(tau) tau*(14*lambda_b + 10*lambda_c) / (15*(lambda_b + lambda_c))
 
 #Average walk distance
-fun.L_W <- function(g)
-  # old
-  #((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) /
-  #(3*(R^2)*(g^2)*(2*lambda_b + lambda_c - 1) - 3*lambda_b*g^4 + 3*R^4)
-  #New
-  (-32*(g^5)*lambda_b + 60*(g^3)*(R^2)*lambda_b + 5*(g^3)*(R^2)*lambda_c + 15*g*(R^4)*lambda_c) /
-  (15*((4*(g^2)*(R^2)*lambda_b - 2*(g^4)*lambda_b + 2*(R^4)*lambda_c)))
+fun.L_W <- function(g){
+  # New
+  #(2*(2*lambda_b*(g^5) + 5*lambda_b*(R^2)*(g^3) + 5*lambda_c*(R^4)*5)) / (15*(2*lambda_b*(R^2)*(g^2) - lambda_b*(g^4) + lambda_c*(R^4)))
+  #(-32*(g^5)*lambda_b + 60*(g^3)*(R^2)*lambda_b + 5*(g^3)*(R^2)*lambda_c + 15*g*(R^4)*lambda_c) / (15*((4*(g^2)*(R^2)*lambda_b - 2*(g^4)*lambda_b + 2*(R^4)*lambda_c)))
+  
+  #old, corrected
+  (10*(g^3)*(R^2)*lambda_b - 8*(g^5)*lambda_b + 3*(R^4)*lambda_c*g) / (6*(g^2)*(R^2)*lambda_b - 3*(g^4)*lambda_b + 3*(R^4)*lambda_c)
 
+}
 
 #### TRAVEL TIMES
 #Average driving travel time
 fun.tt_Dbar <- function(g) {
-  lbar <- fun.L_D(g) # (R-g)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
-
+  lbar <- fun.L_D(g)
+  #lbar <- (R - g)*(14*lambda_b + 10*lambda_c) / (15*(lambda_b + lambda_c))
   if(fun.qbar(g) < q_c)
-    lbar*fun.kq(fun.qbar(g))/fun.qbar(g)
+    tt <- lbar*fun.kq(fun.qbar(g))/fun.qbar(g)
   else
-    lbar*(k_c/q_c)*(fun.qbar(g)/q_c)^20
+    tt <- lbar*(k_c/q_c)*(fun.qbar(g)/q_c)^20
+  
+  return(tt)
 }
 
 #Average mixed-traffic transit travel time
 fun.tt_TMbar<- function(tau) {
-  lbar <- fun.L_TM(tau) # (R-tau)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
+  lbar <- fun.L_TM(tau)
+  #lbar <- (R-tau)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
 
   if(fun.qbar(tau) < q_c)
-    lbar*(fun.kq(fun.qbar(tau))/fun.qbar(tau) + (1/v_m) + (t_s/s))
+    tt <- lbar*(fun.kq(fun.qbar(tau))/fun.qbar(tau) + (1/v_m) + (t_s/s))
   else
-    lbar*((k_c/q_c)*(fun.qbar(tau)/q_c)^20  + (1/v_m) + (t_s/s))
-
+    tt <- lbar*((k_c/q_c)*(fun.qbar(tau)/q_c)^20  + (1/v_m) + (t_s/s))
+  
+  return(tt)
 }
 
 #Transit priority travel time
 fun.tt_TPbar <- function(tau) {
-  lbar <- fun.L_TP(tau) # ((tau*(14*lambda_b + 10*lambda_c))/(15*(lambda_b + lambda_c)))
-  (lbar/v_m) + (lbar/s)*t_s
+  lbar <- fun.L_TP(tau) 
+  #lbar <- ((tau*(14*lambda_b + 10*lambda_c))/(15*(lambda_b + lambda_c)))
+  tt <- (lbar/v_m) + (lbar/s)*t_s
+  return(tt)
 }
 
 #Average travel time within ped zone
 fun.tt_Wbar <- function(g, maxwalk = 0.5) {
   lbar <- fun.L_W(g)
-  #lbar <- ((R^2)*(g^3)*(10*lambda_b + 3*lambda_c - 3) - 6*lambda_b*g^5 + 3*g*R^4) / (3*(R^2)*(g^2)*(2*lambda_b + lambda_c - 1) - 3*lambda_b*g^4 + 3*R^4)
-  #(lbar/v_m) + ((lbar/s)*t_s) + (maxwalk/v_w) #Allows for transit in ped zone, fucks shit up kinda
-  lbar/v_w
+  #tt <- lbar/v_w
+  tt <- (lbar/v_m) + (lbar/s)*t_s + maxwalk/v_w
+  return(tt)
 }
+
 
 #Probability as function of tau
 fun.Ptau <- function(tau) {
