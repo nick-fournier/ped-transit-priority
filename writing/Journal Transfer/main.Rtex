@@ -201,16 +201,17 @@ The driving distance is the average driving distance for baseline trips ($\frac{
         \item $D_{1c} = 2 \lambda_c \gamma^2$ : Total monocentric trips originating inside the pedestrian zone.
         \item $D_{2c} = 2 \lambda_c (R^2 - \gamma^2)$ : Total monocentric trips originating outside the pedestrian zone.
         \item $l_{1b} = \frac{14}{15}\gamma$ : Average distance of baseline trips that originate and end in the pedestrian zone.
-        \item $l_{2b} = \frac{1}{3}\gamma$ : Average distance of baseline trips that originate from uniformly distributed point on the pedestrian zone perimeter (i.e., the point where traveler changes mode to walk) to some uniformly distributed destination in the zone.
+        \item $l_{2b} = \gamma$ : Average distance of baseline trips that originate from the pedestrian zone perimeter (i.e., the point where traveler changes mode to walk) to some uniformly distributed destination in the zone.
         \item $l_{1c} = \frac{2}{3}\gamma$ : Average distance of monocentric trips that originate and end in the pedestrian zone.
-        \item $l_{2c} = \frac{2}{3}\gamma$ : Average distance of monocentric trips that originate from uniformly distributed point on the pedestrian zone perimeter (i.e., the point where traveler changes mode to walk) to the city center.
+        \item $l_{2c} = \gamma$ : Average distance of monocentric trips that originate from the pedestrian zone perimeter to the city center.
     \end{itemize}
     
     The combined function then becomes:
     
     \begin{equation}
-    % l_P = \frac{R^{2}\gamma^{3}\left(10\lambda_{b}+3\lambda_{c}-3\right)-6\lambda_{b}\gamma^{5}+3R^{4}\gamma}{3R^{2}\gamma^{2}\left(2\lambda_{b}+\lambda_{c}-1\right)-3\lambda_{b}\gamma^{4}+3R^{4}}
-    l_p = \frac{2\gamma\left(2\lambda_b\gamma^4 + 5\lambda_b\gamma^2 + 5\lambda_cR^4 \right )}{15\left(-3\lambda_b\gamma^4 + 4\lambda_b\gamma^2 + \lambda_c R^4 \right )}
+    % Old one
+    %l_{P}=\frac{\gamma\left(10\gamma^{2}R^{2}\lambda_{b}-8\gamma^{4}\lambda_{b}+3R^{4}\lambda_{c}\right)}{3\left(2\gamma^{2}R^{2}\lambda_{b}-\gamma^{4}\lambda_{b}+R^{4}\lambda_{c}\right)}
+    l_{P}=\frac{-32\lambda_{b}\gamma^{5}+\left(60\lambda_{b}+5\lambda_{c}\right)R^{2}\gamma^{3}+15R^{4}\lambda_{c}\gamma}{15\left(4\lambda_{b}R^{2}\gamma^{2}-2\lambda_{b}\gamma^{4}+2R^{4}\lambda_{c}\right)}
     \end{equation}
     
     \noindent In relatively large pedestrianized zones (e.g., $\geq \sfrac{1}{2}$ miles in diameter), travel within the zone may be dominated by transit use rather than walking or bicycling. In this case, it can be assumed that the travel time is a function of transit speed, not walking or bicycling speed. 
@@ -392,7 +393,7 @@ The necessary transit priority zone size can be determined using the critical tr
 
 \noindent where the proportion of driving trips, $P_D$, is introduced to scale driving demand to account for mode choice between driving and transit. Unlike the optimal pedestrian zone, which us unaffected by changes in driving demand, the optimal transit priority zone size will depend on driving demand. This is because, assuming $\lambda_c$ and $\lambda_b$ are affected by mode choice equally, both $q_a$ and $q_p$ shift vertically, keeping $\gamma^*$ constant (See Figure~\ref{fig:flowcombo}).
 
-It should be very clearly stated here that this $P_D$ is \emph{not} a mode choice model per se, but merely the proportion necessary for driving travel time to be equal to transit priority travel time. The inferred assumption here is that mode choice depends solely on travel time and is equally substitutable, meaning that travelers do not have a preference for driving over transit. This, of course, is a gross over assumption. For simplicity, this analysis will carry on with this assumption, but future models might assume some proportionally weighted travel time cost to account for mode preference. For example, transit travel costs $w$ more than transit, e.g., $t_{drive} = w t_{transit}$. This would have the effect of increasing $q_T$, meaning that travelers are willing to tolerate more time in traffic before they step foot on a bus.
+It should be very clearly stated here that this $P_D$ is \emph{not} a mode choice model per se, but merely the proportion necessary for driving travel time to be equal to transit priority travel time. The inferred assumption here is that mode choice depends solely on travel time and is equally substitutable, meaning that travelers do not have a preference for driving over transit. This, of course, is a gross over assumption. For simplicity, this analysis will carry on with this assumption, but future models might assume some proportionally weighted travel time cost to account for mode preference. For example, transit travel costs $w$ more than driving, e.g., $t_{transit} = w t_{drive}$. This would have the effect of increasing $q_T$, meaning that travelers are willing to tolerate more time in traffic before they step foot on a bus.
 
 Assuming unlimited transit capacity relative to driving, and transit priority is relatively unaffected by congestion, a transit system with transit priority in this model effectively serves as a pressure release for demand. As congestion increases with driving trips, transit becomes more appealing, thus drawing trips away from driving. Conversely, a reduction in congestion would attract trips towards driving as the driving travel time has improved. Assuming transit with priority provides a reasonable and reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit. Although the proportion $P_D$ may be modeled as a discrete choice probability, this requires travel time as an input, making optimal $\tau$ difficult to find as it creates a dynamic problem dependent upon itself. Fortunately, since since $\gamma^*$ remains constant relative to demand, the necessary proportion of driving demand $P_D$ to achieve $q_a = q_T$ (see Figure~\ref{fig:optimalped}) can be determined directly as a function of $\tau$:
 
