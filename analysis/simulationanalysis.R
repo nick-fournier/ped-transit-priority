@@ -250,13 +250,17 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
   scale_x_continuous(expression("Pedestrian zone size, "~frac(gamma,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
   scale_y_continuous(expression("Transit priority zone size, "~frac(tau,R)), expand = c(0,0), breaks = seq(0,1,by=0.2)) +
   scale_fill_brewer("Average travel time (hours)", palette = 'Blues', direction = -1,
-                    label = c(paste0("<",scales::comma(brks)[lower]),
-                              paste0(scales::comma(brks)[lower:(upper-2)], " - ",
-                                     scales::comma(brks)[(lower+1):(upper-1)]),
-                              paste0(">",scales::comma(brks)[(upper-1)]))) +
+                    label = c(paste0("<",round(brks,2)[lower]),
+                              paste0(round(brks,2)[lower:(upper-2)], " - ",
+                                     round(brks,2)[(lower+1):(upper-1)]),
+                              paste0(">",round(brks,2)[(upper-1)]))) +
+                    # label = c(paste0("<",scales::comma(brks)[lower]),
+                    #           paste0(scales::comma(brks)[lower:(upper-2)], " - ",
+                    #                  scales::comma(brks)[(lower+1):(upper-1)]),
+                    #           paste0(">",scales::comma(brks)[(upper-1)]))) +
   theme_light() + coord_fixed(xlim = c(0,1), ylim = c(0,1)) +
   theme( legend.position = "right", legend.spacing.x = unit(0.5, 'cm'),
          panel.grid = element_blank())
 )
 
-#plots[['optimal']]
+plots[['optimal']]
