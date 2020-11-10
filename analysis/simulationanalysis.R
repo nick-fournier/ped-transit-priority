@@ -263,4 +263,4 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
          panel.grid = element_blank())
 )
 
-plots[['optimal']]
+#plots[['optimal']]
