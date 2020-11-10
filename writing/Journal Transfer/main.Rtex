@@ -387,7 +387,7 @@ To summarize, the pedestrianized zone essentially functions by ``chopping off'' 
 The necessary transit priority zone size can be determined using the critical transit priority traffic flow $q_T$ (see Figure~\ref{fig:transittraveltime}). This value can be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the necessary transit priority zone size, $\tau^*$, when $q_T = q_a$. The reason that $q_a$ is used, and not $q_p$, is because transit priority is because transit priority is concerned with traffic congestion experienced in the network outside of the pedestrian zone, not just at the perimeter. Solving then for $q_T = q_a$ yields a quadratic function, but assuming a non-negative value for the optimal transit zone size, it can be solved for analytically:
 
 \begin{align}
-    \tau^*(\Phi_D) & = \frac{56 P_D \lambda_{b}-60\delta q_{T} +\sqrt{\left(56 P_D \lambda_{b}-60\delta q_{T}\right)^{2} + (30 P_D \lambda_{c} R)^2 }}{30 P_D \lambda_{c}}\\
+    \tau^*(P_D) & = \frac{56 P_D \lambda_{b}-60\delta q_{T} +\sqrt{\left(56 P_D \lambda_{b}-60\delta q_{T}\right)^{2} + (30 P_D \lambda_{c} R)^2 }}{30 P_D \lambda_{c}}\\
     \text{s.t.} & ~ \tau^* \geq 0 \nonumber
 \end{align}
 
