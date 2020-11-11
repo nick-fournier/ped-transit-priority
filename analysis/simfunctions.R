@@ -1,6 +1,6 @@
 
 #Flow across network at distance r from center
-fun.qr_a <- function(r) ((14*R*lambda_b) / (15*delta)) + (lambda_c/(4*r*delta))*(R^2 - r^2)
+fun.qr_a <- function(r) ((14*R*lambda_b) / (15*delta)) + (lambda_c/(2*sqrt(2)*r*delta))*(R^2 - r^2)
 
 #Flow around perimeter road
 fun.qg_p <- function(g) lambda_b*g*(R - g)*(R^2 - g^2) / R^2
