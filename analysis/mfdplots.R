@@ -280,5 +280,5 @@ plots[['timeflow']] <- ggplot(data.frame(q = c(0, 2*q_c)), aes(q)) +
   theme_classic() +
   theme(legend.position = c(0.25,0.5), 
         legend.background = element_blank())
-plots[['timeflow']]
+# plots[['timeflow']]
 
