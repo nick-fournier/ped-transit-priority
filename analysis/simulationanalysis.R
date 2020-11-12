@@ -13,6 +13,7 @@ v_m = 45
 t_s = 60/3600
 s = 0.5
 k_c = 45
+k_j = 125
 q_c = 500
 beta = 1
 delta = 2.71
@@ -264,3 +265,4 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
 )
 
 #plots[['optimal']]
+

@@ -15,6 +15,36 @@ fun.kq <- function(q) k_c*(1-sqrt(1-(q/q_c)))
 #Average flow experienced
 fun.qbar <- function(r) ((14*R*lambda_b)/(15*delta)) + (lambda_c/(8*delta*(R-r))) * (2*(R^2)*log(R/r) - R^2 + r^2)
 
+#Base traffic travel time
+fun.ttr <- function(r, method = "paraexp") {
+  q = fun.qbar(r)
+  
+  switch(method,
+         "bipara" = {
+           # Bi-parabolic
+           if(q < q_c)
+             k_c*(1 - sqrt(1 - (q/q_c))) / q
+           else
+             ( k_c + sqrt( (-2*(q - 2*q_c)*(k_c - k_j) * (k_j - k_c) + 2*q*(k_c - k_j)^2 ) / (2*q_c - q)) ) / q
+         },
+         "paraexp" = {
+           # Parabolic-exponential
+           if(q < q_c)
+             k_c*(1 - sqrt(1 - (q/q_c))) / q
+           else
+             (k_c/q_c)*(q/q_c)^20
+         },
+         "bilinear" = {
+           # Bi-linear
+           if(q < q_c)
+             1/v_m
+           else
+             - (k_j - ((2*k_j - k_c) / (2*q_c))*(2*q_c - q)) / (q - 2*q_c)
+         })
+  
+}
+
+
 #Optimal ped zone size
 fun.gamma_int <- function(g) {
   # A = 11/R^2
@@ -61,25 +91,19 @@ fun.L_W <- function(g)
 
 
 #### TRAVEL TIMES
+
+
 #Average driving travel time
 fun.tt_Dbar <- function(g) {
-  lbar <- fun.L_D(g) # (R-g)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
+  # (R-g)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
 
-  if(fun.qbar(g) < q_c)
-    lbar*fun.kq(fun.qbar(g))/fun.qbar(g)
-  else
-    lbar*(k_c/q_c)*(fun.qbar(g)/q_c)^20
+  fun.L_D(g)*fun.ttr(g)
 }
 
 #Average mixed-traffic transit travel time
 fun.tt_TMbar<- function(tau) {
-  lbar <- fun.L_TM(tau) # (R-tau)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
-
-  if(fun.qbar(tau) < q_c)
-    lbar*(fun.kq(fun.qbar(tau))/fun.qbar(tau) + (1/v_m) + (t_s/s))
-  else
-    lbar*((k_c/q_c)*(fun.qbar(tau)/q_c)^20  + (1/v_m) + (t_s/s))
-
+  # (R-tau)*(14*lambda_b+10*lambda_c)/(15*(lambda_b + lambda_c))
+  fun.L_TM(tau)*(fun.ttr(tau) + (1/v_m) + (t_s/s))
 }
 
 #Transit priority travel time

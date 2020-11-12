@@ -66,7 +66,7 @@ Another related policy is ``transit priority'', which holds a potential solution
 
 A more aggressive transit priority approach is to provide a physically dedicated right-of-way (e.g., bus only lane, elevated rail, or subways) which limits or restricts private vehicle traffic. In the case of bus only lanes or Bus Rapid Transit (BRT), this ensures transit vehicles are unimpeded by congestion, offering rail-like service reliability at a fraction of the cost. Unfortunately, transit priority generally comes at high cost (e.g., rail) or the loss of valuable road space and capacity (e.g., bus only lanes taking a traffic or parking lane) and is seldom politically popular \cite{Nash2003}. However, where the political will exists to implement pedestrian zones, transit priority is a modest extension but holds enormous complementary benefits and is ideally suited to mitigating the possible shortcomings of pedestrianization policies. Moreover, by ensuring that transit operates unimpeded, it provides a demand stabilizing effect. As automobile congestion and travel time rise, a reliable transit alternative becomes a more attractive mode choice, creating a stable demand equilibrium and preventing demand from being suppressed by high travel times due to congestion \cite{Wardrop1952,Gonzales2013,Tabuchi1993,Vickrey1969}. 
 
-This notion of suppressed demand is also important when considering other policy levers for travel demand management, such as pricing (e.g., transit fares, tolls, congestion pricing, parking pricing, etc.). Imposing pricing policies offers an effective means of controlling travel demand and moving towards a more effective equilibrium point without major infrastructure investment \citep{Li2014, Lou2010, Huang2002, Wang2004, Yang1997, Zheng2012, Huang2000, Gonzales2012, Danielis2002}. However, without any reasonable travel alternatives, such as transit, demand will simply be suppressed. This may alleviate congestion, but does little support economic activity or personal mobility and accessibility.
+This notion of suppressed demand is also important when considering other policy levers for travel demand management, such as pricing (e.g., transit fares, tolls, congestion pricing, parking pricing, etc.). Imposing pricing policies offers an effective means of controlling travel demand and moving towards a more effective equilibrium point without major infrastructure investment \citep{Li2014, Lou2010, Huang2002, Wang2004, Yang1997, Zheng2012, Huang2000, Gonzales2012, Danielis2002}. However, without any reasonable travel alternatives, such as transit, demand will simply be suppressed. This may alleviate congestion, but does little to support economic activity or personal mobility and accessibility.
 
 While there have been numerous studies and books published highlighting the potential social, environmental, and economic benefits of walkability and pedestrian-centric design, these studies often lack an objective and quantitative evaluation to justify their claims. Conversely, there have been a multitude of technologically driven engineering research on transit signal priority \cite{Skabardonis2000,Dion2002,Dion2004} and optimization \cite{Stevanovic2008,Mesbah2011,Ma2013}, but are too narrowly focused site-specific performance to realize the greater systemic benefits if broadly implemented in a city, let alone with pedestrianization \citep{Mesbah2008,Sanchez2008,Wang2012}. This research aims to bridge the gap between planning and engineering by modeling the combined effect of pedestrianized and transit priority zones in an analytical model of an idealized city in order to explore the possible outcomes. 
 
@@ -88,7 +88,7 @@ Among academics, there is often a muted tension between idealized analytical mod
 
 Analytical models are often rightfully criticized as being overly simplified and hyper-idealized cases with little or no practical application outside of academic text. While true that simulation's precision offers abundant practical applications (e.g., travel demand models and system optimization), they are often immensely sophisticated ``black-box'' estimations, rely on past data, and too frequently validated against other simulated results. This obscures any broad functional systemic relationships that might exist and limits simulation results only to where sufficient explanatory data exists; and not with, for example, untested pedestrianized and transit priority zones. Analytical models in contrast, focus primarily on those functional relationships, helping shed broader insight for policy that can then later be refined through simulation. For a dramatic example, the position of Newton's apple today could be precisely estimated in a sophisticated simulation based on detailed data collection trials, but would otherwise miss the fundamental function $F=ma$ that can be used to estimate more than just the position of an apple.
 
-The following analytical model is not meant to provide high-resolution results, nor is it meant to provide a grand unifying mathematical function. It is merely intended to demonstrate in quantitative terms, the potential complementary benefits of pedestrianized zones surrounded by transit priority. The goal is that a simplified, objective, and unbiased model might help dissolve some of the opinions and misguided advocacy that that might lead to an impractical or inappropriate policy decisions. Of course, this model is hyper-idealized, only measures travel time, and does not account for the multitude of other social and economic factors beyond basic commuter behavior. It is possible that if the results were implemented in broad strokes, as was done with the automobile oriented boom of the 20\textsuperscript{th} century, there would most likely be numerous unexpected negative side effects. The results should not be taken as cause to radically rebuild, but to help better understand the potential benefits that pedestrianization and transit priority have in increasing system capacity and reducing travel times. 
+The following analytical model is not meant to provide high-resolution results, nor is it meant to provide a grand unifying mathematical function. It is merely intended to demonstrate in quantitative terms, the potential complementary benefits of pedestrianized zones surrounded by transit priority. The goal is that a simplified, objective, and unbiased model might help dissolve some of the opinions and misguided advocacy that might lead to an impractical or inappropriate policy decisions. Of course, this model is hyper-idealized, only measures travel time, and does not account for the multitude of other social and economic factors beyond basic commuter behavior. It is possible that if the results were implemented in broad strokes, as was done with the automobile oriented boom of the 20\textsuperscript{th} century, there would most likely be numerous unexpected negative side effects. The results should not be taken as cause to radically rebuild, but to help better understand the potential benefits that pedestrianization and transit priority have in increasing system capacity and reducing travel times. 
 
 
 \section{Concept}
@@ -120,14 +120,14 @@ Demand is generated in the city area in units of $\frac{trips}{dist^2 \cdot time
     \item monocentric travel demand going to and from the center of the city, $\lambda_c$. 
 \end{itemize}
 
-The baseline traffic flows associated with average trip length $l$ generate $q_b = \frac{\lambda_b l}{\delta}$ flow across the network\footnote{
+Average trip flow can be calculated as the product of trip demand and average trip length, divided by the amount of roadway infrastructure available to carry these trips, yielding trip flow in units of $\frac{trips}{lane \cdot time}$. Thus, the baseline traffic flows associated with average trip length $l_b$ generate $q_b = \frac{\lambda_b l_b}{\delta}$ flow across the network\footnote{
 	The average baseline Manhattan distance, $l_b$ can be calculated from the expected Manhattan distance distributed across a unit square, $E(D) = \iint\iint \frac{1}{4}\left(|x_1 - x_2| + |y_1 - y_2| \right ) dy_2 dx_2 dy_1 dx_1$ with the limits of $-R \leq x_1 \leq R$, $|x_1|-1 \leq y_1 \leq 1-|x_1|$, $-1 \leq x_2 \leq 1$, and $|x_1|-1 \leq y_2 \leq 1-|x_1|$. Since $|x_1 + x_2|$ and $|y_1 + y_2|$ are identical, it can be simplified to $2\int_{-1}^{1} \int_{-1}^{1} |x_1 - x_2|(1-|x_1|)(1-|x_2|)dx_2 dx_1$, which evaluates to $\frac{14}{15}$ as proportional to any size $R$, thus $l_b = \frac{14}{15}R$. The average monocentric Manhattan distance, $l_c$ to the center of the square is equivalent to the Euclidean distance to the center in a circle of size $R$, thus the average expected distance is $l_c = \frac{2}{3}R$ \cite{Stone1991}. The overall average travel distance is then $l = \frac{R(14\lambda_b + 10\lambda_c)}{15(\lambda_b + \lambda_c)}$.
-}. The additional traffic flow associated with trips to and from the center varies with the distance from the center. Consider a narrow square of infinitesimal width $dr$ at radius $r$ from the center, the total demand for trips crossing this square is $2\lambda_c (R^2 - r^2)$. Each of these vehicles travel a distance $dr$ within the square, and the amount of road infrastructure is $8r\delta$ as oriented perpendicular, or $4\sqrt{2}r\delta$ as a 45-degree diamond as shown. $\delta$ is the density\footnote{
+}, where $\delta$ is the roadway network density\footnote{
 The calculation for network density is derived as the total roadway length $2n(n+1)d$, divided by total area $nd^2$; both of which can be expressed as a function of the number of city blocks $n$, and the street spacing dimension $d$. The relationship of $\delta$ and $d$ is linearly constant with respect, yielding $\delta = \frac{2}{d}$.
-} of available road network in $\frac{lane \cdot dist}{dist^2}$. However, unlike ring-radial networks which concentrates traffic along the perimeter road, a rectilinear grid provides multiple equivalent shortest routes around the pedestrianized center. This means that the quantity of perimeter infrastructure is multiplied by the average number of equivalent routes $\frac{R-2}{4d}$. The flow across the network, $q_a$, at a point $r$ distance from the city center is then calculated as the combined sum of the baseline demand and the monocentric demand, calculated as:
+} in units of $\frac{lane \cdot dist}{dist^2}$. The additional traffic flow associated with monocentric trips to and from the center that varies with the distance from the center. Consider a narrow square of infinitesimal perimeter width $dr$, at distance $r$ from the center, the total demand for trips crossing this square is $2\lambda_c (R^2 - r^2)$. The vehicles generated by this demand then travel a distance $dr$ across the square using the available road infrastructure of $4\sqrt{2}r\delta$. The average monocentric flow across the network at distance $r$ from the city center is then $q_m(r) = \frac{2\lambda_c \left(R^2 - r^2\right)}{4\sqrt{2}\delta r}$. The combined flow at distance $r$ from the city center is then the combined sum, calculated as:
 
 \begin{equation}
-    q_a(r) = \frac{14R\lambda_b}{15\delta} + \frac{\lambda_c}{4\delta r} \left(R^2 - r^2 \right)
+    q_a(r) = \frac{14R\lambda_b}{15\delta} + \frac{\lambda_c}{2\sqrt{2}\delta r} \left(R^2 - r^2 \right)
     \label{eq:flowacross}
 \end{equation}
 
@@ -147,7 +147,7 @@ The calculation for network density is derived as the total roadway length $2n(n
      \label{fig:diverted}
 \end{figure}
 
-\noindent In a rectilinear grid, multiple equidistant paths exist that can be used to avoid congestion. Trip types 2 and 3 can avoid traveling along the pinch point perimeter by taking an earlier or later turn without increasing distance. However, trip type 4 cannot avoid the perimeter unless a longer path is taken. While a longer route can and will be chosen in reality, the worst case is assumed that travelers will choose the shortest path and face congestion at these pinch point perimeter roads. To determine the trip flow along this perimeter, the shaded areas in Figure~\ref{fig:diverted} denote the contributing demand area for each trip type. The expected trip flow (vehicle-distance/time) on the perimeter road is the product of three values: the number of trips originating in the critical city half between $\gamma$ and R, $\lambda_b (R^2 - \gamma^2)$; the probability that a trip destination falls within the trip category, $\frac{\gamma(R-\gamma)}{R^2}$; and the expected distance per trip on the pinch point perimeter road $2\gamma$. Dividing the total vehicle-distance/time by the length of the perimeter traversed $2\gamma$, provides the critical flows of vehicles/time on the perimeter road:
+\noindent In a rectilinear grid, multiple equidistant paths exist that can be used to avoid congestion. Trip types 2 and 3 can avoid traveling along the pinch point perimeter by taking an earlier or later turn without increasing distance. However, trip type 4 cannot avoid the pinch point or perimeter unless extra turning movements or a longer path is taken. While a longer route can and will be chosen in reality, the worst case is assumed that travelers will choose the shortest path and face congestion at these pinch point perimeter roads. To determine the trip flow along this perimeter, the shaded areas in Figure~\ref{fig:diverted} denote the contributing demand area for each trip type. The expected trip flow (vehicle-distance/time) on the perimeter road is the product of three values: the number of trips originating in the critical city half between $\gamma$ and R, $\lambda_b (R^2 - \gamma^2)$; the probability that a trip destination falls within the trip category, $\frac{\gamma(R-\gamma)}{R^2}$; and the expected distance per trip on the pinch point perimeter road $2\gamma$. Dividing the total vehicle-distance/time by the length of the perimeter traversed $2\gamma$, provides the critical flows of vehicles/time on the perimeter road:
 
 \begin{equation}
 	q_p(\gamma) = \frac{\lambda_b \gamma (R-\gamma) (R^2 - \gamma^2)}{R^2}
@@ -239,13 +239,13 @@ The driving distance is the average driving distance for baseline trips ($\frac{
 The average total travel time is calculated using the respective travel time functions for each mode type and demand split: 
 
 \begin{equation}
-      \bar{t}_{total}(\gamma,\tau) = P_D \times \left( \bar{t}_D + \bar{t}_P \right) + (1-P_D) \times \left( \bar{t}_{TP} + \bar{t}_{TM} \right)
+      \bar{t}_{total}(\gamma,\tau) = \Phi_D \times \left( \bar{t}_D + \bar{t}_P \right) + (1-\Phi_D) \times \left( \bar{t}_{TP} + \bar{t}_{TM} \right)
 \end{equation}
 
-\noindent where $\bar{t}_{total}(\gamma,\tau)$ is the average total travel time, $\bar{t}_D$ is the average driving travel time, $\bar{t}_P$ is average travel time within the pedestrianized zone, $\bar{t}_{TP}$ is the average transit priority travel time, $\bar{t}_{TM}$ is the average mixed-traffic transit travel time, and $P_D$ is the proportion of trips driven by car.
+\noindent where $\bar{t}_{total}(\gamma,\tau)$ is the average total travel time, $\bar{t}_D$ is the average driving travel time, $\bar{t}_P$ is average travel time within the pedestrianized zone, $\bar{t}_{TP}$ is the average transit priority travel time, $\bar{t}_{TM}$ is the average mixed-traffic transit travel time, and $\Phi_D$ is the proportion of trips driven by car.
 
-\subsubsection{Traffic flow}
-Traffic flow through the network can be characterized by the macroscopic fundamental diagram (see Figure~\ref{fig:mfd}) as a function of trip demand density \citep{Daganzo2008,Geroliminis2008,Liu2016,Haddad2014}. A travel time function (see Figure~\ref{fig:traveltime}) then depends upon the state of traffic flow through the network as being either ``uncongested'' (solid line) or ``congested'' (dashed line) in Figures~\ref{fig:mfd} and~\ref{fig:traveltime}.\footnote{Literature has also classified these two states as ``congestion'' and ``hypercongestion'', where any traffic density affecting traffic speed (i.e., any density $k>0$) is considered ``congested'' and when capacity is exceeded (i.e., when density $k \geq k_c$) it is ``hypercongested'' \citep{Gonzales2015,Small2003}.}
+\subsubsection{Driving}
+Driving travel time depends upon the state of traffic flow through the network. Traffic flow through the network can be characterized by the macroscopic fundamental diagram (see Figure~\ref{fig:mfd}) as a function of trip demand density \citep{Daganzo2008, Geroliminis2008, Liu2016, Haddad2014}. A travel time function (see Figure~\ref{fig:traveltime}) then depends upon the state of traffic flow through the network as being either ``uncongested'' (solid line) or ``congested'' (dashed line) in Figures~\ref{fig:mfd} and~\ref{fig:traveltime}.\footnote{Literature has also classified these two states as ``congestion'' and ``hypercongestion'', where any traffic density affecting traffic speed (i.e., any density $k>0$) is considered ``congested'' and when capacity is exceeded (i.e., when density $k \geq k_c$) it is ``hypercongested'' \citep{Gonzales2015,Small2003}.}
 
 \begin{figure}[H]
      \centering
@@ -267,39 +267,88 @@ Traffic flow through the network can be characterized by the macroscopic fundame
      \caption{Macroscopic fundamental diagram and travel time cost function}
 \end{figure}
 
+Since Greenshields' (\citeyear{Greenshields1935}) seminal work describing the relationship between traffic flow, speed, and density; a variety of more refined macroscopic models have been developed. However, these models are often very sophisticated requiring additional calibration parameters, or possess abrupt transitions that can create anomalies in analytical results.
+
+
+Greenshields' function is elegantly simple, but symmetric parabolic shape has since been proven a poor fit in reality. The ``congested'' portion of the curve after critical density $k_c$, is exceeded tends to extend further. However, most refined models require additional calibration parameters that are unnecessary for this demonstration model paper.
+
+
+
+%Although a variety of more refined macroscopic models have been developed, many models are often very sophisticated requiring additional calibration parameters, or possess abrupt transitions that can create anomalies in analytical results. Two common classical models that require no additional calibration parameters are Greenshields' (\citeyear{Greenshields1935}) parabolic function and Daganzo's (\citeyear{Daganzo1997}) simple bi-linear model. Greenshields' seminal function is elegantly simple, but symmetric parabolic shape has since been proven a poor fit in reality, particularly when critical density, $k_c$, is exceeded. Daganzo's model in contrast provides a very simple parsimonious model with an asymmetric form, but its linearity assumes a constant free-flow speed until it abruptly transitions at critical density. The constant free-flow speed not only ignores minor delay caused by gradual slowing of traffic as density increases, but causes an abrupt transition that can cause erroneous results when results suddenly jump. The bi-parabolic function proposed is both parsimonious, requiring no additional calibration parameters, and contains no abrupt transitions. It is not the most advanced model, but satisfies the needs for this simple simulation.
+
+
+
 Assuming for this case a parabolic function represents the uncongested portion of the flow-density relationship, an expression for the ``uncongested'' solid line portion of Figure~\ref{fig:mfd} can be written as:
 
-\begin{equation}
-    q(k) = q_{c} - \frac{\left(k-k_{c}\right)^{2}}{\alpha_0} = q_{c}\frac{k\left(2k_{c}-k\right)}{k_{c}^{2}}
+\begin{equation}\
+	q(k) = 
+	\begin{cases} 
+		k < k_c :     &  v_{f} k \left(1 - \frac{k}{2k_{c}} \right)\\
+		k \geq k_c :  & q_{c}\ \left(1 - \frac{\left(k - k_{c}\right)^{2}}{\left(k_{j} - k_{c}\right)^{2}}\right)
+	\end{cases}
+	\label{eq:flowdensity}
 \end{equation}
+
+%\begin{equation}
+%    q(k) = q_{c} - \frac{\left(k-k_{c}\right)^{2}}{\alpha_0} = q_{c}\frac{k\left(2k_{c}-k\right)}{k_{c}^{2}}
+%\end{equation}
 
 \noindent where $k_c$ is the density at capacity, $q_c$ is the flow at capacity, and $\alpha_0 = \frac{k_c^2}{q_c}$ is the parameter used to center the left side of the parabola at the origin. In order to determine travel time, density as a function of flow $k(q)$ can be solved as a quadratic:
 
-\begin{equation}
-    k(q) = k_{c}-\sqrt{\alpha_0\left(q_{c}-q\right)} = k_c \left(1 - \sqrt{1- \frac{q}{q_c}} \right)
+%\begin{equation}
+%    k(q) = k_{c}-\sqrt{\alpha_0\left(q_{c}-q\right)} = k_c \left(1 - \sqrt{1- \frac{q}{q_c}} \right)
+%    \label{eq:densityparabolic}
+%\end{equation}
+
+\begin{equation}\
+	k(q) = 
+	\begin{cases} 
+		q < q_c :     & \frac{k_{c}\left(1-\sqrt{1 - \frac{q}{q_{c}}}\right)}{q} \\
+		q \geq q_c :  & k_{c} + \sqrt{\frac{2q\left(k_{c} - k_{j}\right)\left(k_{j} - k_{c}\right) + 2q_{c}\left(k_{c} - k_{j}\right)^{2}}{2q_{c}}}
+	\end{cases}
     \label{eq:densityparabolic}
 \end{equation}
 
-\noindent From this flow-density, a piecewise monotonic cost function for travel time, as shown in Figure~\ref{fig:traveltime}, can then be defined as:
-\begin{subequations}
-\begin{align}
-    t_D(q) &= l \frac{k(q)}{q} & \text{for}~q < q_c \\
-    t_D(q) &= t_c \left(\frac{q}{q_c}\right)^{20} = l\frac{k_c}{q_c} \left(\frac{q}{q_c}\right)^{20} & \text{for}~q \geq q_c
-\end{align}
-\end{subequations}
 
-\noindent where $t(q)$ is travel time for flow $q$, $k(q)$ is traffic density for flow $q$, $l$ is link length, $q_c$ is link capacity, and $t_c = l\frac{k_c}{q_c}$ is the travel time at capacity. The congested portion for travel time can be simply modeled as a sufficiently steep monotonically increasing function. The average travel time in traffic $\bar{t}$, can be determined from the average travel distance $\bar{l}$, divided by average speed $\bar{v}$:
+\noindent From this flow-density, a piecewise monotonic cost function for travel time, as shown in Figure~\ref{fig:traveltime}, can then be defined as:
+
+%\begin{equation}\
+%	t(q) = 
+%	\begin{cases}
+%		q  <  q_{c} : & l \frac{k(q)}{q} \\
+%		q \ge q_{c} : & l \frac{k(2q_c - q)}{\left(2q_{c} - q\right)}
+%	\end{cases}
+%\end{equation}
+
+%\begin{subequations}
+%\begin{align}
+%    t_D(q) &= l \frac{k(q)}{q} & \text{for}~q < q_c \\
+%    t_D(q) &= t_c \left(\frac{q}{q_c}\right)^{20} = l\frac{k_c}{q_c} \left(\frac{q}{q_c}\right)^{20} & \text{for}~q \geq q_c
+%\end{align}
+%\end{subequations}
+
+\begin{equation}\
+	t(q) = 
+	\begin{cases}
+		q  <  q_{c} : & l \frac{k(q)}{q} \\
+		q \ge q_{c} : & t_c \left(\frac{q}{q_c}\right)^{20} = l \frac{k_c}{q_c} \left(\frac{q}{q_c}\right)^{20}
+	\end{cases}
+\end{equation}
+
+\noindent where $t(q)$ is travel time for flow $q$, $k(q)$ is traffic density for flow $q$, $l$ is link length, $q_c$ is link capacity, and $t_c = l\frac{k_c}{q_c}$ is the travel time at capacity. The congested portion for travel time can be simply modeled as a sufficiently steep monotonically increasing function. To avoid an abrupt transition from the uncongested portion, a very high exponent of 20 was chosen to closely match the parabolic function's trajectory without being perfectly vertical. This provides a smooth transition from parabolic to exponential. The average travel time in traffic $\bar{t}$, can be determined from the average travel distance $\bar{l}$, divided by average speed $\bar{v}$:
 
 \begin{equation}
     \bar{t} = \frac{\bar{l}}{\bar{v}} = \bar{l}~\frac{k\left(\bar{q_a}\right)}{\bar{q_a}}
 \end{equation}
 
-\noindent which can be analytically determined from the macroscopic fundamental diagram as a function of average flow across the network $\bar{q_a}$, as experienced by travelers from their trips between the pedestrian zone $\gamma$, and the city limit $R$:
+\noindent which can be analytically determined from the macroscopic fundamental diagram as a function of average flow across the network $\bar{q}_a$, as experienced by travelers from their trips between the pedestrian zone $\gamma$, and the city limit $R$:
 
 \begin{align}
     \bar{q}_a & = \frac{1}{R-\gamma}\int_\gamma^R q(\gamma) d\gamma \notag\\
     \bar{q}_a & = \frac{14R\lambda_{b}}{15\delta} +  \frac{\lambda_{c}}{8\delta (R - \gamma)} \left[ 2R^{2} ln \left( \frac{R}{\gamma}\right) + \gamma^{2} - R^{2}\right]
 \end{align}
+
+\noindent This average flow across the network between 
 
 \subsubsection{Transit}
 
@@ -353,9 +402,9 @@ Assuming policy makers wish to select a pedestrian zone size that does not cause
 However, this three point intersection of $q_a$, $q_p$, and $q_c$ (as shown in Figure~\ref{fig:flowcombo}) is not guaranteed since the functions are independently affected by the two demand types (i.e., monocentric and baseline demand). The first constraint depends on the monocentric demand $\lambda_c$ generating flow to and from the center, $q_a$. The second constraint depends on baseline demand $\lambda_b$ generating flow around the perimeter road, $q_p$. This means that if one trip demand type is so low $q_a$ or $q_p$ never exceeds $q_c$ in the positive space (i.e., when $q$ and $r \geq 0$), then that constraint does not exist. This creates three possible cases:
 
 \begin{enumerate}[label=(\alph*)]
-    \item If both functions meet capacity: $\forall r~(q_a < q_c \& q_p < q_c)$, then $q_a(\gamma^*) \leq q_c \geq q_p(\gamma^*)$ \label{case:mutdom}
-    \item If only monocentric demand meets capacity: $\forall r~(q_a < q_c)$, then $q_a(\gamma^*) \geq q_c$ \label{case:monodom}
-    \item If only baseline demand meets capacity: $\forall r~(q_p < q_c)$, then $q_p(\gamma^*) \geq q_c$ \label{case:basedom}
+    \item If both functions intersect with capacity, then $q_a(\gamma^*) \leq q_c \geq q_p(\gamma^*)$ \label{case:mutdom}
+    \item If $\lambda_c \ll \lambda_b$ so only $q_a$ intersects with capacity, then $q_a(\gamma^*) \geq q_c$ \label{case:monodom}
+    \item If $\lambda_c \gg \lambda_b$ so only $q_p$ intersects with capacity, then $q_p(\gamma^*) \geq q_c$ \label{case:basedom}
 \end{enumerate}
 
 For mathematical convenience, the intersection points can be used as the ``optimal'' pedestrian zone size. This ensures that the size is exactly small or large enough to meet capacity by selecting the minimum pedestrian zone size in case \ref{case:monodom} and the maximum zone size in case \ref{case:basedom}. This makes finding the solution relatively simple by setting the respective functions equal to roadway capacity $q_c$. However, in case \ref{case:mutdom} where both functions meet capacity, either point could be used. As an ``optimal compromise'', the intersection of the two flow functions could be used, ensuring both constraints are satisfied while the least possible traffic flow condition in either function is used. However, setting $q_a = q_p$ to find the intersection point results in a quintic function (polynomial to the 5\textsuperscript{th} power):
@@ -384,29 +433,31 @@ Given that the pedestrian zone size must exist between $0 \leq \gamma \leq R$, t
 To summarize, the pedestrianized zone essentially functions by ``chopping off'' traffic flow before it exceeds capacity. The relative size of this zone is largely dependent on demand, increasing as monocentric demand increases, and decreasing as baseline demand increases. However, as the pedestrian zone size increases, average travel time also increase due to increasing walking distance and whatever unmitigated traffic remains outside of the zone. Transit priority can then be enacted to reduce travel time and offset some of this unmitigated traffic demand, essentially providing a stable travel time alternative to driving.
 
 \subsection{Transit priority zone size}
-The necessary transit priority zone size can be determined using the critical transit priority traffic flow $q_T$ (see Figure~\ref{fig:transittraveltime}). This value can be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the necessary transit priority zone size, $\tau^*$, when $q_T = q_a$. The reason that $q_a$ is used, and not $q_p$, is because transit priority is because transit priority is concerned with traffic congestion experienced in the network outside of the pedestrian zone, not just at the perimeter. Solving then for $q_T = q_a$ yields a quadratic function, but assuming a non-negative value for the optimal transit zone size, it can be solved for analytically:
+The necessary transit priority zone size can be determined using the critical transit priority traffic flow $q_T$ (see Figure~\ref{fig:transittraveltime}). This value can be used in combination with network flow at distance $r$ in Equation~\eqref{eq:flowacross} to determine the necessary transit priority zone size, $\tau^*$, when $q_T = q_a$. The reason that $q_a$ is used, and not $q_p$, is because transit priority is concerned with traffic congestion experienced in the network outside of the pedestrian zone, not just at the perimeter. Solving then for $q_T = q_a$ yields a quadratic function, but assuming a non-negative value for the optimal transit zone size, it can be solved for analytically:
 
 \begin{align}
-    \tau^*(P_D) & = \frac{56 P_D \lambda_{b}-60\delta q_{T} +\sqrt{\left(56 P_D \lambda_{b}-60\delta q_{T}\right)^{2} + (30 P_D \lambda_{c} R)^2 }}{30 P_D \lambda_{c}}\\
+    \tau^*(\Phi_D) & = \frac{56 \Phi_D \lambda_{b}-60\delta q_{T} +\sqrt{\left(56 \Phi_D \lambda_{b}-60\delta q_{T}\right)^{2} + (30 \Phi_D \lambda_{c} R)^2 }}{30 \Phi_D \lambda_{c}}\\
     \text{s.t.} & ~ \tau^* \geq 0 \nonumber
 \end{align}
 
-\noindent where the proportion of driving trips, $P_D$, is introduced to scale driving demand to account for mode choice between driving and transit. Unlike the optimal pedestrian zone, which us unaffected by changes in driving demand, the optimal transit priority zone size will depend on driving demand. This is because, assuming $\lambda_c$ and $\lambda_b$ are affected by mode choice equally, both $q_a$ and $q_p$ shift vertically, keeping $\gamma^*$ constant (See Figure~\ref{fig:flowcombo}).
+\noindent where the proportion of driving trips, $\Phi_D$, is introduced to scale driving demand to account for mode choice between driving and transit. Unlike the optimal pedestrian zone, which us unaffected by changes in driving demand, the optimal transit priority zone size will depend on driving demand. This is because, assuming $\lambda_c$ and $\lambda_b$ are affected by mode choice equally, both $q_a$ and $q_p$ shift vertically, keeping $\gamma^*$ constant (See Figure~\ref{fig:flowcombo}). 
 
-Assuming unlimited transit capacity relative to driving, and transit priority is relatively unaffected by congestion, a transit system with transit priority in this model effectively serves as a pressure release for demand. As congestion increases with driving trips, transit becomes more appealing, thus drawing trips away from driving. Conversely, a reduction in congestion would attract trips towards driving as the driving travel time has improved. Assuming transit with priority provides a reasonable and reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit. Although the proportion $P_D$ may be modeled as a discrete choice probability, this requires travel time as an input, making optimal $\tau$ difficult to find as it creates a dynamic problem dependent upon itself. Fortunately, since since $\gamma^*$ remains constant relative to demand, the necessary proportion of driving demand $P_D$ to achieve $q_a = q_T$ (see Figure~\ref{fig:optimalped}) can be determined directly as a function of $\tau$:
+%Assuming unlimited transit capacity relative to driving, and transit priority is relatively unaffected by congestion, a transit system with transit priority in this model effectively serves as a pressure release for demand. As congestion increases with driving trips, transit becomes more appealing, thus drawing trips away from driving. Conversely, a reduction in congestion would attract trips towards driving as the driving travel time has improved. Assuming transit with priority provides a reasonable and reliable alternative to driving, some demand equilibrium exists where the travel time cost of driving matches transit.
+
+Although the proportion $\Phi_D$ may be modeled as a discrete choice probability, this requires travel time as an input, making optimal $\tau$ difficult to find as it creates a dynamic problem dependent upon itself. Fortunately, since since $\gamma^*$ remains constant relative to demand, the necessary proportion of driving demand $\Phi_D$ to achieve $q_a = q_T$ (see Figure~\ref{fig:optimalped}) can be determined directly as a function of $\tau$:
 
 \begin{equation}
-    P_D(\tau) = \frac {-60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
+    \Phi_D(\tau) = \frac {-60\delta \tau q_{T}}{15\tau^{2}\lambda_{c} - 56 \tau \lambda_{b} - 15\lambda_{c}R^{2}}
 \end{equation}
 
-\noindent With the proportion of drivers, $P_D$, determined as a function of transit priority zone size, $\tau$; the travel time function in Equation~\eqref{eq:ttfunc} is now dependent on only the pedestrian and transit priority zone sizes of $\gamma$ and $\tau$, respectively.
+\noindent With the proportion of drivers, $\Phi_D$, determined as a function of transit priority zone size, $\tau$; the travel time function in Equation~\eqref{eq:ttfunc} is now dependent on only the pedestrian and transit priority zone sizes of $\gamma$ and $\tau$, respectively.
 
-\subsubsection{Relationship of demand and transit priority}
-It should be very clearly stated here that this $P_D$ is \emph{not} a mode choice model per se, but merely the proportion where driving travel time is be equal to transit priority travel time. The inferred assumption here is that mode choice depends solely on travel time and is equally substitutable, meaning that travelers do not have a preference for driving over transit. This, of course, is a gross over assumption. For simplicity, this analysis will carry on with this assumption, but future models might assume some proportionally weighted travel time cost to account for mode preference. For example, transit travel costs $w$ more than driving, e.g., $t_{transit} = w t_{drive}$. This would have the effect of increasing $q_T$, meaning that travelers are willing to tolerate more time in traffic before they step foot on a bus.
+\subsubsection{Relationship of demand and transit priority zone size}
+It should be very clearly stated here that this $\Phi_D$ is \emph{not} a mode choice model per se, but merely the proportion of driving demand so that driving travel time is equal to transit priority travel time for the given $\tau$. The inferred assumption here is that mode choice depends solely on travel time and is equally substitutable, meaning that travelers do not have a preference for driving over transit. This, of course, is a gross over assumption, but for simplicity, this analysis will carry on with it. Future models might assume some proportionally weighted travel time cost to account for mode preference. For example, transit travel costs $w$ more than driving, e.g., $t_{transit} = w t_{drive}$. This would have the effect of increasing $q_T$, meaning that travelers are willing to tolerate more time in traffic before they step foot on a bus.
 
-An interesting caveat to this function is that the proportion of driving demand, $P_D$, could theoretically exceed 1, meaning that more than 100\% of demand must drive in order to achieve $q_a = q_T$ for a transit priority zone size of $\tau$. This occurs when traffic conditions at the edge of the transit priority zone, $q_a(\tau)$, never reach the level necessary to justify transit priority, $q_T$, because overall demand is too low. This may seem like an erroneous outcome of the model, but is actually a useful way to determine if a transit priority zone of size $\tau$ is appropriate. Mathematically, the function can yield a negative value, but would require a negative $\tau$. This is, of course, is an impossibility as that would mean there is a negatively sized zone.
+An interesting caveat to this function is that unlike true mode choice, the proportion of driving demand, $\Phi_D$, can go beyond 0 and 1. If it exceeds 1 this means meaning that more than 100\% of demand must drive in order to achieve $q_a = q_T$ for a transit priority zone size of $\tau$. This occurs when traffic conditions do not reach the level necessary to justify transit priority at $\tau$, and a smaller $\tau$ must be chosen to increase driving demand. This may seem like an erroneous outcome of the model, but is actually a useful way to determine if a transit priority zone of size $\tau$ is appropriate. If the transit priority zone size is already the smallest it can be (i.e., $\tau = \gamma$ or $\tau = 0$), then this means that transit priority is never justifiable because there is not enough overall travel demand in the city itself for $q_a = q_T$. Conversely, the function can also yield a negative value if $\tau < 0$. However, this would require an impossibly sized negative transit priority zone.
 
-When total demand in the city varies, it alters the steepness of the driving proportion function, $P_D$, as $\tau$ varies (see Figure~\ref{fig:taupd}). For a fixed transit priority zone of size $\tau$, and varying overall travel demand $\lambda$, the zone is justified when $P_D \leq 1$ (see Figure~\ref{fig:demandpd}). Meaning automobile traffic conditions are at least the same travel time or slower than transit priority. For example, if the traffic flow at the edge of the pedestrian zone is less than the transit priority threshold, $q_a(\gamma) < q_T \Rightarrow P_D > 1$, a driving demand greater than the total travel demand is needed and a transit priority zone is not beneficial.
+When total demand in the city varies, it alters the steepness of the driving proportion function, $\Phi_D$, as $\tau$ varies (see Figure~\ref{fig:taupd}). For a fixed transit priority zone of size $\tau$, and varying overall travel demand $\lambda$, the zone is justified when $\Phi_D \leq 1$ (see Figure~\ref{fig:demandpd}). Meaning automobile traffic conditions are at least the same travel time or slower than transit priority. For example, if the traffic flow at the edge of the pedestrian zone is less than the transit priority threshold, $q_a(\gamma) < q_T \Rightarrow \Phi_D > 1$, a driving demand greater than the total travel demand is needed and a transit priority zone is not beneficial.
 
 \begin{figure}[H]
      \centering
@@ -414,7 +465,7 @@ When total demand in the city varies, it alters the steepness of the driving pro
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{diagram_tau_pd}
-         \caption{Driving proportion function $P_D(\tau)$}
+         \caption{Driving proportion function $\Phi_D(\tau)$}
          \label{fig:taupd}
      \end{subfigure}
      \hfill
@@ -508,7 +559,7 @@ Both Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} show a steep decrea
 
 
 \subsection{Transit priority threshold}
-To determine whether traffic conditions are worse enough to even justify transit priority, regardless of a pedestrianized zone, the driving demand proportion, $P_D$, can be evaluated against the transit priority threshold, $P_D = 1$. To demonstrate the transit priority threshold, Figure~\ref{fig:demandload} shows a range of transit priority zone sizes across a varying demand load.
+To determine whether traffic conditions are worse enough to even justify transit priority, regardless of a pedestrianized zone, the driving demand proportion, $\Phi_D$, can be evaluated against the transit priority threshold, $\Phi_D = 1$. To demonstrate the transit priority threshold, Figure~\ref{fig:demandload} shows a range of transit priority zone sizes across a varying demand load.
 
 \begin{figure}[H]
     \centering
