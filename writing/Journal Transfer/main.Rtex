@@ -18,6 +18,7 @@
 <<echo=FALSE, cache=TRUE>>==
     source("../../analysis/simfunctions.R")
     source("../../analysis/simulationanalysis.R")
+    source("../../analysis/mfdplots.R")
  @
 \graphicspath{ {figures/} }
 
@@ -252,22 +253,32 @@ Driving travel time depends upon the state of traffic flow through the network. 
      \hfill
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{diagram_mfd}
+         %\includegraphics[width=\textwidth]{diagram_mfd}
+         <<flowdensity, echo=FALSE, cache=TRUE, fig.width=4, fig.asp = 0.66, warning=FALSE>>=
+         plots[['flowdensity']]
+         @
          \caption{Macroscopic fundamental diagram}
          \label{fig:mfd}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{diagram_traveltime}
-        \caption{Travel time cost function}
+         %\includegraphics[width=\textwidth]{diagram_traveltime}
+         <<timeflow, echo=FALSE, cache=TRUE, fig.width=4, fig.asp = 0.66, warning=FALSE>>=
+         plots[['timeflow']]
+         @
+         \caption{Travel time cost function}
          \label{fig:traveltime}
      \end{subfigure}
      \hfill
      \caption{Macroscopic fundamental diagram and travel time cost function}
 \end{figure}
 
-Since Greenshields' (\citeyear{Greenshields1935}) seminal work describing the relationship between traffic flow, speed, and density; a variety of more refined macroscopic models have been developed. However, these models are often very sophisticated requiring additional calibration parameters, or possess abrupt transitions that can create anomalies in analytical results.
+The challenge in using a macroscopic fundamental diagram 
+Introduces a backward bending travel time function
+
+
+Since Greenshields' (\citep{Greenshields1935}) seminal work describing the relationship between traffic flow, speed, and density; a variety of more refined macroscopic models have been developed. However, these models are often very sophisticated requiring additional calibration parameters, or possess abrupt transitions that can create anomalies in analytical results.
 
 
 Greenshields' function is elegantly simple, but symmetric parabolic shape has since been proven a poor fit in reality. The ``congested'' portion of the curve after critical density $k_c$, is exceeded tends to extend further. However, most refined models require additional calibration parameters that are unnecessary for this demonstration model paper.
@@ -519,7 +530,7 @@ First, a baseline scenario in a city with no pedestrianized or transit priority 
 
 \begin{figure}[H]
     \centering
-    <<echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
+    <<baselinett, echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
     plots[['baselinett']]
     @
     \caption{Average total travel time varying demand with no pedestrian zone or transit priority}
@@ -536,7 +547,7 @@ While it is unrealistic that travel time would approach infinity, one might assu
      \centering
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-        <<echo=FALSE, cache=TRUE, fig.width=4, fig.asp = 0.66, warning=FALSE>>=
+        <<drivett, echo=FALSE, cache=TRUE, fig.width=4, fig.asp = 0.66, warning=FALSE>>=
         plots[['drivett']]
         @
          \caption{Effect of pedestrian zone size on average driving travel time (no transit priority zone)}
@@ -545,7 +556,7 @@ While it is unrealistic that travel time would approach infinity, one might assu
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-        <<echo=FALSE, cache=TRUE, fig.width=4, fig.asp = 0.66, warning=FALSE>>=
+        <<transittt, echo=FALSE, cache=TRUE, fig.width=4, fig.asp = 0.66, warning=FALSE>>=
         plots[['transittt']]
         @
         \caption{Effect of transit priority zone size on average transit travel time (no pedestrian zone)}
@@ -563,7 +574,7 @@ To determine whether traffic conditions are worse enough to even justify transit
 
 \begin{figure}[H]
     \centering
-    <<echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
+    <<demandload, echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
     plots[['demandload']]
     @
     \caption{Demand loading to justify transit priority when $\tau$ is 10\% of $R$ (1.5 miles)}
@@ -578,7 +589,7 @@ Figures~\ref{fig:ttpedzone} and~\ref{fig:tttransitzone} only consider travel tim
 
 \begin{figure}[H]
 \centering
-    <<echo=FALSE, cache=TRUE, fig.width = 5.5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
+    <<combott, echo=FALSE, cache=TRUE, fig.width = 5.5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
     plots[['combott']]
     @
     \caption{Average combined travel time for transit and driving varying $\tau$ and $\gamma$}
@@ -590,7 +601,7 @@ It is clear from Figure~\ref{fig:combott} that the optimal travel time can vary 
 
 \begin{figure}[H]
     \centering
-    <<echo=FALSE, cache=TRUE, warning=FALSE, fig.width=8, out.width="\\textwidth", fig.asp=0.5>>=
+    <<optimalpars, echo=FALSE, cache=TRUE, warning=FALSE, fig.width=8, out.width="\\textwidth", fig.asp=0.5>>=
     plots[['optimal']]
     @
     \caption{Average total travel time varying across $\gamma$ and $\tau$}
@@ -605,7 +616,7 @@ Recalling the breakdown of traffic flow in Figure~\ref{fig:baselinett}, the opti
 
 \begin{figure}[H]
     \centering
-    <<echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
+    <<comparett, echo=FALSE, cache=TRUE, fig.width=5, out.width="0.66\\textwidth", fig.asp = 0.6, warning=FALSE>>=
     plots[['comparett']]
     @
     \caption{Comparing average total travel time for no policy and optimal pedestrian and transit priority policies}

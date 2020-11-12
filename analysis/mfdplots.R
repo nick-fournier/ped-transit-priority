@@ -127,7 +127,7 @@ plots[['flowdensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) +
   stat_function(fun = fun.flowdensity_bipara, aes(linetype = "para", color = "para")) +
   stat_function(fun = fun.flowdensity_dag, aes(linetype = "dag", color = "dag"), alpha = 0.5) +
   stat_function(fun = fun.flowdensity_green, aes(linetype = "green", color = "green"), alpha = 0.5) +
-  scale_y_continuous("Traffic flow (veh/hr/lane)", labels = scales::comma, breaks = seq(0, 600, by = 50), expand = c(0,0)) +
+  scale_y_continuous("Traffic flow (veh/hr/lane)", labels = scales::comma, breaks = seq(0, 600, by = 100), expand = c(0,0)) +
   scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), breaks = seq(0, 150, by = 25), expand = c(0,0)) +
   scale_color_brewer("Traffic Flow Model", palette = "Set1", limits = c("para","dag","green"), labels = flabs) +
   scale_linetype_manual("Traffic Flow Model", values = c(1,2,5), limits = c("para","dag","green"), labels = flabs) +
