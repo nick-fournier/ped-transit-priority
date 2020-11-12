@@ -230,8 +230,8 @@ plots[['flowdensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) +
   stat_function(fun = fun.flowdensity_dag2, linetype = 2, aes(color = "dag")) +
   stat_function(fun = fun.flowdensity_green1, linetype = 1, aes(color = "green")) +
   stat_function(fun = fun.flowdensity_green2, linetype = 2, aes(color = "green")) +
-  geom_hline(yintercept = q_c, linetype = "dotted", alpha = 0.5) +
-  geom_vline(xintercept = k_c, linetype = "dotted", alpha = 0.5) +
+  geom_segment(aes(x = 0, y = q_c, xend = k_c, yend = q_c), linetype = "dotted", alpha = 0.5) +
+  geom_segment(aes(x = k_c, y = 0, xend = k_c, yend = q_c), linetype = "dotted", alpha = 0.5) +
   scale_y_continuous("Traffic flow (veh/hr/lane)", labels = expression(q[c]), breaks = q_c, expand = c(0,0)) +
   #scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), breaks = seq(0, 200, by = 200), expand = c(0,0)) +
   scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), labels = c(expression(k[c]), expression(k[j])), breaks = c(k_c,k_j), expand = c(0,0)) +
