@@ -250,7 +250,7 @@ plots[['timeflow']] <- ggplot(data.frame(q = c(0, 2*q_c)), aes(q)) +
   # stat_function(fun = function(q) 600*fun.timeflow_dag(q), aes(linetype = "dag", color = "dag")) +
   # stat_function(fun = function(q) 600*fun.timeflow_bipara(q), aes(linetype = "bipara", color = "bipara")) +
   geom_segment(aes(x = q_c, y = 0, xend = q_c, yend = 600*2/v_f), linetype = "dotted", alpha = 0.5) +
-  scale_y_continuous("Travel time over 10km (mins)", breaks = NULL, expand = c(0,0)) +
+  scale_y_continuous("Travel time (hr)", breaks = NULL, expand = c(0,0)) +
   scale_x_continuous("Traffic flow (veh/hr)", labels = expression(q[c]), breaks = q_c, expand = c(0,0)) +
   scale_color_brewer("Traffic Flow Model", palette = "Set1", limits = c("green","dag","bipara","paraexp"), labels = flabs) +
   #scale_linetype_manual("Traffic Flow Model", values = c(2,5,1), limits = c("bipara","dag","paraexp"), labels = flabs) +
@@ -258,5 +258,5 @@ plots[['timeflow']] <- ggplot(data.frame(q = c(0, 2*q_c)), aes(q)) +
   theme_classic() +
   theme(legend.position = c(0.25,0.5), 
         legend.background = element_blank())
-plots[['timeflow']]
+# plots[['timeflow']]
 
