@@ -197,7 +197,7 @@ fun.timeflow_dag <- function(q) {
 
 
 #### Flow-density function
-flabs = c("Parabolic","Bi-linear",,"Bi-parabolic", "Parabolic-Exponential")
+flabs = c("Parabolic","Bi-linear","Bi-parabolic", "Parabolic-Exponential")
 
 plots[['flowdensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) + 
   stat_function(fun = fun.flowdensity_bipara1, linetype = 1, aes(color = "bipara")) +
