@@ -46,6 +46,64 @@ fun.flowdensity_green <- function(k) {
 }
 
 
+#### Flow density piece-wise ####
+#Flow-density function, double parabolic
+fun.flowdensity_bipara1 <- function(k) {
+  sapply(k, function(k)
+    if(k <= k_c) 
+      k*v_f*(1 - (k/(2*k_c)))
+    else
+      NA
+  )
+}
+
+fun.flowdensity_bipara2 <- function(k) {
+  sapply(k, function(k)
+    if(k <= k_c) 
+      NA
+    else
+      (k_c*v_f/2)*(1 - ((k - k_c)^2)/((k_j - k_c)^2))
+  )
+}
+
+#Flow-density function, linear by daganzo
+fun.flowdensity_dag1 <- function(k) {
+  sapply(k, function(k)
+    if(k <= k_c/2)
+      v_f*k
+    else
+      NA
+  )
+}
+
+fun.flowdensity_dag2 <- function(k) {
+  sapply(k, function(k)
+    if(k <= k_c/2)
+      NA
+    else
+      (v_f*k_c/2)*(1 + ( (k_c - 2*k)/(2*k_j - k_c) ) )
+  )
+}
+
+#Flow-density function, linear by greenshields
+fun.flowdensity_green1 <- function(k) {
+  sapply(k, function(k)
+    if(k <= k_c)
+        k*v_f*(1 - (k/(2*k_c)))
+    else
+      NA
+  )
+}
+
+fun.flowdensity_green2 <- function(k) {
+  sapply(k, function(k)
+    if(k <= k_c)
+      NA
+    else
+      k*v_f*(1 - (k/(2*k_c)))
+  )
+}
+
 
 #### Backbending travel time functions ####
 #Travel time from flow by biparabolic function
@@ -88,6 +146,24 @@ fun.timeflow_dag2 <- function(q) {
   
 }
 
+#Travel time from flow by parabolic-exponential
+fun.timeflow_paraexp1 <- function(q) {
+  sapply(q, function(q)
+    if(q < q_c)
+      k_c*(1 - sqrt(1 - (q/q_c))) / q
+    else
+      NA
+  )
+}
+
+fun.timeflow_paraexp2 <- function(q) {
+  sapply(q, function(q)
+    if(q < q_c)
+      NA
+    else
+      (k_c/q_c)*(q/q_c)^20
+  )
+}
 
 
 #### Continuous travel time functions ####
@@ -124,13 +200,16 @@ fun.timeflow_dag <- function(q) {
 flabs = c("Bi-parabolic","Bi-linear","Parabolic-Exponential")
 
 plots[['flowdensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) + 
-  stat_function(fun = fun.flowdensity_bipara, aes(linetype = "para", color = "para")) +
-  stat_function(fun = fun.flowdensity_dag, aes(linetype = "dag", color = "dag"), alpha = 0.5) +
-  stat_function(fun = fun.flowdensity_green, aes(linetype = "green", color = "green"), alpha = 0.5) +
+  stat_function(fun = fun.flowdensity_bipara1, linetype = 1, aes(color = "para")) +
+  stat_function(fun = fun.flowdensity_bipara2, linetype = 2, aes(color = "para")) +
+  stat_function(fun = fun.flowdensity_dag1, linetype = 1, aes(color = "dag")) +
+  stat_function(fun = fun.flowdensity_dag2, linetype = 2, aes(color = "dag")) +
+  stat_function(fun = fun.flowdensity_green1, linetype = 1, aes(color = "green")) +
+  stat_function(fun = fun.flowdensity_green2, linetype = 2, aes(color = "green")) +
   scale_y_continuous("Traffic flow (veh/hr/lane)", labels = scales::comma, breaks = seq(0, 600, by = 100), expand = c(0,0)) +
   scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), breaks = seq(0, 150, by = 25), expand = c(0,0)) +
   scale_color_brewer("Traffic Flow Model", palette = "Set1", limits = c("para","dag","green"), labels = flabs) +
-  scale_linetype_manual("Traffic Flow Model", values = c(1,2,5), limits = c("para","dag","green"), labels = flabs) +
+  #scale_linetype_manual("Traffic Flow Model", values = c(1,2,5), limits = c("para","dag","green"), labels = flabs) +
   coord_cartesian(xlim = c(0,155), ylim = c(0,600)) +
   theme_classic() +
   theme(legend.position = "none", 
@@ -155,11 +234,12 @@ plots[['speeddensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) +
 
 #### travel time-flow function
 plots[['timeflow']] <- ggplot(data.frame(q = c(0, 2*q_c)), aes(q)) + 
-  stat_function(fun = function(q) 600*fun.timeflow_dag1(q), aes(linetype = "dag", color = "dag")) +
-  stat_function(fun = function(q) 600*fun.timeflow_dag2(q), aes(linetype = "dag", color = "dag")) +
-  stat_function(fun = function(q) 600*fun.timeflow_bipara1(q), aes(linetype = "bipara", color = "bipara")) +
-  stat_function(fun = function(q) 600*fun.timeflow_bipara2(q), aes(linetype = "bipara", color = "bipara")) +
-  stat_function(fun = function(q) 600*fun.timeflow_paraexp(q), aes(linetype = "paraexp", color = "paraexp")) +
+  stat_function(fun = function(q) 600*fun.timeflow_dag1(q), linetype = 1, aes(color = "dag")) +
+  stat_function(fun = function(q) 600*fun.timeflow_dag2(q), linetype = 2, aes(color = "dag")) +
+  stat_function(fun = function(q) 600*fun.timeflow_bipara1(q), linetype = 1, aes(color = "bipara")) +
+  stat_function(fun = function(q) 600*fun.timeflow_bipara2(q), linetype = 2, aes(color = "bipara")) +
+  stat_function(fun = function(q) 600*fun.timeflow_paraexp1(q), linetype = 1, aes(color = "paraexp")) +
+  stat_function(fun = function(q) 600*fun.timeflow_paraexp2(q), linetype = 2, aes(color = "paraexp")) +
   # stat_function(fun = function(q) 600*fun.timeflow_dag(q), aes(linetype = "dag", color = "dag")) +
   # stat_function(fun = function(q) 600*fun.timeflow_bipara(q), aes(linetype = "bipara", color = "bipara")) +
   scale_y_continuous("Travel time over 10km (mins)", labels = scales::comma, breaks = seq(0, 200, by = 25), expand = c(0,0)) +
