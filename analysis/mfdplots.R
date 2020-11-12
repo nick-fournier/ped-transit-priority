@@ -109,10 +109,31 @@ fun.flowdensity_green2 <- function(k) {
 
 
 #### Backbending travel time functions ####
+
+#Travel time from flow by parabolic function
+fun.timeflow_para1 <- function(q) {
+  sapply(q, function(q)
+    if(q <= q_c)
+      k_c*(1 - sqrt(1 - (q/q_c))) / q
+    else
+      NA
+  )
+}
+
+fun.timeflow_para2 <- function(q) {
+  sapply(q, function(q)
+    if(q <= q_c)
+      k_c*(1 + sqrt(1 - (q/q_c))) / q
+    else
+      NA
+  )
+}
+
+
 #Travel time from flow by biparabolic function
 fun.timeflow_bipara1 <- function(q) {
   sapply(q, function(q)
-    if(q <= 2*q_c/2)
+    if(q <= q_c)
       k_c*(1 - sqrt(1 - (q/q_c))) / q
     else
       NA
@@ -121,7 +142,7 @@ fun.timeflow_bipara1 <- function(q) {
 
 fun.timeflow_bipara2 <- function(q) {
   sapply(q, function(q)
-    if(q <= 2*q_c/2)
+    if(q <= q_c)
       (-(k_c/v_f)*(-v_f - sqrt(((v_f^2)*k_c - 2*v_f*q) / k_c)) ) / q
     #( k_c + sqrt( (-2*(q - 2*q_c)*(k_c - k_j) * (k_j - k_c) + 2*q*(k_c - k_j)^2 ) / (2*q_c - q)) ) / q
     else
@@ -213,7 +234,7 @@ plots[['flowdensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) +
   geom_vline(xintercept = k_c, linetype = "dotted", alpha = 0.5) +
   scale_y_continuous("Traffic flow (veh/hr/lane)", labels = expression(q[c]), breaks = q_c, expand = c(0,0)) +
   #scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), breaks = seq(0, 200, by = 200), expand = c(0,0)) +
-  scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), labels = c(expression(k[c]), expression(k_j)), breaks = c(k_c,k_j), expand = c(0,0)) +
+  scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), labels = c(expression(k[c]), expression(k[j])), breaks = c(k_c,k_j), expand = c(0,0)) +
   scale_color_brewer("Traffic Flow Model", palette = "Set1", limits = c("green","dag","bipara","paraexp"), labels = flabs) +
   #scale_linetype_manual("Traffic Flow Model", values = c(1,2,5), limits = c("para","dag","green"), labels = flabs) +
   coord_cartesian(xlim = c(0,155), ylim = c(0,600)) +
@@ -241,6 +262,7 @@ plots[['speeddensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) +
 #### travel time-flow function
 plots[['timeflow']] <- ggplot(data.frame(q = c(0, 2*q_c)), aes(q)) + 
   stat_function(fun = function(q) -1, linetype = 1, aes(color = "green")) +
+  stat_function(fun = function(q) 600*fun.timeflow_para2(q), linetype = 2, aes(color = "green")) +
   stat_function(fun = function(q) 600*fun.timeflow_dag1(q), linetype = 1, aes(color = "dag")) +
   stat_function(fun = function(q) 600*fun.timeflow_dag2(q), linetype = 2, aes(color = "dag")) +
   stat_function(fun = function(q) 600*fun.timeflow_bipara1(q), linetype = 1, aes(color = "bipara")) +
@@ -258,5 +280,5 @@ plots[['timeflow']] <- ggplot(data.frame(q = c(0, 2*q_c)), aes(q)) +
   theme_classic() +
   theme(legend.position = c(0.25,0.5), 
         legend.background = element_blank())
-# plots[['timeflow']]
+plots[['timeflow']]
 
