@@ -5,6 +5,9 @@ v_f = 22
 k_j = 125
 k_c = 45
 
+
+#text=element_text(family="Times New Roman"))
+
 #### Flow density funcs ####
 #Flow-density function, linear-parabolic
 fun.flowdensity_linpara <- function(k) {
@@ -31,10 +34,10 @@ fun.flowdensity_bipara <- function(k) {
 #Flow-density function, linear by daganzo
 fun.flowdensity_dag <- function(k) {
   sapply(k, function(k)
-    if(k <= k_c/2)
-      v_f*k
+    if(k <= k_c)
+      v_f*k/2
     else
-      (v_f*k_c/2)*(1 + ( (k_c - 2*k)/(2*k_j - k_c) ) )
+      (v_f*k_c/2)*(1 + ( (k_c - 1*k)/(1*k_j - k_c) ) )
   )
 }
 
@@ -69,8 +72,8 @@ fun.flowdensity_bipara2 <- function(k) {
 #Flow-density function, linear by daganzo
 fun.flowdensity_dag1 <- function(k) {
   sapply(k, function(k)
-    if(k <= k_c/2)
-      v_f*k
+    if(k <= k_c)
+      v_f*k/2
     else
       NA
   )
@@ -78,10 +81,10 @@ fun.flowdensity_dag1 <- function(k) {
 
 fun.flowdensity_dag2 <- function(k) {
   sapply(k, function(k)
-    if(k <= k_c/2)
+    if(k <= k_c)
       NA
     else
-      (v_f*k_c/2)*(1 + ( (k_c - 2*k)/(2*k_j - k_c) ) )
+      (v_f*k_c/2)*(1 + ( (k_c - 1*k)/(1*k_j - k_c) ) )
   )
 }
 
@@ -188,15 +191,15 @@ fun.timeflow_paraexp <- function(q) {
 fun.timeflow_dag <- function(q) {
   sapply(q, function(q)
     if(q < q_c)
-      1/v_f
+      2/v_f
     else
-      - (k_j - ((2*k_j - k_c) / (2*q_c))*(2*q_c - q)) / (q - 2*q_c) 
+      - (k_j - ((1*k_j - k_c) / (1*q_c))*(2*q_c - q)) / (q - 2*q_c) 
   )
 }
 
 
 
-#### Flow-density function
+#### Plots ####
 flabs = c("Parabolic","Bi-linear","Bi-parabolic", "Parabolic-Exponential")
 
 plots[['flowdensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) + 
@@ -206,8 +209,11 @@ plots[['flowdensity']] <- ggplot(data.frame(k = c(0, 40)), aes(k)) +
   stat_function(fun = fun.flowdensity_dag2, linetype = 2, aes(color = "dag")) +
   stat_function(fun = fun.flowdensity_green1, linetype = 1, aes(color = "green")) +
   stat_function(fun = fun.flowdensity_green2, linetype = 2, aes(color = "green")) +
-  scale_y_continuous("Traffic flow (veh/hr/lane)", labels = scales::comma, breaks = seq(0, 600, by = 100), expand = c(0,0)) +
-  scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), breaks = seq(0, 150, by = 25), expand = c(0,0)) +
+  geom_hline(yintercept = q_c, linetype = "dotted", alpha = 0.5) +
+  geom_vline(xintercept = k_c, linetype = "dotted", alpha = 0.5) +
+  scale_y_continuous("Traffic flow (veh/hr/lane)", labels = expression(q[c]), breaks = q_c, expand = c(0,0)) +
+  #scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), breaks = seq(0, 200, by = 200), expand = c(0,0)) +
+  scale_x_continuous("Traffic density (veh/km/lane)", limits = c(0, 150), labels = c(expression(k[c]), expression(k_j)), breaks = c(k_c,k_j), expand = c(0,0)) +
   scale_color_brewer("Traffic Flow Model", palette = "Set1", limits = c("green","dag","bipara","paraexp"), labels = flabs) +
   #scale_linetype_manual("Traffic Flow Model", values = c(1,2,5), limits = c("para","dag","green"), labels = flabs) +
   coord_cartesian(xlim = c(0,155), ylim = c(0,600)) +
@@ -243,16 +249,14 @@ plots[['timeflow']] <- ggplot(data.frame(q = c(0, 2*q_c)), aes(q)) +
   stat_function(fun = function(q) 600*fun.timeflow_paraexp2(q), linetype = 2, aes(color = "paraexp")) +
   # stat_function(fun = function(q) 600*fun.timeflow_dag(q), aes(linetype = "dag", color = "dag")) +
   # stat_function(fun = function(q) 600*fun.timeflow_bipara(q), aes(linetype = "bipara", color = "bipara")) +
-  scale_y_continuous("Travel time over 10km (mins)", labels = scales::comma, breaks = seq(0, 200, by = 25), expand = c(0,0)) +
-  scale_x_continuous("Traffic flow (veh/hr)", limits = c(0, 1.5*q_c), breaks = seq(0, 2*q_c, by = 100), expand = c(0,0)) +
+  geom_segment(aes(x = q_c, y = 0, xend = q_c, yend = 600*2/v_f), linetype = "dotted", alpha = 0.5) +
+  scale_y_continuous("Travel time over 10km (mins)", breaks = NULL, expand = c(0,0)) +
+  scale_x_continuous("Traffic flow (veh/hr)", labels = expression(q[c]), breaks = q_c, expand = c(0,0)) +
   scale_color_brewer("Traffic Flow Model", palette = "Set1", limits = c("green","dag","bipara","paraexp"), labels = flabs) +
   #scale_linetype_manual("Traffic Flow Model", values = c(2,5,1), limits = c("bipara","dag","paraexp"), labels = flabs) +
   coord_cartesian(xlim = c(0,750), ylim = c(0,150)) +
   theme_classic() +
   theme(legend.position = c(0.25,0.5), 
         legend.background = element_blank())
-# plots[['timeflow']]
+plots[['timeflow']]
 
-
-#text=element_text(family="Times New Roman"))
-# plot[['flowdensity']]
