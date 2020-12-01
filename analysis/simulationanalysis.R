@@ -8,8 +8,8 @@ library(data.table)
 lambda_c = 90/2
 lambda_b = 150/2
 R = 15
-v_w = 3
-v_m = 45
+v_w = 5
+v_m = 50
 t_s = 60/3600
 s = 0.5
 k_c = 45
@@ -114,7 +114,7 @@ plots[['demandload']] <- ggplot(data = unique(demdat[variable == "Average", .(pr
   scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
                      labels = scales::percent_format(accuracy = 1),
                      breaks = seq(0, max(demdat$prop), by = 0.2)) +
-  scale_y_continuous(expression("Proportion Driving"~P[D])) +
+  scale_y_continuous(expression("Proportion Driving"~Phi[D])) +
   scale_color_brewer(expression("Transit priority zone size"~frac(tau,R)), palette = "Set1") +
   theme_classic() +
   coord_cartesian(xlim = c(0,max(demdat$prop)), ylim = c(0,2)) +
@@ -124,28 +124,29 @@ plots[['demandload']] <- ggplot(data = unique(demdat[variable == "Average", .(pr
 
 #Baseline demand loading
 plots[['baselinett']] <- ggplot(data = demdat[variable %in% c("Drive","Transit"), ]) +
-  geom_line(aes(x = prop, y = value, color = variable, linetype = variable)) +
+  geom_line(aes(x = prop, y = 60*value, color = variable, linetype = variable)) +
   scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"),
                      labels = scales::percent_format(accuracy = 1),
                      breaks = seq(0, max(demdat$prop), by = 0.2)) +
-  scale_y_continuous("Average travel time (hours)") +
+  scale_y_continuous("Average travel time (mins)") +
   scale_linetype(NULL) +
   scale_color_brewer(NULL, palette = "Set1") +
   theme_classic() +
-  coord_cartesian(xlim = c(0,1), ylim = c(0,3)) +
+  coord_cartesian(xlim = c(0,1), ylim = c(0,3*60)) +
   theme(legend.position = "bottom")
+
 
 #Compare optimal demand load to baseline
 plots[['comparett']] <- ggplot(data = demdat[variable %in% c("Average","Optimal","Drive","Transit"),]) +
-  geom_line(aes(x = prop, y = value, color = variable, linetype = variable)) +
+  geom_line(aes(x = prop, y = value*60, color = variable, linetype = variable)) +
   scale_x_continuous(expression("Demand load (% of total demand,"~lambda[b] + lambda[c]~")"), 
                      labels = scales::percent_format(accuracy = 1),
                      breaks = seq(0, max(demdat$prop), by = 0.2)) +
-  scale_y_continuous("Average travel time (hours)") +
+  scale_y_continuous("Average travel time (mins)") +
   scale_linetype(NULL, limits = c("Average","Optimal"), labels = c("No policy", "Optimal policy")) +
   scale_color_brewer(NULL, palette = "Set1", limits = c("Average","Optimal"), labels = c("No policy", "Optimal policy")) +
   theme_classic() +
-  coord_cartesian(xlim = c(0,max(demdat$prop)), ylim = c(0,3)) +
+  coord_cartesian(xlim = c(0,max(demdat$prop)), ylim = c(0,3*60)) +
   theme(legend.position = "bottom")
 
 
@@ -224,9 +225,9 @@ minval <- c("gamma"=plotmat[which.min(tt_total), gamma]/R,
             "tau"=plotmat[which.min(tt_total), tau]/R,
             "tt"=plotmat[which.min(tt_total), tt_total])
 
-minlab <- c(paste0("'Travel time'==", round(plotmat[which.min(tt_total), tt_total],2),"~hours"),
-            paste0("gamma==", round(minval['gamma'],2)),
-            paste0("tau==",round(minval['tau'],2)))
+minlab <- c(paste0("'Travel time'==", round(plotmat[which.min(tt_total), 60*tt_total]),"~mins"),
+            paste0("gamma==", round(minval['gamma']*100),"*'%'"),
+            paste0("tau==",round(minval['tau']*100),"*'%'"))
 
 #plotting
 suppressWarnings(
