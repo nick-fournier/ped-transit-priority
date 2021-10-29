@@ -5,9 +5,23 @@ library(data.table)
 # library(ggpubr)
 
 #### 1. Global input parameters ####
-lambda_c = 90/2
-lambda_b = 150/2
-R = 15
+
+# City-specific parameters
+# lambda_c = 90/2
+# lambda_b = 150/2
+# R = 15
+# delta = 2.71
+# d = 2/delta
+
+# City-specific parameters
+lambda_c  = city_params[city_params$CITY == "Melbourne", 'lambda_c']
+lambda_b  = city_params[city_params$CITY == "Melbourne", 'lambda_b']
+R         = city_params[city_params$CITY == "Melbourne", 'R']
+delta     = city_params[city_params$CITY == "Melbourne", 'delta']
+d         = city_params[city_params$CITY == "Melbourne", 'd']
+
+
+# General parameters
 v_w = 5
 v_m = 50
 t_s = 60/3600
@@ -15,9 +29,6 @@ s = 0.5
 k_c = 45
 k_j = 125
 q_c = 500
-beta = 1
-delta = 2.71
-d = 2/delta
 
 
 #### 2.  Functions ####
@@ -58,8 +69,11 @@ plots <- list()
 #Vary demand
 demdat <- rbindlist(lapply(seq(0.01, 1.5, by = 0.001), function(x) {
   #Scaled demand
-  lambda_c <<- x*90/2
-  lambda_b <<- x*150/2
+  # lambda_c <<- x*90/2
+  # lambda_b <<- x*150/2
+  lambda_c <<- x*city_params[city_params$CITY == "Melbourne", 'lambda_c']
+  lambda_b <<- x*city_params[city_params$CITY == "Melbourne", 'lambda_b']
+  
   
   #Find approx starting point
   Rseq <- seq(1/100000,R-(R/100000),length.out = 10)
@@ -129,6 +143,7 @@ plots[['baselinett']] <- ggplot(data = demdat[variable %in% c("Drive","Transit")
                      labels = scales::percent_format(accuracy = 1),
                      breaks = seq(0, max(demdat$prop), by = 0.2)) +
   scale_y_continuous("Average travel time (mins)") +
+  geom_vline(xintercept = 1, linetype='dotted') +
   scale_linetype(NULL) +
   scale_color_brewer(NULL, palette = "Set1") +
   theme_classic() +
@@ -143,6 +158,7 @@ plots[['comparett']] <- ggplot(data = demdat[variable %in% c("Average","Optimal"
                      labels = scales::percent_format(accuracy = 1),
                      breaks = seq(0, max(demdat$prop), by = 0.2)) +
   scale_y_continuous("Average travel time (mins)") +
+  geom_vline(xintercept = 1, linetype='dotted') +
   scale_linetype(NULL, limits = c("Average","Optimal"), labels = c("No policy", "Optimal policy")) +
   scale_color_brewer(NULL, palette = "Set1", limits = c("Average","Optimal"), labels = c("No policy", "Optimal policy")) +
   theme_classic() +
@@ -151,26 +167,47 @@ plots[['comparett']] <- ggplot(data = demdat[variable %in% c("Average","Optimal"
 
 
 #Ensure it is set back to original
-lambda_c = 90/2
-lambda_b = 150/2
-
+# lambda_c = 90/2
+# lambda_b = 150/2
+lambda_c = city_params[city_params$CITY == "Melbourne", 'lambda_c']
+lambda_b = city_params[city_params$CITY == "Melbourne", 'lambda_b']
 
 #### Average travel time for driving and transit separately ####
 #Average driving travel time varying pedestrian zone size gamma
+
+r0 = 2*city_params[city_params$CITY == "Melbourne", 'd']/R
+rwrap=function(f,xmin,xmax){ff=function(x){y=f(x);y[x>xmax]=NA;y[x<xmin]=NA;y}}
+
+
 plots[['drivett']] <- ggplot(data = data.frame(x = c(0,1)), mapping = aes(x = x)) +
-  stat_function(fun = function(x) fun.tt_drive(R*x)) +
+  #stat_function(fun = function(x) if(x>=r0) fun.tt_drive(R*x)) +
+  stat_function(fun = rwrap(function(x) fun.tt_drive(R*x),0,r0+0.01), aes(linetype='g<s')) +
+  stat_function(fun = rwrap(function(x) fun.tt_drive(R*x),r0,1), aes(linetype='g>s')) +
   scale_x_continuous(expression("Pedestrian zone size,"~frac(gamma,R)), breaks = seq(0,1,by=0.2)) +
   scale_y_continuous("Average travel time (hours)") +
+  scale_linetype_manual("Zone parity size\nwith street spacing",
+                        values=c('g<s'='dotted','g>s'='solid'), labels=expression(gamma<s, gamma>=s)) +
   coord_cartesian(xlim = c(0,1), ylim = c(0,5)) +
-  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+  theme_classic() + 
+  theme(legend.position = c(0.8,0.8), 
+        legend.direction = 'vertical',
+        legend.spacing.x = unit(0.5, 'cm'))
 
 #Average transit travel time varying transit zone size tau
 plots[['transittt']] <- ggplot(data = data.frame(x = c(0,1)), mapping = aes(x = x)) +
-  stat_function(fun = function(x) fun.tt_transit(R*x), linetype = "dashed") +
+  # stat_function(fun = function(x) fun.tt_transit(R*x)) +
+  stat_function(fun = rwrap(function(x) fun.tt_transit(R*x),0,r0+.01), aes(linetype='t<s')) +
+  stat_function(fun = rwrap(function(x) fun.tt_transit(R*x),r0,1), aes(linetype='t>s')) +
   scale_x_continuous(expression("Transit zone size, "~frac(tau,R)), breaks = seq(0,1,by=0.2)) +
   scale_y_continuous("Average travel time (hours)") +
   coord_cartesian(xlim = c(0,1), ylim = c(0,5)) +
-  theme_classic() + theme(legend.position = "bottom", legend.spacing.x = unit(0.5, 'cm'))
+  scale_linetype_manual("Zone parity size\nwith street spacing",
+                        values=c('t<s'='dotted','t>s'='solid'), labels=expression(tau<s, tau>=s)) +
+  theme_classic() + 
+  theme(legend.position = c(0.8,0.8),
+        legend.direction = 'vertical', 
+        legend.spacing.x = unit(0.5, 'cm'))
+
 
 #### Average combined travel time ####
 #varying only tau (optimal gamma) and
@@ -266,4 +303,31 @@ plots[['optimal']] <- ggplot(data = plotmat, aes(x = gamma/R, y = tau/R)) +
 )
 
 # plots[['optimal']]
+
+plots[['city_data_logline']] <- ggplot(city_data,
+                                       aes(x=r, y=EMP_DENS, color=CITY)) + 
+  scale_x_continuous("Distance from city center (km)", expand = c(0,0)) +
+  scale_y_log10("Employment density per sq-km", 
+                limits = c(5, max(city_data$EMP_DENS)),
+                labels=scales::comma, expand=c(0,0)) +
+  geom_point(size=0.1, alpha=0.3) +
+  geom_smooth(method='loess', se=F, formula='y~x', fullrange=F, span=0.5) +
+  scale_color_brewer(NULL, palette = "Dark2") + 
+  coord_cartesian(xlim=c(0,75)) +
+  theme_classic() + 
+  theme(legend.position = 'bottom')
+# plots[['city_data_logline']]
+
+
+plots[['city_data_bar']] <- ggplot(city_data_agg, aes(x=r*binsize, y=mn, fill=CITY)) + 
+  scale_x_continuous("Distance from city center (km)", expand = c(0,0)) +
+  scale_y_continuous("Employment density per sq-km", labels=scales::comma, expand = c(0,0)) +
+  # scale_y_log10("Employment density per sq-km", labels=scales::comma, expand=c(0,0)) +
+  geom_col(alpha=0.8, position = 'dodge') +
+  scale_fill_brewer(NULL, palette = "Dark2") + 
+  coord_cartesian(ylim=c(0,20000), xlim=c(0,101)) +
+  theme_classic() +
+  theme(legend.position = 'bottom')
+# plots[['city_data_bar']]
+
 
