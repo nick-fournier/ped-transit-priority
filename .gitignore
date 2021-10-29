@@ -1,0 +1,11 @@
+/writing/submissions
+/writing/TR-A/cache
+/writing/TR-A/figure
+/GIS/data
+*.Rproj.user
+*.Rproj
+*.Rhistory
+*.log
+*.spl
+*.tex
+.Rproj.user

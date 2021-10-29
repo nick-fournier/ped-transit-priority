@@ -143,7 +143,10 @@ fun.tt_transit <- function(tau) fun.tt_TPbar(tau) + fun.tt_TMbar(tau)
 #Total average travel time
 fun.tt_total <- function(g,tau,bounded = F) {
   Ptau = fun.Ptau(tau)
-  if(bounded == T) Ptau = ifelse(Ptau > 1, 1, Ptau)
+  if(bounded == T) {
+    Ptau = ifelse(Ptau > 1, 1, Ptau)
+  }
+  
   Ptau*(fun.tt_Dbar(g) + fun.tt_Wbar(g)) + (1-Ptau)*(fun.tt_TPbar(tau) + fun.tt_TMbar(tau))
 }
 
